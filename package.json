@@ -1,0 +1,30 @@
+{
+  "name": "TweetGeoViz",
+  "version": "0.0.1",
+  "description": "Visualization tool to view tweets by location and content.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JaredHawkins/TweetGeoViz"
+  },
+  "keywords": [
+    "example",
+  ],
+  "author": "BillMills",
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/JaredHawkins/TweetGeoViz/issues"
+  },
+  "dependencies": {
+    "express": "3.4.8",
+    "mongodb": "1.3.23",
+    "jade": "1.1.5"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.32"
+  }
+}
