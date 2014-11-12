@@ -13,7 +13,7 @@ This project uses mongodb to manage its database, node.js for a server, and npm 
 
  - [mongodb v2.6.4](http://docs.mongodb.org/manual/installation/)
  - [node v0.10.31](http://nodejs.org/download/) (comes with npm)
-
+ - [control tweets](https://db.tt/29prxPri) (courtesy of HealthMap)
 
 ##Setup
 In the top directory of the project, run
