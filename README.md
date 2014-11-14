@@ -48,7 +48,7 @@ then navigate to the `twitter` database you created, index it based on tweets, a
 
 ```
 use twitter
-db.ControlTweets.ensureIndex(t:"text")
+db.ControlTweets.ensureIndex({ t: "text" })
 exit
 ```
 
