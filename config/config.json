@@ -1,0 +1,8 @@
+{
+  "mongo": {
+    "server": "mongodb://127.0.0.1:27017/",
+    "databaseName": "twitter"
+  },
+  "sessionSecret": "j4IjCQtMcWTsahgMCFCS",
+  "serverPort": 2063
+}
