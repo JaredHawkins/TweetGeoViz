@@ -105,3 +105,17 @@ where `features` is an array of objects of the format:
 ```
 
 where `tln` and `tlt` are the tweet longitude and lattitude pulled from the database.
+
+##Testing
+
+You need to have Mocha installed on your computer
+
+```
+npm install -g mocha
+```
+
+Then execute tests from the top directory of the project:
+
+```
+npm test
+```
