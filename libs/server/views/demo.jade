@@ -1,12 +1,24 @@
 doctype html5
 html
   head
+
+    //- bootstrap
+    link(href='libs/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+
     //- get the google magics
     script(src='https://maps.googleapis.com/maps/api/js?libraries=geometry,visualization')
+
+    link(href='css/searchBar.css', rel='stylesheet')
 
     script(type='text/javascript').
       //write the pins object to the window
       pins = !{pins};
+
+    script(src='js/utils.js', type='text/javascript', charset='utf-8')
+
+    // components
+    script(src='js/components/searchBar/searchBarView.js', type='text/javascript', charset='utf-8')
+    script(src='js/components/searchBar/searchBar.js', type='text/javascript', charset='utf-8')
 
     script(src='js/demo.js', type='text/javascript', charset='utf-8')
 
@@ -17,4 +29,9 @@ html
       input(type='text', name='tweetText', id='tweetText', required)
 
     //- the map itself
-    div(id='map_canvas' style='width: 500px; height: 400px;')
+    div(class='container')
+      div(id='searchBar')
+      div(id='map-canvas' style='width: 100%; height: 100%;')
+    footer(class='footer')
+      div(class='container')
+        p Hello

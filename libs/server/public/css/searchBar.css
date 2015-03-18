@@ -1,0 +1,25 @@
+#map-canvas {
+  width: 100%;
+  height: 300px;
+  margin: 0;
+  padding: 0px;
+}
+
+#searchBar {
+  padding: 5px;
+}
+
+#searchBar .searchBar-button {
+  backgroundColor: white;
+  borderStyle: solid;
+  borderWidth: 2px;
+  cursor: pointer;
+  textAlign: center;
+}
+
+#searchBar .searchBar-button .searchBar-button-buttonText {
+  fontFamily: 'Arial,sans-serif';
+  fontSize: 12px;
+  paddingLeft: 4px;
+  paddingRight: 4px;
+}
