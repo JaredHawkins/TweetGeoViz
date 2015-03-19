@@ -20,17 +20,19 @@ var tgv = tgv || {};
 
       this.el = document.querySelector(options.componentSelector);
 
-      // Set CSS for the control border.
-      var controlUI = document.createElement('div');
-      controlUI.className = 'searchBar-button';
-      controlUI.title = 'Click to set the map to Home';
-      this.el.appendChild(controlUI);
+      // create Search Button
+      var searchButton = document.createElement('button');
+      searchButton.className = 'btn btn-default btn-lg';
+      searchButton.setAttribute('aria-label', 'Search');
+      searchButton.addEventListener('click', this._control.onSearch);
 
-      // Set CSS for the control interior.
-      var controlText = document.createElement('div');
-      controlText.className = 'searchBar-button-buttonText';
-      controlText.innerHTML = '<strong>Home</strong>';
-      controlUI.appendChild(controlText);
+      var searchButtonSpan = document.createElement('span');
+      searchButtonSpan.className = 'glyphicon glyphicon-search';
+      searchButtonSpan.setAttribute('aria-hidden', 'true');
+
+      searchButton.appendChild(searchButtonSpan);
+      searchButton.innerHTML += ' Search';
+      this.el.appendChild(searchButton);
     },
 
     el: null,

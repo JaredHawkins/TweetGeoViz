@@ -10,15 +10,26 @@ html
 
     link(href='css/searchBar.css', rel='stylesheet')
 
+    //- libs
+    script(src='libs/events/events.0.1.3.min.js', type='text/javascript', charset='utf-8')
+
     script(type='text/javascript').
       //write the pins object to the window
+      var tgv = tgv || {};
+      tgv.events = new utils.Events(); // load events library
       pins = !{pins};
 
     script(src='js/utils.js', type='text/javascript', charset='utf-8')
 
-    // components
+    //- components
+    script(src='js/components/map/mapView.js', type='text/javascript', charset='utf-8')
+    script(src='js/components/map/map.js', type='text/javascript', charset='utf-8')
+
     script(src='js/components/searchBar/searchBarView.js', type='text/javascript', charset='utf-8')
     script(src='js/components/searchBar/searchBar.js', type='text/javascript', charset='utf-8')
+
+    script(src='js/components/slidePanel/slidePanelView.js', type='text/javascript', charset='utf-8')
+    script(src='js/components/slidePanel/slidePanel.js', type='text/javascript', charset='utf-8')
 
     script(src='js/demo.js', type='text/javascript', charset='utf-8')
 
@@ -28,10 +39,12 @@ html
       label Search Text
       input(type='text', name='tweetText', id='tweetText', required)
 
-    //- the map itself
-    div(class='container')
-      div(id='searchBar')
-      div(id='map-canvas' style='width: 100%; height: 100%;')
-    footer(class='footer')
-      div(class='container')
-        p Hello
+    div(class='site-wrapper')
+      div(class='site-wrapper-inner')
+        div(id='slidePanel')
+          ul()
+            il 1
+            il 2
+            il 3
+        div(id='map-canvas' style='width: 100%; height: 100%;')
+        div(id='searchBar')

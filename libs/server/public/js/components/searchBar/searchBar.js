@@ -1,8 +1,9 @@
 var tgv = tgv || {};
 
-(function(utils, SearchBarView) {
+(function(utils, events, SearchBarView) {
   var SearchBar = function(options) {
     this._init = this._init.bind(this);
+    this.onSearch = this.onSearch.bind(this);
 
     var defaults = {
       control: this,
@@ -19,8 +20,12 @@ var tgv = tgv || {};
       this.view = new SearchBarView(options);
     },
 
+    onSearch: function SearchBar_onSearch() {
+      events.emit('onSearch');
+    },
+
     view: null
   };
 
   tgv.SearchBar = SearchBar;
-})(tgv.utils, tgv.SearchBarView);
+})(tgv.utils, tgv.events, tgv.SearchBarView);

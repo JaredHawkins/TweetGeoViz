@@ -15,6 +15,8 @@ var searchRoutes = function(router) {
       }
     }, { tln: 1, tlt: 1 }, function(err, cursor) {
 
+      cursor = cursor || [];
+
       //chew up each database entry into geoJSON;
       //render the page with the data overlay once we reach the end of the list of matches.
       cursor.forEach(function(item) {
