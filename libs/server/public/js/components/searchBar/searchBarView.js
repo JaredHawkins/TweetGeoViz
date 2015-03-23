@@ -20,11 +20,21 @@ var tgv = tgv || {};
 
       this.el = document.querySelector(options.componentSelector);
 
+      var form = document.createElement('form');
+      form.method = 'post';
+      form.action = 'search';
+      form.id = 'searchBarForm';
+
+      var inputGroup = document.createElement('div');
+      inputGroup.className = 'input-group';
+
+      var buttonSpan = document.createElement('span');
+      buttonSpan.className = 'input-group-btn';
+
       // create Search Button
       var searchButton = document.createElement('button');
-      searchButton.className = 'btn btn-default btn-lg';
+      searchButton.className = 'btn btn-default';
       searchButton.setAttribute('aria-label', 'Search');
-      searchButton.addEventListener('click', this._control.onSearch);
 
       var searchButtonSpan = document.createElement('span');
       searchButtonSpan.className = 'glyphicon glyphicon-search';
@@ -32,11 +42,38 @@ var tgv = tgv || {};
 
       searchButton.appendChild(searchButtonSpan);
       searchButton.innerHTML += ' Search';
-      this.el.appendChild(searchButton);
+
+      var span = document.createElement('span');
+      span.id = 'basic-addon';
+      span.className = 'input-group-addon';
+      span.innerHTML = 'tweet keywords';
+
+      var input = document.createElement('input');
+      input.className='form-control';
+      input.setAttribute('aria-describedby', 'basic-addon');
+      input.setAttribute('placeholder', 'keyword1 , keyword2, keyword3, ...');
+      input.type = 'text';
+      input.name = 'tweetText';
+
+      buttonSpan.appendChild(searchButton);
+
+      inputGroup.appendChild(buttonSpan);
+      inputGroup.appendChild(input);
+      inputGroup.appendChild(span);
+
+      form.appendChild(inputGroup);
+
+      //this.el.appendChild(inputGroup);
+      this.el.appendChild(form);
+
+      // bind events
+      searchButton.addEventListener('click', form.submit);
+      input.onclick = this._control.emitOnFocus;
     },
 
     el: null,
-    _control: null
+    _control: null,
+    _inputFocused: false
   };
 
   tgv.SearchBarView = SearchBarView;

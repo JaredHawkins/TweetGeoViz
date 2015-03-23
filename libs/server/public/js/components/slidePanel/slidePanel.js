@@ -4,6 +4,7 @@ var tgv = tgv || {};
   var SlidePanel= function(options) {
     this._init = this._init.bind(this);
     this._slideShow = this._slideShow.bind(this);
+    this._slideHide = this._slideHide.bind(this);
 
     var defaults = {
       control: this,
@@ -19,11 +20,19 @@ var tgv = tgv || {};
     _init: function SlidePanel__init(options) {
       this.view = new SlidePanelView(options);
 
-      events.on('onSearch', this._slideShow);
+      // bind events
+      events.on('startTypingSearch', this._slideShow);
+      events.on('mapClick', this._slideHide);
     },
 
     _slideShow: function SlidePanel__slideShow() {
-      alert('hola');
+      this.showing = true;
+      this.view.show();
+    },
+
+    _slideHide: function SlidePanel__slideHide() {
+      this.showing = false;
+      this.view.hide();
     },
 
     showing: false,

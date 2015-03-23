@@ -2,17 +2,31 @@ doctype html5
 html
   head
 
-    //- bootstrap
-    link(href='libs/bootstrap/css/bootstrap.min.css', rel='stylesheet')
-
-    //- get the google magics
+    //- get the Google magics
     script(src='https://maps.googleapis.com/maps/api/js?libraries=geometry,visualization')
 
-    link(href='css/searchBar.css', rel='stylesheet')
+    //- add the Twitter magics... for share buttons
+    script(type='text/javascript').
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+
+    //- CSS goodness
+    link(href='css/demo.css', rel='stylesheet')
+    link(href='libs/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+
 
     //- libs
     script(src='libs/events/events.0.1.3.min.js', type='text/javascript', charset='utf-8')
 
+    //- for now we need to add jQuery for Bootstrap.js but we should eliminate using jQuery as much as we can
+    script(src='libs/jquery/jquery-1.11.2.min.js', type='text/javascript', charset='utf-8')
+
+    script(src='libs/bootstrap/js/bootstrap.min.js', type='text/javascript', charset='utf-8')
+
+    script(src='libs/snap/snap.js', type='text/javascript', charset='utf-8')
+    link(href='libs/snap/snap.css', rel='stylesheet')
+
+
+    //- !! our script goes here !!
     script(type='text/javascript').
       //write the pins object to the window
       var tgv = tgv || {};
@@ -31,20 +45,42 @@ html
     script(src='js/components/slidePanel/slidePanelView.js', type='text/javascript', charset='utf-8')
     script(src='js/components/slidePanel/slidePanel.js', type='text/javascript', charset='utf-8')
 
-    script(src='js/demo.js', type='text/javascript', charset='utf-8')
+    script(src='js/app.js', type='text/javascript', charset='utf-8')
 
   body
-    //- search form
-    form(method='post', action='search')
-      label Search Text
-      input(type='text', name='tweetText', id='tweetText', required)
+    .snap-drawers
+      .snap-drawer.snap-drawer-left
+        div
+          h3 TweetGeoViz
+          .slidePanel-inner
+            //- put my name for now
+            a.twitter-share-button(href='https://twitter.com/share', data-lang='en', data-text='TweetGeoViz - Visualization tool to view tweets by location and content.', data-url='https://github.com/JaredHawkins/TweetGeoViz', data-count='none', data-via='twitanvk') Tweet
+            //- going to put my name for now but it should be changed to TweetGeoViz
+            a.twitter-follow-button(href='https://twitter.com/twitanvk', data-show-count='false', data-lang='en') Follow @twitanvk
+            iframe(src='http://ghbtns.com/github-btn.html?user=JaredHawkins&repo=TweetGeoViz&type=fork&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='120', height='20')
+            iframe(src='http://ghbtns.com/github-btn.html?user=JaredHawkins&repo=TweetGeoViz&type=follow&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='120', height='20')
+          h4 Controls
+          ul
+            li
+              .input-group.input-group-sm
+                span#cursor-click-radius-description.input-group-addon Cursor Click Radius
+                input.form-control(type='text', placeholder='0', aria-describedby='cursor-click-radius-description', value='5')
+              .input-group.input-group-sm
+                span.input-group-addon Keyword Part of Another Word
+                span.input-group-addon
+                  input(type='checkbox', aria-label='Keyword Part of Another Word', checked='checked')
+              .input-group.input-group-sm
+                span.input-group-addon Enable Map Click
+                span.input-group-addon
+                  input(type='checkbox', aria-label='Enable Map Click', checked='checked')
+          div
+            p Visualization tool to view tweets by location and content.
+            p
+              | A product of collaboration between HealthMap.org (Boston Children's Hospital), Mozilla Science Lab and our community.
+            p
+              span.label.label-primary v0.0.3
 
-    div(class='site-wrapper')
-      div(class='site-wrapper-inner')
-        div(id='slidePanel')
-          ul()
-            il 1
-            il 2
-            il 3
-        div(id='map-canvas' style='width: 100%; height: 100%;')
-        div(id='searchBar')
+    .site-wrapper.snap-content
+      .site-wrapper-inner
+        #map-canvas
+        #searchBar.col-md-4

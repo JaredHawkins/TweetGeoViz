@@ -1,8 +1,9 @@
 var tgv = tgv || {};
 
-(function(utils, MapView) {
+(function(utils, events, MapView) {
   var Map = function(options) {
     this._init = this._init.bind(this);
+    this.mapClick = this.mapClick.bind(this);
     this.addHeatMap = this.addHeatMap.bind(this);
 
     var defaults = {
@@ -18,6 +19,10 @@ var tgv = tgv || {};
   Map.prototype = {
     _init: function Map__init(options) {
       this.view = new MapView(options);
+    },
+
+    mapClick: function Map_addHeatMap() {
+      events.emit('mapClick');
     },
 
     addHeatMap: function Map_addHeatMap(pins) {
@@ -37,4 +42,4 @@ var tgv = tgv || {};
   };
 
   tgv.Map = Map;
-})(tgv.utils, tgv.MapView);
+})(tgv.utils, tgv.events, tgv.MapView);

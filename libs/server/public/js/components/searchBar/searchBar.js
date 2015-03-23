@@ -3,6 +3,7 @@ var tgv = tgv || {};
 (function(utils, events, SearchBarView) {
   var SearchBar = function(options) {
     this._init = this._init.bind(this);
+    this.emitOnFocus = this.emitOnFocus.bind(this);
     this.onSearch = this.onSearch.bind(this);
 
     var defaults = {
@@ -20,8 +21,20 @@ var tgv = tgv || {};
       this.view = new SearchBarView(options);
     },
 
-    onSearch: function SearchBar_onSearch() {
-      events.emit('onSearch');
+    emitOnFocus: function SearchBar_emitOnFocus() {
+      events.emit('startTypingSearch');
+    },
+
+    onSearch: function SearchBar_onSearch(inputText) {
+      if (!inputText || inputText.length === 0) {
+        return;
+      }
+
+      var data = {
+        tweetText: inputText
+      };
+
+      utils.serverSend('POST', '/search', data);
     },
 
     view: null

@@ -30,6 +30,9 @@ var tgv = tgv || {};
       };
 
       this._googleMap = new google.maps.Map(mapCanvas, mapOptions);
+
+      // bind events
+      google.maps.event.addListener(this._googleMap, 'click', this._control.mapClick);
     },
 
     addMapControl: function MapView_addMapControl(location, el) {

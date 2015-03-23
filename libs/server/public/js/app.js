@@ -17,7 +17,8 @@ var tgv = tgv || {};
     });
 
     var slidePanel = new SlidePanel({
-      componentSelector: '#slidePanel'
+      componentSelector: '#slidePanel',
+      contentSelector: '.site-wrapper'
     });
 
     map.view.addMapControl(google.maps.ControlPosition.TOP_LEFT,
