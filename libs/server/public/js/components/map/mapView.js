@@ -5,6 +5,7 @@ var tgv = tgv || {};
     this._init = this._init.bind(this);
     this.addMapControl = this.addMapControl.bind(this);
     this.renderHeatMap = this.renderHeatMap.bind(this);
+    this.addMapCircle = this.addMapCircle.bind(this);
 
     var defaults = {
       control: null,
@@ -32,7 +33,32 @@ var tgv = tgv || {};
       this._googleMap = new google.maps.Map(mapCanvas, mapOptions);
 
       // bind events
-      google.maps.event.addListener(this._googleMap, 'click', this._control.mapClick);
+      google.maps.event.addListener(this._googleMap, 'click', function(event) {
+        var lat = event.latLng.lat(),
+            lng = event.latLng.lng();
+
+        this._control.mapClick();
+        this.addMapCircle(lat, lng);
+      }.bind(this));
+    },
+
+    addMapCircle: function MapView_addMapCircle(lat, lng) {
+      if (this._circle) {
+        this._circle.setMap(null);
+      }
+
+      this._circle = new google.maps.Circle({
+        map: this._googleMap,
+        center: new google.maps.LatLng(lat, lng),
+        clickable: false,
+        // metres
+        radius: 500000,
+        fillColor: '#fff',
+        fillOpacity: .6,
+        strokeColor: '#313131',
+        strokeOpacity: .4,
+        strokeWeight: .8
+      });
     },
 
     addMapControl: function MapView_addMapControl(location, el) {
@@ -50,6 +76,8 @@ var tgv = tgv || {};
     },
 
     el: null,
+    showingCircle: false,
+    _circle: null,
     _control: null,
     _googleMap: null
   };
