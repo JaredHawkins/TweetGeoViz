@@ -1,11 +1,12 @@
 var tgv = tgv || {};
 
-(function(utils) {
+(function(appModel, utils) {
   var MapView = function(options) {
     this._init = this._init.bind(this);
     this.addMapControl = this.addMapControl.bind(this);
     this.renderHeatMap = this.renderHeatMap.bind(this);
     this.addMapCircle = this.addMapCircle.bind(this);
+    this.removeCircle = this.removeCircle.bind(this);
 
     var defaults = {
       control: null,
@@ -43,22 +44,28 @@ var tgv = tgv || {};
     },
 
     addMapCircle: function MapView_addMapCircle(lat, lng) {
-      if (this._circle) {
-        this._circle.setMap(null);
-      }
+      this.removeCircle();
 
       this._circle = new google.maps.Circle({
         map: this._googleMap,
         center: new google.maps.LatLng(lat, lng),
         clickable: false,
         // metres
-        radius: 500000,
+        radius: appModel.getClickRadiusMeters(),
         fillColor: '#fff',
         fillOpacity: .6,
         strokeColor: '#313131',
         strokeOpacity: .4,
         strokeWeight: .8
       });
+    },
+
+    removeCircle: function MapView_removeCircle() {
+      if (!this._circle) {
+        return;
+      }
+
+      this._circle.setMap(null);
     },
 
     addMapControl: function MapView_addMapControl(location, el) {
@@ -83,4 +90,4 @@ var tgv = tgv || {};
   };
 
   tgv.MapView = MapView;
-})(tgv.utils);
+})(tgv.appModel, tgv.utils);

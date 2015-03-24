@@ -1,6 +1,6 @@
 var tgv = tgv || {};
 
-(function(utils, events, SlidePanelView) {
+(function(appModel, utils, events, SlidePanelView) {
   var SlidePanel= function(options) {
     this._init = this._init.bind(this);
     this._slideShow = this._slideShow.bind(this);
@@ -27,11 +27,13 @@ var tgv = tgv || {};
 
     _slideShow: function SlidePanel__slideShow() {
       this.showing = true;
+      appModel.showingSidePanel = this.showing;
       this.view.show();
     },
 
     _slideHide: function SlidePanel__slideHide() {
       this.showing = false;
+      appModel.showingSidePanel = this.showing;
       this.view.hide();
     },
 
@@ -40,4 +42,4 @@ var tgv = tgv || {};
   };
 
   tgv.SlidePanel = SlidePanel;
-})(tgv.utils, tgv.events, tgv.SlidePanelView);
+})(tgv.appModel, tgv.utils, tgv.events, tgv.SlidePanelView);

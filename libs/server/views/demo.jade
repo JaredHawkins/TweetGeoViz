@@ -35,6 +35,9 @@ html
 
     script(src='js/utils.js', type='text/javascript', charset='utf-8')
 
+    //- models
+    script(src='js/models/appModel.js', type='text/javascript', charset='utf-8')
+
     //- components
     script(src='js/components/map/mapView.js', type='text/javascript', charset='utf-8')
     script(src='js/components/map/map.js', type='text/javascript', charset='utf-8')
@@ -65,6 +68,7 @@ html
               .input-group.input-group-sm
                 span#cursor-click-radius-description.input-group-addon Cursor Click Radius
                 input.form-control(type='text', placeholder='0', aria-describedby='cursor-click-radius-description', value='5')
+                span.input-group-addon km
               .input-group.input-group-sm
                 span.input-group-addon Keyword Part of Another Word
                 span.input-group-addon
