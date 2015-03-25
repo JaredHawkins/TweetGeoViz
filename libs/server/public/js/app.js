@@ -5,11 +5,11 @@ var tgv = tgv || {};
   var domLoaded = function() {
     var pins = window.pins || {};
 
-    //var tweetCollection = new TweetCollection(pins);
+    var tweetCollection = new TweetCollection(pins);
 
     var map = new tgv.Map({
       componentSelector: '#map-canvas',
-      //tweetCollection: tweetCollection
+      tweetCollection: tweetCollection
     });
 
     var searchBar = new SearchBar({

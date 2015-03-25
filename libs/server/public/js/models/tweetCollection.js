@@ -4,9 +4,10 @@ var tgv = tgv || {};
   var TweetCollection = function(options) {
     this._init = this._init.bind(this);
     this.generateHeatMap = this.generateHeatMap.bind(this);
+    this.getTweetsInBounds = this.getTweetsInBounds.bind(this);
 
     var defaults = {
-      pins: []
+      features: []
     };
 
     options = utils.deepExtend({}, defaults, options);
@@ -16,18 +17,15 @@ var tgv = tgv || {};
 
   TweetCollection.prototype = {
     _init: function TweetCollection__init(options) {
-      this._pins = options.pins;
+      this._features = options.features;
     },
 
     generateHeatMap: function TweetCollection_generateHeatMap() {
-      var heatmapData = [],
-          pins = this._pins;
-
-      pins.features = pins.features || [];
+      var heatmapData = [];
 
       //create heatmap layer
-      for (var i = 0, len = pins.features.length; i < len; i++) {
-        var coords = pins.features[i].geometry.coordinates;
+      for (var i = 0, len = this._features.length; i < len; i++) {
+        var coords = this._features[i].geometry.coordinates;
         var latLng = new google.maps.LatLng(coords[1], coords[0]);
         heatmapData.push(latLng);
       }
@@ -35,7 +33,22 @@ var tgv = tgv || {};
       return heatmapData;
     },
 
-    _pins: null
+    getTweetsInBounds: function TweetCollection_getTweetsInBounds(bounds) {
+      var tweets = [];
+
+      for (var i = 0, len = this._features.length; i < len; i++) {
+        var coords = this._features[i].geometry.coordinates;
+        var latLng = new google.maps.LatLng(coords[1], coords[0]);
+
+        if (bounds.contains(latLng)) {
+          tweets.push(this._features[i]);
+        }
+      }
+
+      return tweets;
+    },
+
+    _features: null
   };
 
   tgv.TweetCollection = TweetCollection;

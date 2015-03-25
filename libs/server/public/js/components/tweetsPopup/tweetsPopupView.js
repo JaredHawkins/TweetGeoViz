@@ -35,6 +35,8 @@ var tgv = tgv || {};
       this.el.style.top = y + 'px';
 
       this.el.style.display = 'block';
+
+
     },
 
     el: null,

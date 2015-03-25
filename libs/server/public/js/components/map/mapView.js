@@ -38,8 +38,9 @@ var tgv = tgv || {};
         var lat = event.latLng.lat(),
             lng = event.latLng.lng();
 
-        this._control.mapClick(event.pixel.x, event.pixel.y, lat, lng);
         this.addMapCircle(lat, lng);
+        this._control.mapClick(event.pixel.x, event.pixel.y,
+          this._circle.getBounds());
       }.bind(this));
     },
 
@@ -50,13 +51,12 @@ var tgv = tgv || {};
         map: this._googleMap,
         center: new google.maps.LatLng(lat, lng),
         clickable: false,
-        // metres
         radius: appModel.getClickRadiusMeters(),
         fillColor: '#fff',
-        fillOpacity: .6,
+        fillOpacity: 0.6,
         strokeColor: '#313131',
-        strokeOpacity: .4,
-        strokeWeight: .8
+        strokeOpacity: 0.4,
+        strokeWeight: 0.8
       });
     },
 
@@ -83,7 +83,6 @@ var tgv = tgv || {};
     },
 
     el: null,
-    showingCircle: false,
     _circle: null,
     _control: null,
     _googleMap: null
