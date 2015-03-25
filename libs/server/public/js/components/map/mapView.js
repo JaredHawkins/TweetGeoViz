@@ -38,7 +38,7 @@ var tgv = tgv || {};
         var lat = event.latLng.lat(),
             lng = event.latLng.lng();
 
-        this._control.mapClick();
+        this._control.mapClick(event.pixel.x, event.pixel.y, lat, lng);
         this.addMapCircle(lat, lng);
       }.bind(this));
     },

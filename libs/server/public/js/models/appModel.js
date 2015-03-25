@@ -9,11 +9,12 @@ var tgv = tgv || {};
     getClickRadiusMeters: function AppModel_getClickRadiusMeters() {
       var km = 1000;
 
-      return this._clickRadius * km;
+      return this.clickRadius * km;
     },
 
     showingSidePanel: false,
-    _clickRadius: 250
+    showingTweetsPopup: false,
+    clickRadius: 250
   };
 
   tgv.appModel = new AppModel();

@@ -8,7 +8,8 @@ var tgv = tgv || {};
 
     var defaults = {
       componentSelector: null,
-      control: this
+      control: this,
+      tweetCollection: null
     };
 
     options = utils.deepExtend({}, defaults, options);
@@ -19,26 +20,33 @@ var tgv = tgv || {};
   Map.prototype = {
     _init: function Map__init(options) {
       this.view = new MapView(options);
+      this._tweetCollection = options.tweetCollection;
+
+      //this.view.renderHeatMap(this._tweetCollection.generateHeatMap());
+
+      // bind events
+      events.on('closePopup', this.view.removeCircle);
     },
 
-    mapClick: function Map_addHeatMap() {
-      events.emit('mapClick');
+    mapClick: function Map_addHeatMap(x, y, lat, lng) {
+      events.emit('mapClick', [x, y, lat, lng]);
     },
 
     addHeatMap: function Map_addHeatMap(pins) {
-      var heatmapData = [];
+      // var heatmapData = [];
 
-      //create heatmap layer
-      for (var i = 0, len = pins.features.length; i < len; i++) {
-        var coords = pins.features[i].geometry.coordinates;
-        var latLng = new google.maps.LatLng(coords[1], coords[0]);
-        heatmapData.push(latLng);
-      }
+      // //create heatmap layer
+      // for (var i = 0, len = pins.features.length; i < len; i++) {
+      //   var coords = pins.features[i].geometry.coordinates;
+      //   var latLng = new google.maps.LatLng(coords[1], coords[0]);
+      //   heatmapData.push(latLng);
+      // }
 
-      this.view.renderHeatMap(heatmapData);
+      //this.view.renderHeatMap(heatmapData);
     },
 
-    view: null
+    view: null,
+    _tweetCollection: null
   };
 
   tgv.Map = Map;

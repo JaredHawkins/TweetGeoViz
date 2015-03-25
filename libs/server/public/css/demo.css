@@ -65,3 +65,19 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+#tweetsPopup {
+  display: none;
+  top: 100px;
+  left: 100px;
+  position: absolute;
+}
+#tweetsPopup ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+#tweetsPopup ul li > .tweetText {
+  padding: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

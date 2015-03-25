@@ -36,6 +36,8 @@ html
     script(src='js/utils.js', type='text/javascript', charset='utf-8')
 
     //- models
+    script(src='js/models/tweet.js', type='text/javascript', charset='utf-8')
+    script(src='js/models/tweetCollection.js', type='text/javascript', charset='utf-8')
     script(src='js/models/appModel.js', type='text/javascript', charset='utf-8')
 
     //- components
@@ -48,12 +50,15 @@ html
     script(src='js/components/slidePanel/slidePanelView.js', type='text/javascript', charset='utf-8')
     script(src='js/components/slidePanel/slidePanel.js', type='text/javascript', charset='utf-8')
 
+    script(src='js/components/tweetsPopup/tweetsPopupView.js', type='text/javascript', charset='utf-8')
+    script(src='js/components/tweetsPopup/tweetsPopup.js', type='text/javascript', charset='utf-8')
+
     script(src='js/app.js', type='text/javascript', charset='utf-8')
 
   body
     .snap-drawers
       .snap-drawer.snap-drawer-left
-        div
+        div#slidePanel
           h3 TweetGeoViz
           .slidePanel-social
             //- put my name for now
@@ -67,7 +72,7 @@ html
             li
               .input-group.input-group-sm
                 span#cursor-click-radius-description.input-group-addon Cursor Click Radius
-                input.form-control(type='text', placeholder='0', aria-describedby='cursor-click-radius-description', value='5')
+                input#cursor-click-radius-input.form-control(type='number', placeholder='0', aria-describedby='cursor-click-radius-description')
                 span.input-group-addon km
               .input-group.input-group-sm
                 span.input-group-addon Keyword Part of Another Word
@@ -88,3 +93,13 @@ html
       .site-wrapper-inner
         #map-canvas
         #searchBar.col-md-4
+        #tweetsPopup.col-md-2
+          .panel.panel-default
+            .panel-heading
+              strong Tweets
+              button#tweetsPopup-close.close(aria-hidden="true", type="button") &#215;
+            .panel-body
+              ul
+                li
+                  .tweetText
+                    span No Tweets Found

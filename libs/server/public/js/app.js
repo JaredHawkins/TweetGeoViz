@@ -1,15 +1,15 @@
-/*global google*/
-
 var tgv = tgv || {};
 
-// taken from http://youmightnotneedjquery.com/#ready
-(function(Map, SearchBar, SlidePanel) {
+(function(TweetCollection, Map, SearchBar, SlidePanel, TweetsPopup) {
 
   var domLoaded = function() {
     var pins = window.pins || {};
 
+    //var tweetCollection = new TweetCollection(pins);
+
     var map = new tgv.Map({
-      componentSelector: '#map-canvas'
+      componentSelector: '#map-canvas',
+      //tweetCollection: tweetCollection
     });
 
     var searchBar = new SearchBar({
@@ -21,11 +21,17 @@ var tgv = tgv || {};
       contentSelector: '.site-wrapper'
     });
 
+    var tweetsPopup = new TweetsPopup({
+      componentSelector: '#tweetsPopup'
+    });
+
     map.view.addMapControl(google.maps.ControlPosition.TOP_LEFT,
       searchBar.view.el);
 
     // if there was a search then let's render it
-    map.addHeatMap(pins);
+    //var TweetCollection = new TweetCollection(pins);
+
+    //map.addHeatMap(pins);
   };
 
   if (document.readyState != 'loading') {
@@ -34,4 +40,4 @@ var tgv = tgv || {};
     document.addEventListener('DOMContentLoaded', domLoaded);
   }
 
-})(tgv.Map, tgv.SearchBar, tgv.SlidePanel);
+})(tgv.TweetCollection, tgv.Map, tgv.SearchBar, tgv.SlidePanel, tgv.TweetsPopup);

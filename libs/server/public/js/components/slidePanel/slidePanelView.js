@@ -1,6 +1,6 @@
 var tgv = tgv || {};
 
-(function(utils) {
+(function(appModel, utils) {
   var SlidePanelView = function(options) {
     this._init = this._init.bind(this);
     this.show = this.show.bind(this);
@@ -27,6 +27,14 @@ var tgv = tgv || {};
         touchToDrag: false,
         hyperextensible: false
       });
+
+      var clickRadiusInput = this.el.querySelector('#cursor-click-radius-input');
+      clickRadiusInput.value = appModel.clickRadius;
+
+      // bind events
+      clickRadiusInput.oninput = function() {
+        appModel.clickRadius = clickRadiusInput.value;
+      };
     },
 
     hide: function SlidePanelView_hide() {
@@ -43,4 +51,4 @@ var tgv = tgv || {};
   };
 
   tgv.SlidePanelView = SlidePanelView;
-})(tgv.utils);
+})(tgv.appModel, tgv.utils);
