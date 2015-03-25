@@ -20,3 +20,8 @@ var tgv = tgv || {};
 
   tgv.appModel = new AppModel();
 })();
+
+// Node.js support
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = tgv.appModel;
+}
