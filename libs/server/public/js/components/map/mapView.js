@@ -7,6 +7,7 @@ var tgv = tgv || {};
     this.renderHeatMap = this.renderHeatMap.bind(this);
     this.addMapCircle = this.addMapCircle.bind(this);
     this.removeCircle = this.removeCircle.bind(this);
+    this.getCircleBounds = this.getCircleBounds.bind(this);
 
     var defaults = {
       control: null,
@@ -38,10 +39,16 @@ var tgv = tgv || {};
         var lat = event.latLng.lat(),
             lng = event.latLng.lng();
 
-        this.addMapCircle(lat, lng);
-        this._control.mapClick(event.pixel.x, event.pixel.y,
-          this._circle.getBounds());
+        this._control.mapClick(event.pixel.x, event.pixel.y, lat, lng);
       }.bind(this));
+    },
+
+    getCircleBounds: function MapView_getCircleBounds() {
+      if (!this._circle) {
+        return;
+      }
+
+      return this._circle.getBounds();
     },
 
     addMapCircle: function MapView_addMapCircle(lat, lng) {
@@ -58,6 +65,14 @@ var tgv = tgv || {};
         strokeOpacity: 0.4,
         strokeWeight: 0.8
       });
+
+      this._googleMap.setOptions({
+        draggable: false,
+        zoomControl: false,
+        scrollwheel: false,
+        panControl: false,
+        disableDoubleClickZoom: true
+      });
     },
 
     removeCircle: function MapView_removeCircle() {
@@ -66,6 +81,13 @@ var tgv = tgv || {};
       }
 
       this._circle.setMap(null);
+      this._googleMap.setOptions({
+        draggable: true,
+        zoomControl: true,
+        scrollwheel: true,
+        panControl: true,
+        disableDoubleClickZoom: false
+      });
     },
 
     addMapControl: function MapView_addMapControl(location, el) {

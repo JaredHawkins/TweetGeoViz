@@ -1,11 +1,15 @@
 var tgv = tgv || {};
 
-(function(TweetCollection, Map, SearchBar, SlidePanel, TweetsPopup) {
+(function(appModel, TweetCollection, Map, SearchBar, SlidePanel, TweetsPopup) {
 
   var domLoaded = function() {
     var pins = window.pins || {};
 
-    var tweetCollection = new TweetCollection(pins);
+    appModel.searchQuery = window.searchQuery;
+
+    var tweetCollection = new TweetCollection({
+      pins: pins
+    });
 
     var map = new tgv.Map({
       componentSelector: '#map-canvas',
@@ -40,4 +44,11 @@ var tgv = tgv || {};
     document.addEventListener('DOMContentLoaded', domLoaded);
   }
 
-})(tgv.TweetCollection, tgv.Map, tgv.SearchBar, tgv.SlidePanel, tgv.TweetsPopup);
+})(
+  tgv.appModel,
+  tgv.TweetCollection,
+  tgv.Map,
+  tgv.SearchBar,
+  tgv.SlidePanel,
+  tgv.TweetsPopup
+);

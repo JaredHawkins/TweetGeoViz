@@ -71,13 +71,21 @@
   left: 100px;
   position: absolute;
 }
-#tweetsPopup ul {
+#tweetsPopup .panel-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 420px;
+}
+#tweetsPopup .panel-body ul {
   padding: 0;
   margin: 0;
   list-style-type: none;
 }
-#tweetsPopup ul li > .tweetText {
+#tweetsPopup .panel-body ul li > .tweetText {
   padding: 15px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+#tweetsPopup .panel-body ul li > .tweetText .selection {
+  background-color: yellow;
 }

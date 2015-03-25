@@ -63,11 +63,24 @@ var tgv = tgv || {};
 
       form.appendChild(inputGroup);
 
-      //this.el.appendChild(inputGroup);
       this.el.appendChild(form);
 
       // bind events
       searchButton.addEventListener('click', form.submit);
+      input.onkeypress = function(e) {
+        if (!e) {
+          e = window.event;
+        }
+        var keyCode = e.keyCode || e.which;
+
+        if (keyCode == '13') {
+          if (!input.value) {
+            return false;
+          }
+
+          form.submit();
+        }
+      }
       input.onclick = this._control.emitOnFocus;
     },
 

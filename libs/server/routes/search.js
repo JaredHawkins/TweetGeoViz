@@ -29,7 +29,8 @@ var searchRoutes = function(router) {
           geometry: {
             type: 'Point',
             coordinates: [item.tln, item.tlt]
-          }
+          },
+          text: item.t
         });
       });
 
@@ -38,7 +39,7 @@ var searchRoutes = function(router) {
         features: features
       };
 
-      return res.render('demo.jade', { pins: JSON.stringify(geoJSONlist) });
+      return res.render('demo.jade', { pins: JSON.stringify(geoJSONlist), searchQuery: JSON.stringify(req.body.tweetText) });
     });
   });
 };

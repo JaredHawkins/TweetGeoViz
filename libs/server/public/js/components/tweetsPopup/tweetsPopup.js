@@ -24,11 +24,13 @@ var tgv = tgv || {};
       events.on('mapClick', this._showPopup);
     },
 
-    _showPopup: function TweetsPopup__showPopup(x, y) {
+    _showPopup: function TweetsPopup__showPopup(x, y, tweets) {
+      tweets = tweets || [];
+
       this.showing = true;
       appModel.showingTweetsPopup = this.showing;
 
-      this.view.show(x, y);
+      this.view.show(x, y, tweets);
     },
 
     _hidePopup: function TweetsPopup__hidePopup() {

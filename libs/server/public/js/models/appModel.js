@@ -14,7 +14,8 @@ var tgv = tgv || {};
 
     showingSidePanel: false,
     showingTweetsPopup: false,
-    clickRadius: 250
+    clickRadius: 250,
+    searchQuery: null
   };
 
   tgv.appModel = new AppModel();

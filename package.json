@@ -2,6 +2,21 @@
   "name": "TweetGeoViz",
   "version": "0.0.3",
   "description": "Visualization tool to view tweets by location and content.",
+  "author": "Jared Hawkins",
+  "contributors": [
+    {
+      "name": "Alexey Novak",
+      "email": "alexey.novak.mail@gmail.com"
+    },
+    {
+      "name": "Jared Hawkins",
+      "email": "Jared.Hawkins@childrens.harvard.edu"
+    },
+    {
+      "name": "Bill Mills",
+      "email": "mills.wj@gmail.com"
+    }
+  ],
   "main": "app.js",
   "scripts": {
     "test": "mocha tests/*"
@@ -11,10 +26,9 @@
     "url": "https://github.com/JaredHawkins/TweetGeoViz"
   },
   "keywords": [
-    "example"
+    "tweets",
+    "map"
   ],
-  "author": "BillMills",
-  "license": "Apache",
   "bugs": {
     "url": "https://github.com/JaredHawkins/TweetGeoViz/issues"
   },
@@ -31,5 +45,6 @@
   "engines": {
     "node": "0.10.x",
     "npm": "1.2.32"
-  }
+  },
+  "license": "Apache"
 }
