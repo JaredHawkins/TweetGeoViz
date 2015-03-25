@@ -24,6 +24,7 @@ var tgv = tgv || {};
       var closeButton = this.el.querySelector('#tweetsPopup-close');
 
       this._panelBody = this.el.querySelector('.panel-body ul');
+      this._headerText = this.el.querySelector('.panel-heading strong');
 
       // bind events
       closeButton.addEventListener('click', this._control._hidePopup);
@@ -65,11 +66,15 @@ var tgv = tgv || {};
         }
       }
 
+      // change popup header to show how many tweets we found
+      this._headerText.innerHTML = tweets.length + ' Tweets';
+
       this.el.style.display = 'block';
     },
 
     el: null,
     _panelBody: null,
+    _headerText: null,
     _control: null
   };
 

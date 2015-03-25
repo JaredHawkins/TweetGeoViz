@@ -1,3 +1,3 @@
 /*global require*/
 
-require('./libs/server/server.js');
+require('./server/server.js');
