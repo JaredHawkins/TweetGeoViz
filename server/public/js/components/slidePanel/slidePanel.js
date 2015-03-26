@@ -5,10 +5,14 @@ var tgv = tgv || {};
     this._init = this._init.bind(this);
     this._slideShow = this._slideShow.bind(this);
     this._slideHide = this._slideHide.bind(this);
+    this.radiusInputChange = this.radiusInputChange.bind(this);
+    this.enableMapClickChange = this.enableMapClickChange.bind(this);
 
     var defaults = {
       control: this,
-      componentSelector: null
+      componentSelector: null,
+      clickRadius: appModel.getClickRadius(),
+      enableMapClick: appModel.getMapClickEnabled()
     };
 
     options = utils.deepExtend({}, defaults, options);
@@ -35,6 +39,14 @@ var tgv = tgv || {};
       this.showing = false;
       appModel.showingSidePanel = this.showing;
       this.view.hide();
+    },
+
+    radiusInputChange: function SlidePanel_radiusInputChange(value) {
+      appModel.setClickRadius(value);
+    },
+
+    enableMapClickChange: function SlidePanel_enableMapClickChange(value) {
+      appModel.setMapClickEnabled(value);
     },
 
     showing: false,

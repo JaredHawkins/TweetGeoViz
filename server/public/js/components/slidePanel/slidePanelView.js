@@ -1,6 +1,6 @@
 var tgv = tgv || {};
 
-(function(appModel, utils) {
+(function(utils) {
   var SlidePanelView = function(options) {
     this._init = this._init.bind(this);
     this.show = this.show.bind(this);
@@ -8,7 +8,9 @@ var tgv = tgv || {};
 
     var defaults = {
       control: null,
-      componentSelector: null
+      componentSelector: null,
+      clickRadius: null,
+      enableMapClick: null
     };
 
     options = utils.deepExtend({}, defaults, options);
@@ -28,13 +30,21 @@ var tgv = tgv || {};
         hyperextensible: false
       });
 
-      var clickRadiusInput = this.el.querySelector('#cursor-click-radius-input');
-      clickRadiusInput.value = appModel.clickRadius;
+      var clickRadiusInput = this.el
+        .querySelector('#cursor-click-radius-input');
+      clickRadiusInput.value = options.clickRadius;
+
+      var enableMapClickCheckbox = this.el
+        .querySelector('#enable-map-click-checkbox');
+      enableMapClickCheckbox.checked = options.enableMapClick === 'true';
 
       // bind events
       clickRadiusInput.oninput = function() {
-        appModel.clickRadius = clickRadiusInput.value;
-      };
+        this._control.radiusInputChange(clickRadiusInput.value);
+      }.bind(this);
+      enableMapClickCheckbox.onchange = function() {
+        this._control.enableMapClickChange(enableMapClickCheckbox.checked);
+      }.bind(this);
     },
 
     hide: function SlidePanelView_hide() {
@@ -51,4 +61,4 @@ var tgv = tgv || {};
   };
 
   tgv.SlidePanelView = SlidePanelView;
-})(tgv.appModel, tgv.utils);
+})(tgv.utils);

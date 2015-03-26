@@ -1,6 +1,6 @@
 var tgv = tgv || {};
 
-(function(utils, events, MapView) {
+(function(appModel, utils, events, MapView) {
   var Map = function(options) {
     this._init = this._init.bind(this);
     this.mapClick = this.mapClick.bind(this);
@@ -33,6 +33,12 @@ var tgv = tgv || {};
     },
 
     mapClick: function Map_addHeatMap(x, y, lat, lng) {
+      // check if click is disabled in settings
+      if (!appModel.getMapClickEnabled()) {
+        return;
+      }
+
+      // check if already showing popup overlay
       if (this.showingClickOverlay) {
         return;
       }
@@ -57,4 +63,4 @@ var tgv = tgv || {};
   };
 
   tgv.Map = Map;
-})(tgv.utils, tgv.events, tgv.MapView);
+})(tgv.appModel, tgv.utils, tgv.events, tgv.MapView);
