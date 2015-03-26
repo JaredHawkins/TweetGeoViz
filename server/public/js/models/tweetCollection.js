@@ -1,3 +1,5 @@
+/*global google*/
+
 var tgv = tgv || {};
 
 (function(utils) {

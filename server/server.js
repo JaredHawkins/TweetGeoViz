@@ -1,7 +1,6 @@
 /*global process, require, __dirname*/
 
 var express = require('express'),
-    mongo = require('mongodb'),
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),

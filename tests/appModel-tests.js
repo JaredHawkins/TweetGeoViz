@@ -1,12 +1,13 @@
-/* global it, describe, require */
+/* global it, describe, require, beforeEach, afterEach */
 
 var chai = require('chai'),
     expect = chai.expect,
     appModel = require('../server/public/js/models/appModel.js'),
-    LocalStorage = require('node-localstorage').LocalStorage,
-    localStorage;
+    LocalStorage = require('node-localstorage').LocalStorage;
 
 describe('appModel tests', function() {
+
+  var localStorage;
 
   beforeEach(function() {
     localStorage = new LocalStorage('./nodeLocalStorage');

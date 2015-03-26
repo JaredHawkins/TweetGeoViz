@@ -80,7 +80,8 @@ var tgv = tgv || {};
 
           form.submit();
         }
-      }
+      };
+
       input.onclick = this._control.emitOnFocus;
     },
 

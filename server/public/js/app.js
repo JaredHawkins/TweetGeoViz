@@ -1,3 +1,5 @@
+/*global google*/
+
 var tgv = tgv || {};
 
 (function(appModel, TweetCollection, Map, SearchBar, SlidePanel, TweetsPopup) {
@@ -11,7 +13,7 @@ var tgv = tgv || {};
       pins: pins
     });
 
-    var map = new tgv.Map({
+    var map = new Map({
       componentSelector: '#map-canvas',
       tweetCollection: tweetCollection
     });

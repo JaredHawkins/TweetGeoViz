@@ -1,3 +1,5 @@
+/*global Snap*/
+
 var tgv = tgv || {};
 
 (function(utils) {

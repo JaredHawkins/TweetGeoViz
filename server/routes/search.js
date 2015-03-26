@@ -1,4 +1,4 @@
-/*require module*/
+/*global module*/
 
 var searchRoutes = function(router) {
   //deal with search form - ors all words in search phrase together

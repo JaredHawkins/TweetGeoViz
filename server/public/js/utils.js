@@ -1,3 +1,5 @@
+/*global module*/
+
 var tgv = tgv || {};
 
 tgv.utils = {

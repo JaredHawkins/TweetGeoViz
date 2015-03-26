@@ -1,12 +1,12 @@
+/*global module, require*/
+
 var tgv = tgv || {};
 
 // Node.js detection. For testing
 if (typeof module !== 'undefined' && module.exports) {
   tgv.utils = require('../utils.js');
-  var path = require('path'),
-      LocalStorage = require('node-localstorage').LocalStorage,
-      nodeLocalStoragePath = path.resolve(__dirname + '../../../../tests/nodeLocalStorage'),
-  localStorage = new LocalStorage('./nodeLocalStorage');
+  var LocalStorage = require('node-localstorage').LocalStorage,
+      localStorage = new LocalStorage('./nodeLocalStorage');
 }
 
 (function(utils) {
