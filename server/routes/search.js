@@ -1,4 +1,4 @@
-/*require module*/
+/*global module*/
 
 var searchRoutes = function(router) {
   //deal with search form - ors all words in search phrase together
@@ -15,6 +15,8 @@ var searchRoutes = function(router) {
       }
     }, { tln: 1, tlt: 1 }, function(err, cursor) {
 
+      cursor = cursor || [];
+
       //chew up each database entry into geoJSON;
       //render the page with the data overlay once we reach the end of the list of matches.
       cursor.forEach(function(item) {
@@ -27,7 +29,8 @@ var searchRoutes = function(router) {
           geometry: {
             type: 'Point',
             coordinates: [item.tln, item.tlt]
-          }
+          },
+          text: item.t
         });
       });
 
@@ -36,7 +39,7 @@ var searchRoutes = function(router) {
         features: features
       };
 
-      return res.render('demo.jade', { pins: JSON.stringify(geoJSONlist) });
+      return res.render('demo.jade', { pins: JSON.stringify(geoJSONlist), searchQuery: JSON.stringify(req.body.tweetText) });
     });
   });
 };

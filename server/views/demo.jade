@@ -1,0 +1,105 @@
+doctype html5
+html
+  head
+
+    //- get the Google magics
+    script(src='https://maps.googleapis.com/maps/api/js?libraries=geometry,visualization')
+
+    //- add the Twitter magics... for share buttons
+    script(type='text/javascript').
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+
+    //- CSS goodness
+    link(href='css/demo.css', rel='stylesheet')
+    link(href='libs/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+
+
+    //- libs
+    script(src='libs/events/events.0.1.3.min.js', type='text/javascript', charset='utf-8')
+
+    //- for now we need to add jQuery for Bootstrap.js but we should eliminate using jQuery as much as we can
+    script(src='libs/jquery/jquery-1.11.2.min.js', type='text/javascript', charset='utf-8')
+
+    script(src='libs/bootstrap/js/bootstrap.min.js', type='text/javascript', charset='utf-8')
+
+    script(src='libs/snap/snap.js', type='text/javascript', charset='utf-8')
+    link(href='libs/snap/snap.css', rel='stylesheet')
+
+
+    //- !! our script goes here !!
+    script(type='text/javascript').
+      //write the pins object to the window
+      var tgv = tgv || {};
+      tgv.events = new utils.Events(); // load events library
+      pins = !{pins};
+      searchQuery = !{searchQuery};
+
+    script(src='js/utils.js', type='text/javascript', charset='utf-8')
+
+    //- models
+    script(src='js/models/tweetCollection.js', type='text/javascript', charset='utf-8')
+    script(src='js/models/appModel.js', type='text/javascript', charset='utf-8')
+
+    //- components
+    script(src='js/components/map/mapView.js', type='text/javascript', charset='utf-8')
+    script(src='js/components/map/map.js', type='text/javascript', charset='utf-8')
+
+    script(src='js/components/searchBar/searchBarView.js', type='text/javascript', charset='utf-8')
+    script(src='js/components/searchBar/searchBar.js', type='text/javascript', charset='utf-8')
+
+    script(src='js/components/slidePanel/slidePanelView.js', type='text/javascript', charset='utf-8')
+    script(src='js/components/slidePanel/slidePanel.js', type='text/javascript', charset='utf-8')
+
+    script(src='js/components/tweetsPopup/tweetsPopupView.js', type='text/javascript', charset='utf-8')
+    script(src='js/components/tweetsPopup/tweetsPopup.js', type='text/javascript', charset='utf-8')
+
+    script(src='js/app.js', type='text/javascript', charset='utf-8')
+
+  body
+    .snap-drawers
+      .snap-drawer.snap-drawer-left
+        div#slidePanel
+          h3 TweetGeoViz
+          .slidePanel-social
+            //- put my name for now
+            a.twitter-share-button(href='https://twitter.com/share', data-lang='en', data-text='TweetGeoViz - Visualization tool to view tweets by location and content.', data-url='https://github.com/JaredHawkins/TweetGeoViz', data-count='none', data-via='twitanvk') Tweet
+            //- going to put my name for now but it should be changed to TweetGeoViz
+            a.twitter-follow-button(href='https://twitter.com/twitanvk', data-show-count='false', data-lang='en') Follow @twitanvk
+            iframe(src='http://ghbtns.com/github-btn.html?user=JaredHawkins&repo=TweetGeoViz&type=fork&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='120', height='20')
+            iframe(src='http://ghbtns.com/github-btn.html?user=JaredHawkins&repo=TweetGeoViz&type=follow&count=true', allowtransparency='true', frameborder='0', scrolling='0', width='120', height='20')
+          h4 Controls
+          ul
+            li
+              .input-group.input-group-sm
+                span#cursor-click-radius-description.input-group-addon Cursor Click Radius
+                input#cursor-click-radius-input.form-control(type='number', placeholder='0', aria-describedby='cursor-click-radius-description')
+                span.input-group-addon km
+              .input-group.input-group-sm
+                span.input-group-addon Keyword Part of Another Word
+                span.input-group-addon
+                  input(type='checkbox', aria-label='Keyword Part of Another Word', checked='checked', disabled='disabled')
+              .input-group.input-group-sm
+                span.input-group-addon Enable Map Click
+                span.input-group-addon
+                  input#enable-map-click-checkbox(type='checkbox', aria-label='Enable Map Click')
+          div
+            p Visualization tool to view tweets by location and content.
+            p
+              | A product of collaboration between HealthMap.org (Boston Children's Hospital), Mozilla Science Lab and our community.
+            p
+              span.label.label-primary v0.0.3
+
+    .site-wrapper.snap-content
+      .site-wrapper-inner
+        #map-canvas
+        #searchBar.col-md-4
+        #tweetsPopup.col-md-2
+          .panel.panel-default
+            .panel-heading
+              strong Tweets
+              button#tweetsPopup-close.close(aria-hidden="true", type="button") &#215;
+            .panel-body
+              ul
+                li
+                  .tweetText
+                    span No Tweets Found

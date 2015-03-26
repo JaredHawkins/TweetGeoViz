@@ -55,7 +55,7 @@ exit
 Then start the app from the top directory of the project:
 
 ```
-node app.js
+npm start
 ```
 
 And in a browser, navigate to `http://localhost:2063/`.
@@ -105,6 +105,14 @@ where `features` is an array of objects of the format:
 ```
 
 where `tln` and `tlt` are the tweet longitude and lattitude pulled from the database.
+
+##Compiling CSS from LESS
+
+Run from the main directory
+
+```
+lessc libs/server/public/css/demo.less > libs/server/public/css/demo.css
+```
 
 ##Testing
 

@@ -1,0 +1,30 @@
+@tweetPopupMaxHeight: 420px;
+
+#tweetsPopup {
+  display: none;
+  top: 100px;
+  left: 100px;
+  position: absolute;
+
+  .panel-body {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: @tweetPopupMaxHeight;
+
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+
+      li > .tweetText {
+        padding: @padding;
+        border-bottom: 1px solid @borderBottomColor;
+        border-top: 1px solid @borderTopColor;
+
+        .selection {
+          background-color: yellow;
+        }
+      }
+    }
+  }
+}

@@ -6,11 +6,12 @@ var express = require('express'),
 // Landing page
 router.get('/', function(req, res) {
   var emptyBlob = {
-    features:[]
+    features: []
   };
 
   res.render('demo.jade', {
-    pins: JSON.stringify(emptyBlob)
+    pins: JSON.stringify(emptyBlob),
+    searchQuery: JSON.stringify(null)
   });
 });
 
