@@ -1,5 +1,14 @@
 var tgv = tgv || {};
 
+// Node.js detection. For testing
+if (typeof module !== 'undefined' && module.exports) {
+  tgv.utils = require('../utils.js');
+  var path = require('path'),
+      LocalStorage = require('node-localstorage').LocalStorage,
+      nodeLocalStoragePath = path.resolve(__dirname + '../../../../tests/nodeLocalStorage'),
+  localStorage = new LocalStorage('./nodeLocalStorage');
+}
+
 (function(utils) {
   var AppModel = function(options) {
     this._init = this._init.bind(this);
@@ -29,17 +38,17 @@ var tgv = tgv || {};
 
       // overwrite data from localStorage storage if it is available
       if (localStorage.getItem('clickRadius') !== null) {
-        this._clickRadius = localStorage.getItem('clickRadius');
+        this._clickRadius = parseInt(localStorage.getItem('clickRadius'), 10);
       }
 
       if (localStorage.getItem('mapClickEnabled') !== null) {
-        this._mapClickEnabled = localStorage.getItem('mapClickEnabled');
+        this._mapClickEnabled =
+          localStorage.getItem('mapClickEnabled') === 'true';
       }
     },
 
     getClickRadiusMeters: function AppModel_getClickRadiusMeters() {
       var km = 1000;
-
       return this._clickRadius * km;
     },
 

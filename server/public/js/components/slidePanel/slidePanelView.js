@@ -36,7 +36,7 @@ var tgv = tgv || {};
 
       var enableMapClickCheckbox = this.el
         .querySelector('#enable-map-click-checkbox');
-      enableMapClickCheckbox.checked = options.enableMapClick === 'true';
+      enableMapClickCheckbox.checked = options.enableMapClick;
 
       // bind events
       clickRadiusInput.oninput = function() {

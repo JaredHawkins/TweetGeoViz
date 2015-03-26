@@ -1,1 +1,3 @@
 node_modules/
+nodeLocalStorage/
+npm-debug.log
