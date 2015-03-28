@@ -6,6 +6,12 @@ Visualization tool to view tweets by location and content.
 ------
 A product of collaboration between HealthMap.org (Boston Children's Hospital), Mozilla Science Lab and our community.
 
+![Screeshot 1](https://github.com/JaredHawkins/TweetGeoViz/blob/master/screenshots/mar_26_2015/1.png)
+
+![Screeshot 2](https://github.com/JaredHawkins/TweetGeoViz/blob/master/screenshots/mar_26_2015/2.png)
+
+![Screeshot 3](https://github.com/JaredHawkins/TweetGeoViz/blob/master/screenshots/mar_26_2015/3.png)
+
 #Getting Started
 
 ##Dependencies
