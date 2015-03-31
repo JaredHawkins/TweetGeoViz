@@ -10,9 +10,9 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 (function(utils) {
+
   var AppModel = function(options) {
     this._init = this._init.bind(this);
-
     this.getClickRadius = this.getClickRadius.bind(this);
     this.getMapClickEnabled = this.getMapClickEnabled.bind(this);
     this.setClickRadius = this.setClickRadius.bind(this);
@@ -31,45 +31,6 @@ if (typeof module !== 'undefined' && module.exports) {
   };
 
   AppModel.prototype = {
-    _init: function App_Model__init(options) {
-
-      this._clickRadius = options.clickRadius;
-      this._mapClickEnabled = options.mapClickEnabled;
-
-      // overwrite data from localStorage storage if it is available
-      if (localStorage.getItem('clickRadius') !== null) {
-        this._clickRadius = parseInt(localStorage.getItem('clickRadius'), 10);
-      }
-
-      if (localStorage.getItem('mapClickEnabled') !== null) {
-        this._mapClickEnabled =
-          localStorage.getItem('mapClickEnabled') === 'true';
-      }
-    },
-
-    getClickRadiusMeters: function AppModel_getClickRadiusMeters() {
-      var km = 1000;
-      return this._clickRadius * km;
-    },
-
-    getClickRadius: function AppModel_getClickRadius() {
-      return this._clickRadius;
-    },
-
-    getMapClickEnabled: function AppModel_getMapClickEnabled() {
-      return this._mapClickEnabled;
-    },
-
-    setClickRadius: function AppModel_setClickRadius(value) {
-      this._clickRadius = value;
-      localStorage.setItem('clickRadius', value);
-    },
-
-    setMapClickEnabled: function AppModel_setMapClickEnabled(value) {
-      this._mapClickEnabled = value;
-      localStorage.setItem('mapClickEnabled', value);
-    },
-
     showingSidePanel: false,
     showingTweetsPopup: false,
     searchQuery: null,
@@ -77,7 +38,53 @@ if (typeof module !== 'undefined' && module.exports) {
     _clickRadius: null
   };
 
+  AppModel.prototype._init = function App_Model__init(options) {
+    this._clickRadius = options.clickRadius;
+    this._mapClickEnabled = options.mapClickEnabled;
+
+    // overwrite data from localStorage storage if it is available
+    if (localStorage.getItem('clickRadius') !== null) {
+      this._clickRadius = parseInt(localStorage.getItem('clickRadius'), 10);
+    }
+
+    if (localStorage.getItem('mapClickEnabled') !== null) {
+      this._mapClickEnabled =
+        localStorage.getItem('mapClickEnabled') === 'true';
+    }
+  };
+
+  AppModel.prototype.getClickRadiusMeters =
+                                      function AppModel_getClickRadiusMeters() {
+    var km = 1000;
+    return this._clickRadius * km;
+  };
+
+  AppModel.prototype.getClickRadius = function AppModel_getClickRadius() {
+    return this._clickRadius;
+  };
+
+  AppModel.prototype.getMapClickEnabled =
+                                        function AppModel_getMapClickEnabled() {
+    return this._mapClickEnabled;
+  };
+
+  AppModel.prototype.setClickRadius = function AppModel_setClickRadius(value) {
+    this._clickRadius = value;
+    localStorage.setItem('clickRadius', value);
+
+    return this; // for chaining
+  };
+
+  AppModel.prototype.setMapClickEnabled =
+                                  function AppModel_setMapClickEnabled(value) {
+    this._mapClickEnabled = value;
+    localStorage.setItem('mapClickEnabled', value);
+
+    return this; // for chaining
+  };
+
   tgv.appModel = new AppModel();
+
 })(tgv.utils);
 
 // Node.js support
