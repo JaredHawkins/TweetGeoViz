@@ -1,0 +1,50 @@
+#t,
+#c,
+.site-wrapper.snap-content {
+  position: absolute;
+  display: table;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  z-index: 2;
+}
+#t #d,
+#c #d,
+.site-wrapper.snap-content #d,
+#t .site-wrapper-inner,
+#c .site-wrapper-inner,
+.site-wrapper.snap-content .site-wrapper-inner {
+  display: table-cell;
+  vertical-align: top;
+}
+#t #d #map-canvas,
+#c #d #map-canvas,
+.site-wrapper.snap-content #d #map-canvas,
+#t .site-wrapper-inner #map-canvas,
+#c .site-wrapper-inner #map-canvas,
+.site-wrapper.snap-content .site-wrapper-inner #map-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+#searchBar {
+  padding: 5px;
+  /* need to remove this*/
+  z-index: 0;
+  position: absolute;
+  left: 113px;
+  top: 0px;
+}
+#searchBar .searchBar-button {
+  backgroundColor: #fff;
+  borderStyle: solid;
+  borderWidth: 2px;
+  cursor: pointer;
+  textAlign: center;
+}
+#searchBar .searchBar-button .searchBar-button-buttonText {
+  fontFamily: 'Arial,sans-serif';
+  fontSize: 12px;
+  paddingLeft: 4px;
+  paddingRight: 4px;
+}
