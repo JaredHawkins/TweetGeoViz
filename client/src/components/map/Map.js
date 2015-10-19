@@ -2,7 +2,8 @@
 
 var React = require('react'),
     SearchBar = require('../searchBar/searchBar.js'),
-    SlidePanel = require('../sidePanel/slidePanel.js');
+    SlidePanel = require('../sidePanel/slidePanel.js'),
+    TweetsPopup = require('../tweetsPopup/tweetsPopup.js');
 
 var Map = React.createClass({
 
@@ -30,13 +31,21 @@ var Map = React.createClass({
 
   render: function() {
     return (
-      <div id='t' className='.site-wrapper.snap-content'>
-        <div id='d' className='.site-wrapper-inner'>
-        <SlidePanel />
-        <div id='map-canvas'>
-          Loading map...
+      <div>
+        <div className='snap-drawers'>
+          <div className='snap-drawer snap-drawer-left'>
+            <SlidePanel />
+          </div>
         </div>
-        <SearchBar />
+
+        <div className='site-wrapper snap-content'>
+          <div className='site-wrapper-inner'>
+            <div id='map-canvas'>
+              Loading map...
+            </div>
+            <SearchBar />
+            <TweetsPopup />
+          </div>
         </div>
       </div>
     );

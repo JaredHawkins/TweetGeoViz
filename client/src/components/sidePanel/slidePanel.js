@@ -1,21 +1,27 @@
 'use strict';
 
-var React = require('react');
+var React = require('react'),
+    Snap = require('../../libs/snap/snap.js');
 
 var SlidePanel = React.createClass({
 
   propTypes: {
-    selector: React.PropTypes.string.isRequired
+    contentSelector: React.PropTypes.string.isRequired
   },
 
   getDefaultProps: function() {
     return {
-      selector: '#map-canvas'
+      contentSelector: '.site-wrapper'
     };
   },
 
   componentDidMount: function() {
-    var element = document.querySelector(this.props.selector);
+    var snap = new Snap({
+      element: document.querySelector(this.props.contentSelector),
+      tapToClose: false,
+      touchToDrag: false,
+      hyperextensible: false
+    });
   },
 
   render: function() {
