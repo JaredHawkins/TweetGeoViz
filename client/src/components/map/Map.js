@@ -3,7 +3,9 @@
 var React = require('react'),
     SearchBar = require('../searchBar/searchBar.js'),
     SlidePanel = require('../sidePanel/slidePanel.js'),
-    TweetsPopup = require('../tweetsPopup/tweetsPopup.js');
+    TweetsPopup = require('../tweetsPopup/tweetsPopup.js'),
+    TweetsPopupStore = require('../../stores/tweetsPopupStore.js'),
+    TweetsPopupActions = require('../../actions/tweetsPopupActions.js');
 
 var Map = React.createClass({
 
@@ -24,9 +26,56 @@ var Map = React.createClass({
     };
   },
 
+  getInitialState: function() {
+    return {
+      showPopup: false,
+      popupPoint: {
+        x: -100,
+        y: -100
+      }
+    }
+  },
+
+  componentWillMount: function() {
+    this.setState({
+      showPopup: TweetsPopupStore.isVisible(),
+      popupPoint: TweetsPopupStore.getPoint()
+    });
+
+    TweetsPopupStore.addChangeListener(this._TweetsPopupStoreChange);
+  },
+
+  _mapClick: function(event) {
+    var lat = event.latLng.lat(),
+        lng = event.latLng.lng();
+
+    if (!this.state.showPopup) {
+      TweetsPopupActions.showPopup({
+        x: event.pixel.x,
+        y: event.pixel.y
+      });
+    }
+
+    //alert('hola');
+  },
+
   componentDidMount: function() {
-    var element = document.querySelector(this.props.selector);
-    new google.maps.Map(element, this.props.mapOptions);
+    var element = document.querySelector(this.props.selector),
+        googleMap = new google.maps.Map(element, this.props.mapOptions);
+
+    // attach event to google map click
+    google.maps.event.addListener(googleMap, 'click', this._mapClick);
+  },
+
+  componentWillUnmount: function() {
+    TweetsPopupStore.removeChangeListener(this._TweetsPopupStoreChange);
+  },
+
+  _TweetsPopupStoreChange: function() {
+    this.setState({
+      showPopup: TweetsPopupStore.isVisible(),
+      popupPoint: TweetsPopupStore.getPoint()
+    });
   },
 
   render: function() {
@@ -44,7 +93,9 @@ var Map = React.createClass({
               Loading map...
             </div>
             <SearchBar />
-            <TweetsPopup />
+            <TweetsPopup
+              visible={this.state.showPopup}
+              point={this.state.popupPoint} />
           </div>
         </div>
       </div>

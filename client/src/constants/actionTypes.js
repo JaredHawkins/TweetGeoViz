@@ -3,5 +3,9 @@
 var keyMirror = require('react/lib/keyMirror');
 
 module.exports = keyMirror({
-  INITIALIZE: null
+  INITIALIZE: null,
+
+  // tweetsPopup
+  SHOW_POPUP: null,
+  HIDE_POPUP: null
 });
