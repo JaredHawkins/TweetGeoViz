@@ -3,12 +3,12 @@
 var Dispatcher = require('../dispatcher/appDispatcher.js'),
     ActionTypes = require('../constants/actionTypes.js');
 
-var InitializeActions = {
-  closePopup: function() {
+var SearchBarActions = {
+  onFocus: function() {
     Dispatcher.dispatch({
-      actionType: ActionTypes.CLOSE_POPUP
+      actionType: ActionTypes.SEARCH_ONFOCUS
     });
   }
 };
 
-module.exports = InitializeActions;
+module.exports = SearchBarActions;

@@ -5,9 +5,13 @@ var React = require('react'),
     SlidePanel = require('../sidePanel/slidePanel.js'),
     TweetsPopup = require('../tweetsPopup/tweetsPopup.js'),
     TweetsPopupStore = require('../../stores/tweetsPopupStore.js'),
-    TweetsPopupActions = require('../../actions/tweetsPopupActions.js');
+    MapActions = require('../../actions/mapActions.js'),
+    MapStore = require('../../stores/mapStore.js');
 
 var Map = React.createClass({
+
+  _googleMap: null,
+  _mapCircle: null,
 
   propTypes: {
     selector: React.PropTypes.string.isRequired,
@@ -42,21 +46,59 @@ var Map = React.createClass({
       popupPoint: TweetsPopupStore.getPoint()
     });
 
-    TweetsPopupStore.addChangeListener(this._TweetsPopupStoreChange);
+    TweetsPopupStore.addChangeListener(this._tweetsPopupStoreChange);
   },
 
-  _mapClick: function(event) {
+  _onClick: function(event) {
     var lat = event.latLng.lat(),
         lng = event.latLng.lng();
 
     if (!this.state.showPopup) {
-      TweetsPopupActions.showPopup({
+      MapActions.onClick({
         x: event.pixel.x,
         y: event.pixel.y
       });
+      this._showCircle(lat, lng);
+    }
+  },
+
+  _showCircle: function(lat, lng) {
+    this._hideCircle();
+
+    this._mapCircle = new google.maps.Circle({
+      map: this._googleMap,
+      center: new google.maps.LatLng(lat, lng),
+      clickable: false,
+      radius: MapStore.getClickRadiusMeters(),
+      fillColor: '#fff',
+      fillOpacity: 0.6,
+      strokeColor: '#313131',
+      strokeOpacity: 0.4,
+      strokeWeight: 0.8
+    });
+
+    this._googleMap.setOptions({
+      draggable: false,
+      zoomControl: false,
+      scrollwheel: false,
+      panControl: false,
+      disableDoubleClickZoom: true
+    });
+  },
+
+  _hideCircle: function() {
+    if (!this._mapCircle) {
+      return;
     }
 
-    //alert('hola');
+    this._mapCircle.setMap(null);
+    this._googleMap.setOptions({
+      draggable: true,
+      zoomControl: true,
+      scrollwheel: true,
+      panControl: true,
+      disableDoubleClickZoom: false
+    });
   },
 
   componentDidMount: function() {
@@ -64,18 +106,24 @@ var Map = React.createClass({
         googleMap = new google.maps.Map(element, this.props.mapOptions);
 
     // attach event to google map click
-    google.maps.event.addListener(googleMap, 'click', this._mapClick);
+    google.maps.event.addListener(googleMap, 'click', this._onClick);
+
+    this._googleMap = googleMap;
   },
 
   componentWillUnmount: function() {
-    TweetsPopupStore.removeChangeListener(this._TweetsPopupStoreChange);
+    TweetsPopupStore.removeChangeListener(this._tweetsPopupStoreChange);
   },
 
-  _TweetsPopupStoreChange: function() {
+  _tweetsPopupStoreChange: function() {
     this.setState({
       showPopup: TweetsPopupStore.isVisible(),
       popupPoint: TweetsPopupStore.getPoint()
     });
+
+    if (!TweetsPopupStore.isVisible()) {
+      this._hideCircle();
+    }
   },
 
   render: function() {

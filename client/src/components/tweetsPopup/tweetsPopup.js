@@ -20,8 +20,8 @@ var TweetsPopup = React.createClass({
     };
   },
 
-  close: function() {
-    TweetsPopupActions.hidePopup();
+  _onClick: function(event) {
+    TweetsPopupActions.closePopup();
   },
 
   render: function() {
@@ -36,7 +36,7 @@ var TweetsPopup = React.createClass({
         <div className='panel panel-default'>
           <div className='panel-heading'>
             <strong>0 Tweets</strong>
-            <button id='tweetsPopup-close' aria-hidden='true' type='button' className='close' onClick={this.close}>×</button>
+            <button id='tweetsPopup-close' aria-hidden='true' type='button' className='close' onClick={this._onClick}>×</button>
           </div>
           <div className='panel-body'>
             <ul>

@@ -3,12 +3,13 @@
 var Dispatcher = require('../dispatcher/appDispatcher.js'),
     ActionTypes = require('../constants/actionTypes.js');
 
-var InitializeActions = {
-  closePopup: function() {
+var MapActions = {
+  onClick: function(point) {
     Dispatcher.dispatch({
-      actionType: ActionTypes.CLOSE_POPUP
+      actionType: ActionTypes.MAP_CLICK,
+      point: point
     });
   }
 };
 
-module.exports = InitializeActions;
+module.exports = MapActions;

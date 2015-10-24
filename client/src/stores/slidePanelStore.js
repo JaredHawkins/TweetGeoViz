@@ -7,13 +7,9 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     _ = require('lodash'),
     CHANGE_EVENT = 'change';
 
-var _visible = false,
-    _point = {
-      x: -100,
-      y: -100
-    };
+var _isSlidePanelVisible = false;
 
-var TweetsPopupStore = assign({}, EventEmitter.prototype, {
+var SlidePanelStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -26,37 +22,28 @@ var TweetsPopupStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  isVisible: function() {
-    return _visible;
-  },
-
-  getPoint: function() {
-    return _point;
+  isSlidePanelVisible: function() {
+    return _isSlidePanelVisible;
   }
 });
 
-TweetsPopupStore.dispatchToken = Dispatcher.register(function(action) {
+SlidePanelStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.actionType) {
-    case ActionTypes.MAP_CLICK:
-      if (_visible) {
+    case ActionTypes.SEARCH_ONFOCUS:
+      if (_isSlidePanelVisible) {
         return;
       }
 
-      _visible = true;
-      _point = action.point;
-      TweetsPopupStore.emitChange();
+      _isSlidePanelVisible = true;
+      SlidePanelStore.emitChange();
       break;
-    case ActionTypes.CLOSE_POPUP:
-      if (!_visible) {
+    case ActionTypes.MAP_CLICK:
+      if (!_isSlidePanelVisible) {
         return;
       }
 
-      _visible = false;
-      _point = {
-        x: -100,
-        y: -100
-      };
-      TweetsPopupStore.emitChange();
+      _isSlidePanelVisible = false;
+      SlidePanelStore.emitChange();
       break;
     default:
       // nothing to do
@@ -64,4 +51,4 @@ TweetsPopupStore.dispatchToken = Dispatcher.register(function(action) {
   }
 });
 
-module.exports = TweetsPopupStore;
+module.exports = SlidePanelStore;

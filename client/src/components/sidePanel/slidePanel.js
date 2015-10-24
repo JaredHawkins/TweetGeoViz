@@ -1,9 +1,12 @@
 'use strict';
 
 var React = require('react'),
+    SlidePanelStore = require('../../stores/slidePanelStore.js'),
     Snap = require('../../libs/snap/snap.js');
 
 var SlidePanel = React.createClass({
+
+  _snapPanel: null,
 
   propTypes: {
     contentSelector: React.PropTypes.string.isRequired
@@ -16,12 +19,36 @@ var SlidePanel = React.createClass({
   },
 
   componentDidMount: function() {
-    var snap = new Snap({
+    this._snapPanel = new Snap({
       element: document.querySelector(this.props.contentSelector),
       tapToClose: false,
       touchToDrag: false,
       hyperextensible: false
     });
+  },
+
+  _closePanel: function() {
+    this._snapPanel.close();
+  },
+
+  _openPanel: function() {
+    this._snapPanel.open('left');
+  },
+
+  componentWillMount: function() {
+    SlidePanelStore.addChangeListener(this._slidePanelStoreChange);
+  },
+
+  componentWillUnmount: function() {
+    SlidePanelStore.removeChangeListener(this._slidePanelStoreChange);
+  },
+
+  _slidePanelStoreChange: function() {
+    if (SlidePanelStore.isSlidePanelVisible()) {
+      this._openPanel();
+    } else {
+      this._closePanel();
+    }
   },
 
   render: function() {
