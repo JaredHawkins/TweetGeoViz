@@ -5,8 +5,7 @@ var React = require('react'),
     SlidePanel = require('../sidePanel/slidePanel.js'),
     TweetsPopup = require('../tweetsPopup/tweetsPopup.js'),
     TweetsPopupStore = require('../../stores/tweetsPopupStore.js'),
-    MapActions = require('../../actions/mapActions.js'),
-    MapStore = require('../../stores/mapStore.js');
+    MapActions = require('../../actions/mapActions.js');
 
 var Map = React.createClass({
 
@@ -32,28 +31,41 @@ var Map = React.createClass({
 
   getInitialState: function() {
     return {
-      showPopup: false,
-      popupPoint: {
-        x: -100,
-        y: -100
+      popup: {
+        visible: false,
+        point: {
+          x: -100,
+          y: -100
+        }
+      },
+      map: {
+        clickEnabled: true,
+        clickRadius: 250
       }
     }
   },
 
   componentWillMount: function() {
+    // set default state from stores
     this.setState({
-      showPopup: TweetsPopupStore.isVisible(),
-      popupPoint: TweetsPopupStore.getPoint()
+      popup: {
+        visible: TweetsPopupStore.isVisible(),
+        point: TweetsPopupStore.getPoint()
+      }
     });
 
-    TweetsPopupStore.addChangeListener(this._tweetsPopupStoreChange);
+    TweetsPopupStore.addChangeListener(this._popupStateChange);
   },
 
   _onClick: function(event) {
+    if (!this.state.map.clickEnabled) {
+      return;
+    }
+
     var lat = event.latLng.lat(),
         lng = event.latLng.lng();
 
-    if (!this.state.showPopup) {
+    if (!this.state.popup.visible) {
       MapActions.onClick({
         x: event.pixel.x,
         y: event.pixel.y
@@ -69,7 +81,7 @@ var Map = React.createClass({
       map: this._googleMap,
       center: new google.maps.LatLng(lat, lng),
       clickable: false,
-      radius: MapStore.getClickRadiusMeters(),
+      radius: this._getClickRadiusMeters(),
       fillColor: '#fff',
       fillOpacity: 0.6,
       strokeColor: '#313131',
@@ -112,13 +124,20 @@ var Map = React.createClass({
   },
 
   componentWillUnmount: function() {
-    TweetsPopupStore.removeChangeListener(this._tweetsPopupStoreChange);
+    TweetsPopupStore.removeChangeListener(this._popupStateChange);
   },
 
-  _tweetsPopupStoreChange: function() {
+  _getClickRadiusMeters: function() {
+    var km = 1000;
+    return this.state.map.clickRadius * km;
+  },
+
+  _popupStateChange: function() {
     this.setState({
-      showPopup: TweetsPopupStore.isVisible(),
-      popupPoint: TweetsPopupStore.getPoint()
+      popup: {
+        visible: TweetsPopupStore.isVisible(),
+        point: TweetsPopupStore.getPoint()
+      }
     });
 
     if (!TweetsPopupStore.isVisible()) {
@@ -126,12 +145,30 @@ var Map = React.createClass({
     }
   },
 
+  _setMapState: function(event) {
+    var field = event.target.name,
+        value = event.target.value;
+
+    if (field == 'clickRadius') {
+      value = parseInt(value, 10);
+    } else if (field == 'clickEnabled') {
+      value = event.target.checked;
+    }
+
+    this.state.map[field] = value;
+    return this.setState({ map: this.state.map });
+  },
+
   render: function() {
     return (
       <div>
         <div className='snap-drawers'>
           <div className='snap-drawer snap-drawer-left'>
-            <SlidePanel />
+            <SlidePanel
+              contentSelector='.site-wrapper'
+              mapClickEnabled={this.state.map.clickEnabled}
+              clickRadius={this.state.map.clickRadius}
+              onChange={this._setMapState} />
           </div>
         </div>
 
@@ -142,8 +179,8 @@ var Map = React.createClass({
             </div>
             <SearchBar />
             <TweetsPopup
-              visible={this.state.showPopup}
-              point={this.state.popupPoint} />
+              visible={this.state.popup.visible}
+              point={this.state.popup.point} />
           </div>
         </div>
       </div>

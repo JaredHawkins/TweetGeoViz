@@ -9,12 +9,17 @@ var SlidePanel = React.createClass({
   _snapPanel: null,
 
   propTypes: {
-    contentSelector: React.PropTypes.string.isRequired
+    contentSelector: React.PropTypes.string.isRequired,
+    onChange: React.PropTypes.func.isRequired,
+    mapClickEnabled: React.PropTypes.bool,
+    clickRadius: React.PropTypes.number
   },
 
   getDefaultProps: function() {
     return {
-      contentSelector: '.site-wrapper'
+      contentSelector: '.site-wrapper',
+      mapClickEnabled: true,
+      clickRadius: 250
     };
   },
 
@@ -79,7 +84,7 @@ var SlidePanel = React.createClass({
           <li>
             <div className='input-group input-group-sm'>
               <span id='cursor-click-radius-description' className='input-group-addon'>Cursor Click Radius</span>
-              <input id='cursor-click-radius-input' placeholder='0' aria-describedby='cursor-click-radius-description' className='form-control' type='number' />
+              <input id='cursor-click-radius-input' name='clickRadius' placeholder='0' aria-describedby='cursor-click-radius-description' className='form-control' type='number' value={this.props.clickRadius} onChange={this.props.onChange} />
               <span className='input-group-addon'>km</span>
             </div>
             <div className='input-group input-group-sm'>
@@ -91,7 +96,7 @@ var SlidePanel = React.createClass({
             <div className='input-group input-group-sm'>
               <span className='input-group-addon'>Enable Map Click</span>
               <span className='input-group-addon'>
-                <input id='enable-map-click-checkbox' aria-label='Enable Map Click' type='checkbox' />
+                <input id='enable-map-click-checkbox' name='clickEnabled' aria-label='Enable Map Click' type='checkbox' checked={this.props.mapClickEnabled} onChange={this.props.onChange} />
               </span>
             </div>
           </li>
@@ -100,7 +105,7 @@ var SlidePanel = React.createClass({
           <p>Visualization tool to view tweets by location and content.</p>
           <p>A product of collaboration between HealthMap.org (Boston Children&#39;s Hospital), Mozilla Science Lab and our community.</p>
           <p>
-            <span className='label label-primary'>v0.0.3</span>
+            <span className='label label-primary'>v0.1.0</span>
           </p>
         </div>
       </div>
