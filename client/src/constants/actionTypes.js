@@ -12,5 +12,11 @@ module.exports = keyMirror({
   SEARCH_ONFOCUS: null,
 
   // tweetsPopup
-  CLOSE_POPUP: null
+  CLOSE_POPUP: null,
+
+  // tweets
+  TWEETS_SEARCH: null,
+
+  // errors
+  ERROR: null
 });

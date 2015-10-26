@@ -8,6 +8,6 @@ var React = require('react'),
 InitializeActions.initApp();
 
 // add Router.HistoryLocation if you want to use clean HTML5 router without #
-Router.run(routes, function(Handler) {
+Router.run(routes, Router.HistoryLocation, function(Handler) {
   React.render(<Handler />, document.getElementById('app'));
 });

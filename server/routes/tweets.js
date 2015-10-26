@@ -1,19 +1,27 @@
-/*global module*/
+'use strict';
 
-var searchRoutes = function(router) {
-  //deal with search form - ors all words in search phrase together
-  router.post('/search', function(req, res) {
+/* global require, module */
 
-    var db = req.db,
-        collection = db.get('ControlTweets'),
-        features = [];
+var monk = require('monk'),
+    mongoConfig = require('../config/config.json').mongo;
+
+var tweets = {
+  get: function(req, res, next) {
+    var db = monk(mongoConfig.server + mongoConfig.databaseName),
+        collection = db.get(mongoConfig.collection);
 
     //execute db query
     collection.find({
       $text: {
-        $search: req.body.tweetText
+        $search: req.query.search
       }
-    }, { tln: 1, tlt: 1 }, function(err, cursor) {
+    }, { tln: 1, tlt: 1 }, function(error, cursor) {
+
+      var features = [];
+
+      if (error) {
+        return next(error);
+      }
 
       cursor = cursor || [];
 
@@ -39,9 +47,10 @@ var searchRoutes = function(router) {
         features: features
       };
 
-      return res.render('demo.jade', { pins: JSON.stringify(geoJSONlist), searchQuery: JSON.stringify(req.body.tweetText) });
+      res.status(200);
+      res.json(geoJSONlist);
     });
-  });
+  }
 };
 
-module.exports = searchRoutes;
+module.exports = tweets;

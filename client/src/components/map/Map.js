@@ -1,10 +1,12 @@
 'use strict';
 
 var React = require('react'),
+    toastr = require('toastr'),
     SearchBar = require('../searchBar/searchBar.js'),
     SlidePanel = require('../sidePanel/slidePanel.js'),
     TweetsPopup = require('../tweetsPopup/tweetsPopup.js'),
     TweetsPopupStore = require('../../stores/tweetsPopupStore.js'),
+    MapStore = require('../../stores/mapStore.js'),
     MapActions = require('../../actions/mapActions.js');
 
 var Map = React.createClass({
@@ -31,6 +33,7 @@ var Map = React.createClass({
 
   getInitialState: function() {
     return {
+      error: null,
       popup: {
         visible: false,
         point: {
@@ -48,6 +51,7 @@ var Map = React.createClass({
   componentWillMount: function() {
     // set default state from stores
     this.setState({
+      error: MapStore.getError(),
       popup: {
         visible: TweetsPopupStore.isVisible(),
         point: TweetsPopupStore.getPoint()
@@ -55,6 +59,7 @@ var Map = React.createClass({
     });
 
     TweetsPopupStore.addChangeListener(this._popupStateChange);
+    MapStore.addChangeListener(this._mapStateChange);
   },
 
   _onClick: function(event) {
@@ -125,6 +130,7 @@ var Map = React.createClass({
 
   componentWillUnmount: function() {
     TweetsPopupStore.removeChangeListener(this._popupStateChange);
+    MapStore.removeChangeListener(this._mapStateChange);
   },
 
   _getClickRadiusMeters: function() {
@@ -143,6 +149,16 @@ var Map = React.createClass({
     if (!TweetsPopupStore.isVisible()) {
       this._hideCircle();
     }
+  },
+
+  _mapStateChange: function() {
+    var error = MapStore.getError();
+
+    if (error) {
+      toastr.error(error);
+    }
+
+    this.setState({ error: error });
   },
 
   _setMapState: function(event) {

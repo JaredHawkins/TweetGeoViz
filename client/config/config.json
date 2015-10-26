@@ -1,0 +1,10 @@
+{
+  "api": {
+    "baseUrl": "http://localhost:2036",
+    "urls": {
+      "tweets": "/tweets"
+    },
+    "timeout": 12000,
+    "xAccessToken": "914AF1EA-7B67-11E5-96EC-563519B61C82"
+  }
+}

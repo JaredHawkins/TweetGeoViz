@@ -1,44 +1,61 @@
-/*global process, require, __dirname*/
+'use strict';
+
+/* global require, process, console */
 
 var express = require('express'),
     logger = require('morgan'),
-    cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
-    monk = require('monk'),
-    path = require('path'),
-    config = require('../config/config.json'),
-    dbConfig = config.mongo || {},
-    app = express();
+    routes = require('./routes'),
+    config = require('./config/config.json'),
+    authRequest = require('./middlewares/authRequest.js'),
+    allowCORSHandler = require('./middlewares/allowCORS.js'),
+    notFoundRequest = require('./middlewares/notFound.js'),
+    logErrorsHandler = require('./middlewares/logErrors.js'),
+    errorHandler = require('./middlewares/serverError.js'),
+    fs = require('fs'),
+    moment = require('moment'),
+    app = express(),
+    ip = config.ip || 'localhost',
+    port = config.port || 3000,
+    apiPrefix = config.apiPrefix || 'api',
+    apiVersion = config.apiVersion || 'v1';
 
-var db = monk(dbConfig.server + dbConfig.databaseName);
+require('console-stamp')(console, {
+  pattern: 'dd/mmm/yyyy:HH:MM:ss o'
+});
 
-// view engine setup
-app.set('views', path.join(__dirname, './views'));
-app.set('view engine', 'jade');
+logger.token('date', function() {
+  return moment().format('DD/MMM/YYYY:HH:mm:ss ZZ');
+});
 
-app.use(express.static(path.join(__dirname, './public')));
-app.use(logger('dev'));
+app.use(logger('common'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 
-// Make our db accessible to our router
-app.use(function(req, res, next) {
-  req.db = db;
-  next();
-});
+app.use('/*', allowCORSHandler);
+app.use(apiPrefix + '/*', authRequest);
+app.use([apiPrefix + apiVersion, apiPrefix], routes);
+app.use(notFoundRequest);
 
-// Load our routes
-app.use('/', require('./routes'));
+app.use(logErrorsHandler);
+app.use(errorHandler);
 
-// If no route is matched by now, it must be a 404
-app.use(function(req, res, next) {
-  res.status(404);
-  res.json('Page Not Found.');
-});
+// set the port for the webservice
+if (process.argv.length > 2) {
+  port = process.argv[2];
+}
 
-//start the app
-var port = process.env.PORT || config.serverPort;
-app.listen(port, function() {
-  console.log('Listening on ' + port);
+// set process title
+if (process.argv.length > 3) {
+  process.title = process.argv[3];
+}
+
+// output process pid into a file
+if (process.argv.length > 4) {
+  fs.writeFile(process.argv[4], process.pid);
+}
+
+// Start the server
+app.set('port', port);
+app.listen(app.get('port'), ip, function() {
+  console.log('WebService has started on %s:%s', ip, port);
 });
