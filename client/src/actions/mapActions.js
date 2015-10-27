@@ -4,10 +4,12 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     ActionTypes = require('../constants/actionTypes.js');
 
 var MapActions = {
-  onClick: function(point) {
+  onClick: function(data) {
     Dispatcher.dispatch({
       actionType: ActionTypes.MAP_CLICK,
-      point: point
+      point: data.point,
+      lat: data.lat,
+      lng: data.lng
     });
   }
 };

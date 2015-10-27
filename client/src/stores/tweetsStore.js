@@ -24,6 +24,22 @@ var TweetsStore = assign({}, EventEmitter.prototype, {
 
   getTweets: function() {
     return _tweets;
+  },
+
+  getTweetsInBounds: function(bounds) {
+    var tweets = [];
+
+    for (var i = 0, len = _tweets.length; i < len; i++) {
+      var tweet = _tweets[i],
+          coords = tweet.geometry.coordinates,
+          latLng = new google.maps.LatLng(coords[1], coords[0]);
+
+      if (bounds.contains(latLng)) {
+        tweets.push(tweet);
+      }
+    }
+
+    return tweets;
   }
 });
 

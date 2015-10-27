@@ -6,12 +6,15 @@ var React = require('react'),
     SlidePanel = require('../sidePanel/slidePanel.js'),
     TweetsPopup = require('../tweetsPopup/tweetsPopup.js'),
     TweetsPopupStore = require('../../stores/tweetsPopupStore.js'),
+    TweetsActions = require('../../actions/tweetsActions.js'),
+    TweetsStore = require('../../stores/tweetsStore.js'),
     MapStore = require('../../stores/mapStore.js'),
     MapActions = require('../../actions/mapActions.js');
 
 var Map = React.createClass({
 
   _googleMap: null,
+  _heatMap: null,
   _mapCircle: null,
 
   propTypes: {
@@ -34,6 +37,10 @@ var Map = React.createClass({
   getInitialState: function() {
     return {
       error: null,
+      selectedTweets: [],
+      heatMapData: [],
+      searchQuery: '',
+      lastQuerySearch: '',
       popup: {
         visible: false,
         point: {
@@ -55,7 +62,9 @@ var Map = React.createClass({
       popup: {
         visible: TweetsPopupStore.isVisible(),
         point: TweetsPopupStore.getPoint()
-      }
+      },
+      heatMapData: MapStore.getHeatMapData(),
+      searchQuery: MapStore.getSearchQuery()
     });
 
     TweetsPopupStore.addChangeListener(this._popupStateChange);
@@ -67,16 +76,18 @@ var Map = React.createClass({
       return;
     }
 
-    var lat = event.latLng.lat(),
-        lng = event.latLng.lng();
+    if (this.state.popup.visible) {
+      return;
+    }
 
-    if (!this.state.popup.visible) {
-      MapActions.onClick({
+    MapActions.onClick({
+      point: {
         x: event.pixel.x,
         y: event.pixel.y
-      });
-      this._showCircle(lat, lng);
-    }
+      },
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng()
+    });
   },
 
   _showCircle: function(lat, lng) {
@@ -118,12 +129,34 @@ var Map = React.createClass({
     });
   },
 
+  _renderHeatMap: function(heatMapData) {
+    heatMapData = heatMapData || [];
+
+    // remove old heatmap if it was present
+    if (this._heatMap) {
+      this._heatMap.setMap(null);
+    }
+
+    if (!heatMapData.length) {
+      return;
+    }
+
+    this._heatMap = new google.maps.visualization.HeatmapLayer({
+      data: heatMapData,
+      dissipating: false,
+      radius: 5,
+      map: this._googleMap
+    });
+  },
+
   componentDidMount: function() {
     var element = document.querySelector(this.props.selector),
         googleMap = new google.maps.Map(element, this.props.mapOptions);
 
     // attach event to google map click
     google.maps.event.addListener(googleMap, 'click', this._onClick);
+
+    this._renderHeatMap(this.state.heatMapData);
 
     this._googleMap = googleMap;
   },
@@ -139,26 +172,42 @@ var Map = React.createClass({
   },
 
   _popupStateChange: function() {
+    var selectedTweets = [];
+
+    if (!TweetsPopupStore.isVisible()) {
+      this._hideCircle();
+      selectedTweets = [];
+    } else {
+      this._showCircle(TweetsPopupStore.getLat(), TweetsPopupStore.getLng());
+      selectedTweets = TweetsStore.getTweetsInBounds(
+        this._mapCircle.getBounds());
+    }
+
     this.setState({
+      selectedTweets: selectedTweets,
       popup: {
         visible: TweetsPopupStore.isVisible(),
         point: TweetsPopupStore.getPoint()
       }
     });
-
-    if (!TweetsPopupStore.isVisible()) {
-      this._hideCircle();
-    }
   },
 
   _mapStateChange: function() {
-    var error = MapStore.getError();
+    var error = MapStore.getError(),
+        heatMapData = MapStore.getHeatMapData(),
+        searchQuery = MapStore.getSearchQuery();
 
     if (error) {
       toastr.error(error);
+      return;
     }
 
-    this.setState({ error: error });
+    this._renderHeatMap(heatMapData);
+
+    this.setState({
+      error: error,
+      heatMapData: heatMapData
+    });
   },
 
   _setMapState: function(event) {
@@ -173,6 +222,20 @@ var Map = React.createClass({
 
     this.state.map[field] = value;
     return this.setState({ map: this.state.map });
+  },
+
+  _searchQueryChange: function(event) {
+    this.setState({
+      searchQuery: event.target.value
+    });
+  },
+
+  _searchClick: function(event) {
+    // this is bad. need to move it to store instead
+    this.setState({
+      lastQuerySearch: this.state.searchQuery
+    });
+    TweetsActions.search(this.state.searchQuery);
   },
 
   render: function() {
@@ -193,9 +256,14 @@ var Map = React.createClass({
             <div id='map-canvas'>
               Loading map...
             </div>
-            <SearchBar />
+            <SearchBar
+              searchQuery={this.state.searchQuery}
+              onChange={this._searchQueryChange}
+              onClick={this._searchClick} />
             <TweetsPopup
+              data={this.state.selectedTweets}
               visible={this.state.popup.visible}
+              searchQuery={this.state.lastQuerySearch}
               point={this.state.popup.point} />
           </div>
         </div>

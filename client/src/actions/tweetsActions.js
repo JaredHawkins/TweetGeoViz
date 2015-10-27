@@ -8,8 +8,11 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
 
 var TweetsActions = {
   search: function(query) {
+    if (query.length < 3) {
+      return;
+    }
+
     var callback = function(error, response, body) {
-      debugger;
       if (error) {
         Dispatcher.dispatch({
           actionType: ActionTypes.ERROR,
@@ -21,7 +24,7 @@ var TweetsActions = {
 
       Dispatcher.dispatch({
         actionType: ActionTypes.TWEETS_SEARCH,
-        tweets: body
+        tweets: body.features
       });
     };
 

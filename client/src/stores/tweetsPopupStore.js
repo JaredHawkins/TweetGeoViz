@@ -11,7 +11,9 @@ var _visible = false,
     _point = {
       x: -100,
       y: -100
-    };
+    },
+    _lat = null,
+    _lng = null;
 
 var TweetsPopupStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
@@ -32,6 +34,14 @@ var TweetsPopupStore = assign({}, EventEmitter.prototype, {
 
   getPoint: function() {
     return _point;
+  },
+
+  getLat: function() {
+    return _lat;
+  },
+
+  getLng: function() {
+    return _lng;
   }
 });
 
@@ -44,6 +54,8 @@ TweetsPopupStore.dispatchToken = Dispatcher.register(function(action) {
 
       _visible = true;
       _point = action.point;
+      _lat = action.lat;
+      _lng = action.lng;
       TweetsPopupStore.emitChange();
       break;
     case ActionTypes.CLOSE_POPUP:
@@ -56,6 +68,8 @@ TweetsPopupStore.dispatchToken = Dispatcher.register(function(action) {
         x: -100,
         y: -100
       };
+      _lat = null;
+      _lng = null;
       TweetsPopupStore.emitChange();
       break;
     default:

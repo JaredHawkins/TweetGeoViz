@@ -7,7 +7,9 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     _ = require('lodash'),
     CHANGE_EVENT = 'change';
 
-var _error = null;
+var _error = null,
+    _heatMapData = [],
+    _searchQuery = '';
 
 var MapStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
@@ -24,13 +26,34 @@ var MapStore = assign({}, EventEmitter.prototype, {
 
   getError: function() {
     return _error;
+  },
+
+  getHeatMapData: function() {
+    return _heatMapData;
+  },
+
+  getSearchQuery: function() {
+    return _searchQuery;
   }
+
 });
 
 MapStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.actionType) {
     case ActionTypes.ERROR:
       _error = action.error;
+      MapStore.emitChange();
+      break;
+    case ActionTypes.TWEETS_SEARCH:
+      _heatMapData = [];
+
+      for (var i = 0, len = action.tweets.length; i < len; ++i) {
+        var item = action.tweets[i],
+            coords = item.geometry.coordinates,
+            latLng = new google.maps.LatLng(coords[1], coords[0]);
+        _heatMapData.push(latLng);
+      }
+
       MapStore.emitChange();
       break;
     default:

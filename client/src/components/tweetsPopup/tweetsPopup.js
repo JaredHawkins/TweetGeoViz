@@ -6,18 +6,10 @@ var React = require('react'),
 var TweetsPopup = React.createClass({
 
   propTypes: {
-    point: React.PropTypes.object,
-    visible: React.PropTypes.bool
-  },
-
-  getDefaultProps: function() {
-    return {
-      point: {
-        x: -100,
-        y: -100
-      },
-      visible: false
-    };
+    data: React.PropTypes.array.isRequired,
+    searchQuery: React.PropTypes.string.isRequired,
+    point: React.PropTypes.object.isRequired,
+    visible: React.PropTypes.bool.isRequired
   },
 
   _onClick: function(event) {
@@ -31,20 +23,31 @@ var TweetsPopup = React.createClass({
       top: this.props.point.y + 'px'
     };
 
+    var createRow = function(rowData) {
+      var regex = new RegExp(this.props.searchQuery, 'ig');
+      var text = rowData.text.replace(regex, '<span class="selection">$&</span>');
+
+      return (
+        <li key={rowData._id}>
+          <div className='tweetText'>
+            <span>
+              {{__html: text }}
+            </span>
+          </div>
+        </li>
+      );
+    };
+
     return (
       <div id='tweetsPopup' className='col-md-2' style={popupStyle}>
         <div className='panel panel-default'>
           <div className='panel-heading'>
-            <strong>0 Tweets</strong>
+            <strong>{this.props.data.length} Tweets</strong>
             <button id='tweetsPopup-close' aria-hidden='true' type='button' className='close' onClick={this._onClick}>×</button>
           </div>
           <div className='panel-body'>
             <ul>
-              <li>
-                <div className='tweetText'>
-                  <span>No Tweets Found</span>
-                </div>
-              </li>
+              { this.props.data.length? this.props.data.map(createRow, this) : <li><div className='tweetText'><span>No Tweets Found</span></div></li> }
             </ul>
           </div>
         </div>

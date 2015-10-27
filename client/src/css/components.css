@@ -15,6 +15,28 @@
   height: 100%;
 }
 
+#searchBar {
+  padding: 5px;
+  /* need to remove this*/
+  z-index: 0;
+  position: absolute;
+  left: 113px;
+  top: 0px;
+}
+#searchBar .searchBar-button {
+  backgroundColor: #fff;
+  borderStyle: solid;
+  borderWidth: 2px;
+  cursor: pointer;
+  textAlign: center;
+}
+#searchBar .searchBar-button .searchBar-button-buttonText {
+  fontFamily: 'Arial,sans-serif';
+  fontSize: 12px;
+  paddingLeft: 4px;
+  paddingRight: 4px;
+}
+
 .snap-drawers {
   background: #323949;
 }
@@ -74,26 +96,4 @@
 }
 #tweetsPopup .panel-body ul li > .tweetText .selection {
   background-color: yellow;
-}
-
-#searchBar {
-  padding: 5px;
-  /* need to remove this*/
-  z-index: 0;
-  position: absolute;
-  left: 113px;
-  top: 0px;
-}
-#searchBar .searchBar-button {
-  backgroundColor: #fff;
-  borderStyle: solid;
-  borderWidth: 2px;
-  cursor: pointer;
-  textAlign: center;
-}
-#searchBar .searchBar-button .searchBar-button-buttonText {
-  fontFamily: 'Arial,sans-serif';
-  fontSize: 12px;
-  paddingLeft: 4px;
-  paddingRight: 4px;
 }

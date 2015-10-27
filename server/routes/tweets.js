@@ -38,7 +38,8 @@ var tweets = {
             type: 'Point',
             coordinates: [item.tln, item.tlt]
           },
-          text: item.t
+          text: item.t,
+          _id: item._id
         });
       });
 
