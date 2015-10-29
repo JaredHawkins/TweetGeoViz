@@ -30,8 +30,7 @@ var TweetsPopup = React.createClass({
       return (
         <li key={rowData._id}>
           <div className='tweetText'>
-            <span>
-              {{__html: text }}
+            <span dangerouslySetInnerHTML={{__html: text }}>
             </span>
           </div>
         </li>

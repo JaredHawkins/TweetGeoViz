@@ -4,7 +4,7 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     ActionTypes = require('../constants/actionTypes.js'),
     request = require('request'),
     params = require('query-params'),
-    apiConfig = require('../../config/config.json').api;
+    apiConfig = require('../config/config.json').api;
 
 var TweetsActions = {
   search: function(query) {
