@@ -7,7 +7,8 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     _ = require('lodash'),
     CHANGE_EVENT = 'change';
 
-var _tweets = [];
+var _tweets = [],
+    _selectedTweets = [];
 
 var TweetsStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
@@ -24,6 +25,10 @@ var TweetsStore = assign({}, EventEmitter.prototype, {
 
   getTweets: function() {
     return _tweets;
+  },
+
+  getSelectedTweets: function() {
+    return _selectedTweets;
   },
 
   getTweetsInBounds: function(bounds) {

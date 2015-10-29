@@ -9,9 +9,9 @@ var React = require('react'),
 
 var routes = (
   <Route name='app' path='/' handler={require('./components/app.js')}>
-    <DefaultRoute handler={require('./components/map/map.js')} />
+    <DefaultRoute handler={require('./components/mapPage/mapPage.js')} />
 
-    <Route name='search' handler={require('./components/map/map.js')} />
+    <Route name='search' handler={require('./components/mapPage/mapPage.js')} />
 
     // not found page
     <NotFoundRoute handler={require('./components/notFoundPage/notFoundPage.js')} />
