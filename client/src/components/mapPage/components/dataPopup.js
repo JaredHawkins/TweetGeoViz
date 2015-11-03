@@ -43,7 +43,7 @@ var DataPopup = React.createClass({
               className='close btn-xs'
               aria-describedby='descriptionClose'
               onClick={this.props.onClose}>
-              <span className='glyphicon glyphicon-remove' aria-hidden='true'></span>
+            <span className='glyphicon glyphicon-remove' aria-hidden='true'></span>
             </button>
           </div>
           <div className='panel-body'>

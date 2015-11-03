@@ -2,226 +2,39 @@
 
 var React = require('react'),
     toastr = require('toastr'),
-    SearchBar = require('../searchBar/searchBar.js'),
-    SlidePanel = require('../sidePanel/slidePanel.js'),
-    TweetsPopup = require('./components/tweetsPopup.js'),
-    TweetsPopupStore = require('../../stores/tweetsPopupStore.js'),
+    Map = require('./components/map.js'),
+    SearchBar = require('./components/searchBar.js'),
+    SlidePanel = require('./components/slidePanel.js'),
+    DataPopup = require('./components/dataPopup.js'),
     TweetsActions = require('../../actions/tweetsActions.js'),
-    TweetsStore = require('../../stores/tweetsStore.js'),
-    MapStore = require('../../stores/mapStore.js'),
-    MapActions = require('../../actions/mapActions.js');
+    TweetsStore = require('../../stores/tweetsStore.js');
 
 var MapPage = React.createClass({
 
-  _googleMap: null,
-  _heatMap: null,
-  _mapCircle: null,
-
-  propTypes: {
-    selector: React.PropTypes.string.isRequired,
-    mapOptions: React.PropTypes.object
-  },
-
-  getDefaultProps: function() {
-    return {
-      selector: '#map-canvas',
-      mapOptions: {
-        center: new google.maps.LatLng(21.2125, 31.1973),
-        zoom: 3,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        streetViewControl: false
-      }
-    };
-  },
-
   getInitialState: function() {
     return {
-      error: null,
-      selectedTweets: [],
-      heatMapData: [],
-      searchQuery: '',
-      lastQuerySearch: '',
+      slidePanel: {
+        visible: false
+      },
+
+      map: {
+        isClickEnabled: true,
+        isCircleVisible: false,
+        clickRadius: 250
+      },
+
       popup: {
+        selectedTweets: [],
         visible: false,
         point: {
           x: -100,
           y: -100
         }
       },
-      map: {
-        clickEnabled: true,
-        clickRadius: 250
-      }
+
+      error: {},
+      searchQuery: ''
     }
-  },
-
-  componentWillMount: function() {
-    // set default state from stores
-    this.setState({
-      error: MapStore.getError(),
-      popup: {
-        visible: TweetsPopupStore.isVisible(),
-        point: TweetsPopupStore.getPoint()
-      },
-      heatMapData: MapStore.getHeatMapData(),
-      searchQuery: MapStore.getSearchQuery()
-    });
-
-    TweetsPopupStore.addChangeListener(this._popupStateChange);
-    MapStore.addChangeListener(this._mapStateChange);
-  },
-
-  _onClick: function(event) {
-    if (!this.state.map.clickEnabled) {
-      return;
-    }
-
-    if (this.state.popup.visible) {
-      return;
-    }
-
-    MapActions.onClick({
-      point: {
-        x: event.pixel.x,
-        y: event.pixel.y
-      },
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng()
-    });
-  },
-
-  _showCircle: function(lat, lng) {
-    this._hideCircle();
-
-    this._mapCircle = new google.maps.Circle({
-      map: this._googleMap,
-      center: new google.maps.LatLng(lat, lng),
-      clickable: false,
-      radius: this._getClickRadiusMeters(),
-      fillColor: '#fff',
-      fillOpacity: 0.6,
-      strokeColor: '#313131',
-      strokeOpacity: 0.4,
-      strokeWeight: 0.8
-    });
-
-    this._googleMap.setOptions({
-      draggable: false,
-      zoomControl: false,
-      scrollwheel: false,
-      panControl: false,
-      disableDoubleClickZoom: true
-    });
-  },
-
-  _hideCircle: function() {
-    if (!this._mapCircle) {
-      return;
-    }
-
-    this._mapCircle.setMap(null);
-    this._googleMap.setOptions({
-      draggable: true,
-      zoomControl: true,
-      scrollwheel: true,
-      panControl: true,
-      disableDoubleClickZoom: false
-    });
-  },
-
-  _renderHeatMap: function(heatMapData) {
-    heatMapData = heatMapData || [];
-
-    // remove old heatmap if it was present
-    if (this._heatMap) {
-      this._heatMap.setMap(null);
-    }
-
-    if (!heatMapData.length) {
-      return;
-    }
-
-    this._heatMap = new google.maps.visualization.HeatmapLayer({
-      data: heatMapData,
-      dissipating: false,
-      radius: 5,
-      map: this._googleMap
-    });
-  },
-
-  componentDidMount: function() {
-    var element = document.querySelector(this.props.selector),
-        googleMap = new google.maps.Map(element, this.props.mapOptions);
-
-    // attach event to google map click
-    google.maps.event.addListener(googleMap, 'click', this._onClick);
-
-    this._renderHeatMap(this.state.heatMapData);
-
-    this._googleMap = googleMap;
-  },
-
-  componentWillUnmount: function() {
-    TweetsPopupStore.removeChangeListener(this._popupStateChange);
-    MapStore.removeChangeListener(this._mapStateChange);
-  },
-
-  _getClickRadiusMeters: function() {
-    var km = 1000;
-    return this.state.map.clickRadius * km;
-  },
-
-  _popupStateChange: function() {
-    var selectedTweets = [];
-
-    if (!TweetsPopupStore.isVisible()) {
-      this._hideCircle();
-      selectedTweets = [];
-    } else {
-      this._showCircle(TweetsPopupStore.getLat(), TweetsPopupStore.getLng());
-      selectedTweets = TweetsStore.getTweetsInBounds(
-        this._mapCircle.getBounds());
-    }
-
-    this.setState({
-      selectedTweets: selectedTweets,
-      popup: {
-        visible: TweetsPopupStore.isVisible(),
-        point: TweetsPopupStore.getPoint()
-      }
-    });
-  },
-
-  _mapStateChange: function() {
-    var error = MapStore.getError(),
-        heatMapData = MapStore.getHeatMapData(),
-        searchQuery = MapStore.getSearchQuery();
-
-    if (error) {
-      toastr.error(error);
-      return;
-    }
-
-    this._renderHeatMap(heatMapData);
-
-    this.setState({
-      error: error,
-      heatMapData: heatMapData
-    });
-  },
-
-  _setMapState: function(event) {
-    var field = event.target.name,
-        value = event.target.value;
-
-    if (field == 'clickRadius') {
-      value = parseInt(value, 10);
-    } else if (field == 'clickEnabled') {
-      value = event.target.checked;
-    }
-
-    this.state.map[field] = value;
-    return this.setState({ map: this.state.map });
   },
 
   _searchQueryChange: function(event) {
@@ -230,41 +43,134 @@ var MapPage = React.createClass({
     });
   },
 
-  _searchClick: function(event) {
-    // this is bad. need to move it to store instead
-    this.setState({
-      lastQuerySearch: this.state.searchQuery
-    });
+  _onClickSearch: function(event) {
     TweetsActions.search(this.state.searchQuery);
   },
 
+  _onFocusSearchField: function(event) {
+    if (this.state.slidePanel.visible) {
+      return;
+    }
+
+    this.state.slidePanel.visible = true;
+    this.state.map.isCircleVisible = false;
+    this.state.popup.visible = false;
+
+    this.setState({
+      slidePanel: this.state.slidePanel,
+      map: this.state.map,
+      popup: this.state.popup
+    });
+  },
+
+  _slidePanelChange: function(event) {
+    var name = event.target.name,
+        value = event.target.value;
+
+    if (name == 'clickRadius') {
+      this.state.map[name] = parseInt(value, 10);
+    } else if (name == 'isClickEnabled') {
+      this.state.map[name] = event.target.checked;
+    }
+
+    this.setState({
+      map: this.state.map
+    });
+  },
+
+  _onPopupClose: function(event) {
+    if (!this.state.popup.visible) {
+      return;
+    }
+
+    this.state.popup.visible = false;
+    this.state.map.isCircleVisible = false;
+
+    this.setState({
+      popup: this.state.popup,
+      map: this.state.map
+    });
+  },
+
+  _onMapClick: function(options) {
+    options = options || {};
+
+    if (!this.state.map.isClickEnabled) {
+      if (this.state.slidePanel.visible) {
+        this.state.slidePanel.visible = false;
+        this.setState({
+          slidePanel: this.state.slidePanel
+        });
+      }
+
+      return;
+    }
+
+    if (this.state.map.isCircleVisible && this.state.popup.visible) {
+      return;
+    }
+
+    this.state.slidePanel.visible = false;
+
+    if (!this.state.map.isCircleVisible) {
+      this.state.map.isCircleVisible = true;
+      this.state.map.lpoint = options.lpoint;
+    }
+
+    if (!this.state.popup.visible) {
+      this.state.popup.visible = true;
+      this.state.popup.point = options.point;
+    }
+
+    this.setState({
+      map: this.state.map,
+      popup: this.state.popup,
+      slidePanel: this.state.slidePanel
+    });
+  },
+
   render: function() {
+    var popupHeader = this.state.popup.selectedTweets.length + ' Tweets';
+
     return (
       <div>
         <div className='snap-drawers'>
           <div className='snap-drawer snap-drawer-left'>
             <SlidePanel
-              contentSelector='.site-wrapper'
-              mapClickEnabled={this.state.map.clickEnabled}
-              clickRadius={this.state.map.clickRadius}
-              onChange={this._setMapState} />
+              contentSelector = '.site-wrapper'
+              visible = {this.state.slidePanel.visible}
+              clickRadius = {this.state.map.clickRadius}
+              isClickEnabled = {this.state.map.isClickEnabled}
+              onChange = {this._slidePanelChange} />
           </div>
         </div>
 
         <div className='site-wrapper snap-content'>
           <div className='site-wrapper-inner'>
-            <div id='map-canvas'>
-              Loading map...
-            </div>
+
+            <Map
+              onClick = {this._onMapClick}
+              isClickEnabled = {this.state.map.isClickEnabled}
+              isCircleVisible = {this.state.map.isCircleVisible}
+              clickRadius = {this.state.map.clickRadius}
+              heatMapData = {this.state.map.heatMapData}
+              lpoint = {this.state.map.lpoint} />
+
             <SearchBar
-              searchQuery={this.state.searchQuery}
-              onChange={this._searchQueryChange}
-              onClick={this._searchClick} />
-            <TweetsPopup
-              data={this.state.selectedTweets}
-              visible={this.state.popup.visible}
-              searchQuery={this.state.lastQuerySearch}
-              point={this.state.popup.point} />
+              searchQuery = {this.state.searchQuery}
+              onChange = {this._searchQueryChange}
+              onFocus = {this._onFocusSearchField}
+              onClickSearch = {this._onClickSearch} />
+
+            <DataPopup
+              id = 'tweetsPopup'
+              header = {popupHeader}
+              data = {this.state.popup.selectedTweets}
+              onClose = {this._onPopupClose}
+              point = {this.state.popup.point}
+              visible = {this.state.popup.visible}
+              rowClass = 'tweetText'
+              noDataText = 'No Tweets Found' />
           </div>
         </div>
       </div>
