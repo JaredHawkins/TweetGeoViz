@@ -1,24 +1,26 @@
 'use strict';
 
-var React = require('react');
+var React = require('react'),
+    MapStore = require('../../../stores/mapStore.js');
 
 var Map = React.createClass({
   propTypes: {
-    selector:  React.PropTypes.string.isRequired,
     onClick: React.PropTypes.func.isRequired,
-
-    isClickEnabled: React.PropTypes.bool,
-    isCircleVisible:  React.PropTypes.bool,
+    selector:  React.PropTypes.string,
     clickRadius:  React.PropTypes.number,
     heatMapData:  React.PropTypes.array,
-    mapOptions: React.PropTypes.object,
-    lpoint: React.PropTypes.object
+    mapOptions: React.PropTypes.object
+  },
+
+  getInitialState: function() {
+    return {
+      isCircleVisible: MapStore.isCircleVisible(),
+      lpoint: MapStore.getLPoint()
+    }
   },
 
   getDefaultProps: function() {
     return {
-      isClickEnabled: true,
-      isCircleVisible: false,
       clickRadius: 250,
       heatMapData: [],
       selector: '#map-canvas',
@@ -27,12 +29,23 @@ var Map = React.createClass({
         zoom: 3,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         streetViewControl: false
-      },
-      lpoint: {
-        lat: 0,
-        lng: 0
       }
     };
+  },
+
+  componentWillMount: function() {
+    MapStore.addChangeListener(this._mapStoreChange);
+  },
+
+  componentWillUnmount: function() {
+    MapStore.removeChangeListener(this._mapStoreChange);
+  },
+
+  _mapStoreChange: function() {
+    this.setState({
+      isCircleVisible: MapStore.isCircleVisible(),
+      lpoint: MapStore.getLPoint()
+    });
   },
 
   componentDidMount: function() {
@@ -44,14 +57,11 @@ var Map = React.createClass({
     google.maps.event.addListener(this._googleMap, 'click', this._onClick);
 
     this._renderHeatMap(this.props.heatMapData);
-    this._toggleCircle(this.props.isCircleVisible);
+    this._toggleCircle(this.state.isCircleVisible);
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
-    this._toggleCircle(nextProps.isCircleVisible);
-
-    // we never need to rerender our map
-    return false;
+  componentDidUpdate: function() {
+    this._toggleCircle();
   },
 
   _onClick: function(event) {
@@ -73,7 +83,7 @@ var Map = React.createClass({
   },
 
   _showCircle: function() {
-    var lpoint = this.props.lpoint;
+    var lpoint = this.state.lpoint;
 
     this._hideCircle();
 
@@ -113,8 +123,8 @@ var Map = React.createClass({
     });
   },
 
-  _toggleCircle: function(visible) {
-    if (visible) {
+  _toggleCircle: function() {
+    if (this.state.isCircleVisible) {
       this._showCircle();
     } else {
       this._hideCircle();

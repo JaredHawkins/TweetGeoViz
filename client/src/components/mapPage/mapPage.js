@@ -6,61 +6,39 @@ var React = require('react'),
     SearchBar = require('./components/searchBar.js'),
     SlidePanel = require('./components/slidePanel.js'),
     DataPopup = require('./components/dataPopup.js'),
+
+    MapActions = require('../../actions/mapActions.js'),
     TweetsActions = require('../../actions/tweetsActions.js'),
+    DataPopupActions = require('../../actions/dataPopupActions.js'),
+    SearchBarActions = require('../../actions/searchBarActions.js'),
+
     TweetsStore = require('../../stores/tweetsStore.js');
 
 var MapPage = React.createClass({
 
   getInitialState: function() {
     return {
-      slidePanel: {
-        visible: false
-      },
-
-      map: {
-        isClickEnabled: true,
-        isCircleVisible: false,
-        clickRadius: 250
-      },
-
-      popup: {
-        selectedTweets: [],
-        visible: false,
-        point: {
-          x: -100,
-          y: -100
-        }
-      },
-
-      error: {},
-      searchQuery: ''
+      showPopupOnClick: true,
+      clickRadius: 250,
+      heatMapData: [],
+      selectedTweets: [],
+      searchQuery: '',
+      error: {}
     }
   },
 
   _searchQueryChange: function(event) {
-    this.setState({
-      searchQuery: event.target.value
-    });
+    this.state.searchQuery = event.target.value.trim();
+
+    this.setState(this.state);
   },
 
-  _onClickSearch: function(event) {
+  _onClickSearch: function() {
     TweetsActions.search(this.state.searchQuery);
   },
 
-  _onFocusSearchField: function(event) {
-    if (this.state.slidePanel.visible) {
-      return;
-    }
-
-    this.state.slidePanel.visible = true;
-    this.state.map.isCircleVisible = false;
-    this.state.popup.visible = false;
-
-    this.setState({
-      slidePanel: this.state.slidePanel,
-      map: this.state.map,
-      popup: this.state.popup
-    });
+  _onFocusSearchField: function() {
+    SearchBarActions.focus();
   },
 
   _slidePanelChange: function(event) {
@@ -68,79 +46,36 @@ var MapPage = React.createClass({
         value = event.target.value;
 
     if (name == 'clickRadius') {
-      this.state.map[name] = parseInt(value, 10);
-    } else if (name == 'isClickEnabled') {
-      this.state.map[name] = event.target.checked;
+      this.state[name] = parseInt(value, 10);
+    } else if (name == 'showPopupOnClick') {
+      this.state[name] = event.target.checked;
     }
 
-    this.setState({
-      map: this.state.map
-    });
+    this.setState(this.state);
   },
 
-  _onPopupClose: function(event) {
-    if (!this.state.popup.visible) {
-      return;
-    }
-
-    this.state.popup.visible = false;
-    this.state.map.isCircleVisible = false;
-
-    this.setState({
-      popup: this.state.popup,
-      map: this.state.map
-    });
+  _onPopupClose: function() {
+    DataPopupActions.close();
   },
 
   _onMapClick: function(options) {
     options = options || {};
 
-    if (!this.state.map.isClickEnabled) {
-      if (this.state.slidePanel.visible) {
-        this.state.slidePanel.visible = false;
-        this.setState({
-          slidePanel: this.state.slidePanel
-        });
-      }
-
-      return;
-    }
-
-    if (this.state.map.isCircleVisible && this.state.popup.visible) {
-      return;
-    }
-
-    this.state.slidePanel.visible = false;
-
-    if (!this.state.map.isCircleVisible) {
-      this.state.map.isCircleVisible = true;
-      this.state.map.lpoint = options.lpoint;
-    }
-
-    if (!this.state.popup.visible) {
-      this.state.popup.visible = true;
-      this.state.popup.point = options.point;
-    }
-
-    this.setState({
-      map: this.state.map,
-      popup: this.state.popup,
-      slidePanel: this.state.slidePanel
+    MapActions.click({
+      point: options.point,
+      lpoint: options.lpoint,
+      showPopupOnClick: this.state.showPopupOnClick
     });
   },
 
   render: function() {
-    var popupHeader = this.state.popup.selectedTweets.length + ' Tweets';
-
     return (
       <div>
         <div className='snap-drawers'>
           <div className='snap-drawer snap-drawer-left'>
             <SlidePanel
-              contentSelector = '.site-wrapper'
-              visible = {this.state.slidePanel.visible}
-              clickRadius = {this.state.map.clickRadius}
-              isClickEnabled = {this.state.map.isClickEnabled}
+              clickRadius = {this.state.clickRadius}
+              showPopupOnClick = {this.state.showPopupOnClick}
               onChange = {this._slidePanelChange} />
           </div>
         </div>
@@ -150,11 +85,8 @@ var MapPage = React.createClass({
 
             <Map
               onClick = {this._onMapClick}
-              isClickEnabled = {this.state.map.isClickEnabled}
-              isCircleVisible = {this.state.map.isCircleVisible}
-              clickRadius = {this.state.map.clickRadius}
-              heatMapData = {this.state.map.heatMapData}
-              lpoint = {this.state.map.lpoint} />
+              clickRadius = {this.state.clickRadius}
+              heatMapData = {this.state.heatMapData} />
 
             <SearchBar
               searchQuery = {this.state.searchQuery}
@@ -163,14 +95,8 @@ var MapPage = React.createClass({
               onClickSearch = {this._onClickSearch} />
 
             <DataPopup
-              id = 'tweetsPopup'
-              header = {popupHeader}
-              data = {this.state.popup.selectedTweets}
-              onClose = {this._onPopupClose}
-              point = {this.state.popup.point}
-              visible = {this.state.popup.visible}
-              rowClass = 'tweetText'
-              noDataText = 'No Tweets Found' />
+              data = {this.state.selectedTweets}
+              onClose = {this._onPopupClose} />
           </div>
         </div>
       </div>

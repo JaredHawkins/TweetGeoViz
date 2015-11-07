@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react'),
-    _ = require('lodash'),
+    SlidePanelStore = require('../../../stores/slidePanelStore.js'),
     Snap = require('../../../libs/snap/snap.js');
 
 var SlidePanel = React.createClass({
@@ -9,11 +9,36 @@ var SlidePanel = React.createClass({
   _snapPanel: null,
 
   propTypes: {
-    contentSelector: React.PropTypes.string.isRequired,
     onChange: React.PropTypes.func.isRequired,
-    visible: React.PropTypes.bool,
-    clickRadius: React.PropTypes.number,
-    isClickEnabled: React.PropTypes.bool
+    clickRadius: React.PropTypes.number.isRequired,
+    showPopupOnClick: React.PropTypes.bool.isRequired,
+    contentSelector: React.PropTypes.string
+  },
+
+  getInitialState: function() {
+    return {
+      visible: SlidePanelStore.isVisible()
+    }
+  },
+
+  getDefaultProps: function() {
+    return {
+      contentSelector: '.site-wrapper'
+    };
+  },
+
+  componentWillMount: function() {
+    SlidePanelStore.addChangeListener(this._slidePanelStoreChange);
+  },
+
+  componentWillUnmount: function() {
+    SlidePanelStore.removeChangeListener(this._slidePanelStoreChange);
+  },
+
+  _slidePanelStoreChange: function() {
+    this.setState({
+      visible: SlidePanelStore.isVisible()
+    });
   },
 
   componentDidMount: function() {
@@ -24,15 +49,11 @@ var SlidePanel = React.createClass({
       hyperextensible: false
     });
 
-    this._togglePanel(this.props.visible);
+    this._togglePanel(this.state.visible);
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
-    if (nextProps.visible !== this.props.visible) {
-      this._togglePanel(nextProps.visible);
-    }
-
-    return true;
+  componentDidUpdate: function() {
+    this._togglePanel();
   },
 
   _closePanel: function() {
@@ -43,8 +64,8 @@ var SlidePanel = React.createClass({
     this._snapPanel.open('left');
   },
 
-  _togglePanel: function(isVisible) {
-    if (isVisible) {
+  _togglePanel: function() {
+    if (this.state.visible) {
       this._openPanel();
     } else {
       this._closePanel();
@@ -113,7 +134,6 @@ var SlidePanel = React.createClass({
                   Cursor Click Radius
               </span>
               <input
-                id='cursor-click-radius-input'
                 name='clickRadius'
                 placeholder='0'
                 aria-describedby='cursor-click-radius-description'
@@ -137,11 +157,10 @@ var SlidePanel = React.createClass({
               <span className='input-group-addon'>Enable Map Click</span>
               <span className='input-group-addon'>
                 <input
-                  id='enable-map-click-checkbox'
-                  name='isClickEnabled'
-                  aria-label='Enable Map Click'
+                  name='showPopupOnClick'
+                  aria-label='Show Popup on Click'
                   type='checkbox'
-                  checked={this.props.isClickEnabled}
+                  checked={this.props.showPopupOnClick}
                   onChange={this.props.onChange} />
               </span>
             </div>
