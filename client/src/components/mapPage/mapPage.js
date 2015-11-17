@@ -20,17 +20,33 @@ var MapPage = React.createClass({
     return {
       showPopupOnClick: true,
       clickRadius: 250,
-      heatMapData: [],
-      selectedTweets: [],
+      heatMapData: TweetsStore.getHeatMapData(),
+      selectedTweets: TweetsStore.getSelectedTweets(),
       searchQuery: '',
       error: {}
     }
   },
 
-  _searchQueryChange: function(event) {
-    this.state.searchQuery = event.target.value.trim();
+  componentWillMount: function() {
+    TweetsStore.addChangeListener(this._tweetsStoreChange);
+  },
 
-    this.setState(this.state);
+  componentWillUnmount: function() {
+    TweetsStore.removeChangeListener(this._tweetsStoreChange);
+  },
+
+  _tweetsStoreChange: function() {
+    debugger;
+    this.setState({
+      heatMapData: TweetsStore.getHeatMapData(),
+      selectedTweets: TweetsStore.getSelectedTweets()
+    });
+  },
+
+  _searchQueryChange: function(event) {
+    this.setState({
+      searchQuery: event.target.value.trim()
+    });
   },
 
   _onClickSearch: function() {
@@ -64,7 +80,9 @@ var MapPage = React.createClass({
     MapActions.click({
       point: options.point,
       lpoint: options.lpoint,
-      showPopupOnClick: this.state.showPopupOnClick
+      showPopupOnClick: this.state.showPopupOnClick,
+      bounds: options.bounds,
+      searchQuery: this.state.searchQuery
     });
   },
 

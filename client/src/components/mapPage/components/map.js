@@ -6,9 +6,9 @@ var React = require('react'),
 var Map = React.createClass({
   propTypes: {
     onClick: React.PropTypes.func.isRequired,
-    selector:  React.PropTypes.string,
-    clickRadius:  React.PropTypes.number,
-    heatMapData:  React.PropTypes.array,
+    selector: React.PropTypes.string,
+    clickRadius: React.PropTypes.number,
+    heatMapData: React.PropTypes.array,
     mapOptions: React.PropTypes.object
   },
 
@@ -61,10 +61,17 @@ var Map = React.createClass({
   },
 
   componentDidUpdate: function() {
+    debugger;
     this._toggleCircle();
+    this._renderHeatMap(this.props.heatMapData);
   },
 
   _onClick: function(event) {
+    var bounds = new google.maps.Circle({
+      center: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
+      radius: this._getClickRadiusMeters()
+    }).getBounds();
+
     this.props.onClick({
       point: {
         x: event.pixel.x,
@@ -73,7 +80,8 @@ var Map = React.createClass({
       lpoint: {
         lat: event.latLng.lat(),
         lng: event.latLng.lng()
-      }
+      },
+      bounds: bounds
     });
   },
 
