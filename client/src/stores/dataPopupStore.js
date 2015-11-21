@@ -7,12 +7,14 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     _ = require('lodash'),
     CHANGE_EVENT = 'change';
 
-var _point = {
-  left: -100,
-  right: -100
+var _data = {
+  point: {
+    left: undefined,
+    right: undefined
+  },
+  visible: false,
+  showPopupOnClick: true
 };
-
-var _visible = false;
 
 var DataPopupStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
@@ -27,38 +29,48 @@ var DataPopupStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  isVisible: function() {
-    return _visible;
-  },
-
-  getPoint: function() {
-    return _point;
+  getData: function() {
+    return _data;
   }
 });
 
 DataPopupStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.actionType) {
+    case ActionTypes.POPUP_CHANGE_VALUE:
+
+      _data[action.name] = action.value;
+
+      DataPopupStore.emitChange();
+      break;
     case ActionTypes.MAP_CLICK:
-      if (_visible) {
+      // if click is disabled and we show popup - hide it
+      if (!action.showPopupOnClick && _data.visible) {
+        _data.visible = false;
+
+        return DataPopupStore.emitChange();
+      }
+
+      // if click is enabled and popup already shown - then do not do anything
+      // wait until popup is closed
+      if (_data.visible) {
         return;
       }
 
-      if (!action.showPopupOnClick) {
-        return;
-      }
-
-      _visible = true;
-      _point = action.point;
+      // otherwise show the popup
+      _data.visible = true;
+      _data.point = action.point;
 
       DataPopupStore.emitChange();
       break;
     case ActionTypes.CLOSE_POPUP:
     case ActionTypes.SEARCH_ONFOCUS:
-      if (!_visible) {
+      // if popup is already hidden - do not do anything
+      if (!_data.visible) {
         return;
       }
 
-      _visible = false;
+      // otherwise hide the popup
+      _data.visible = false;
 
       DataPopupStore.emitChange();
       break;

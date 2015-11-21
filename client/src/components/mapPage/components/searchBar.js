@@ -18,16 +18,16 @@ var SearchBar = React.createClass({
   },
 
   componentDidMount: function() {
-    var input = document.getElementById('searchBar-queryText');
+    this.refs.searchQuery.onkeypress = function(event) {
+      var value = event.target.value;
 
-    input.onkeypress = function(e) {
-      if (!e) {
-        e = window.event;
+      if (!event) {
+        event = window.event;
       }
-      var keyCode = e.keyCode || e.which;
+      var keyCode = event.keyCode || event.which;
 
       if (keyCode == '13') {
-        if (!input.value) {
+        if (!value) {
           return false;
         }
 
@@ -36,13 +36,14 @@ var SearchBar = React.createClass({
     }.bind(this);
   },
 
-  _onClickSearch: function(event) {
+  _onClickSearch: function() {
+
     // check first if there is anything to search for at all
     if (!this.props.searchQuery.trim().length) {
       return;
     }
 
-    this.props.onClickSearch(event);
+    this.props.onClickSearch();
   },
 
   render: function() {
@@ -65,8 +66,9 @@ var SearchBar = React.createClass({
 
           <input
             id='searchBar-queryText'
-            name='tweetText'
-            placeholder='keyword1 , keyword2, keyword3, ...'
+            name='searchQuery'
+            ref = 'searchQuery'
+            placeholder='search keywords'
             aria-describedby='basic-addon'
             className='form-control'
             type='text'

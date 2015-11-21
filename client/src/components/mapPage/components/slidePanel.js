@@ -1,7 +1,6 @@
 'use strict';
 
 var React = require('react'),
-    SlidePanelStore = require('../../../stores/slidePanelStore.js'),
     Snap = require('../../../libs/snap/snap.js');
 
 var SlidePanel = React.createClass({
@@ -9,36 +8,18 @@ var SlidePanel = React.createClass({
   _snapPanel: null,
 
   propTypes: {
+    visible: React.PropTypes.bool,
     onChange: React.PropTypes.func.isRequired,
     clickRadius: React.PropTypes.number.isRequired,
     showPopupOnClick: React.PropTypes.bool.isRequired,
     contentSelector: React.PropTypes.string
   },
 
-  getInitialState: function() {
-    return {
-      visible: SlidePanelStore.isVisible()
-    }
-  },
-
   getDefaultProps: function() {
     return {
+      visible: false,
       contentSelector: '.site-wrapper'
     };
-  },
-
-  componentWillMount: function() {
-    SlidePanelStore.addChangeListener(this._slidePanelStoreChange);
-  },
-
-  componentWillUnmount: function() {
-    SlidePanelStore.removeChangeListener(this._slidePanelStoreChange);
-  },
-
-  _slidePanelStoreChange: function() {
-    this.setState({
-      visible: SlidePanelStore.isVisible()
-    });
   },
 
   componentDidMount: function() {
@@ -49,7 +30,7 @@ var SlidePanel = React.createClass({
       hyperextensible: false
     });
 
-    this._togglePanel(this.state.visible);
+    this._togglePanel(this.props.visible);
   },
 
   componentDidUpdate: function() {
@@ -65,7 +46,7 @@ var SlidePanel = React.createClass({
   },
 
   _togglePanel: function() {
-    if (this.state.visible) {
+    if (this.props.visible) {
       this._openPanel();
     } else {
       this._closePanel();

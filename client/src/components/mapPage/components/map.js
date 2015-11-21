@@ -1,10 +1,11 @@
 'use strict';
 
-var React = require('react'),
-    MapStore = require('../../../stores/mapStore.js');
+var React = require('react');
 
 var Map = React.createClass({
   propTypes: {
+    isCircleVisible: React.PropTypes.bool,
+    point: React.PropTypes.object,
     onClick: React.PropTypes.func.isRequired,
     selector: React.PropTypes.string,
     clickRadius: React.PropTypes.number,
@@ -12,15 +13,13 @@ var Map = React.createClass({
     mapOptions: React.PropTypes.object
   },
 
-  getInitialState: function() {
-    return {
-      isCircleVisible: MapStore.isCircleVisible(),
-      lpoint: MapStore.getLPoint()
-    }
-  },
-
   getDefaultProps: function() {
     return {
+      isCircleVisible: false,
+      lpoint: {
+        lat: 0,
+        lng: 0
+      },
       clickRadius: 250,
       heatMapData: [],
       selector: '#map-canvas',
@@ -33,21 +32,6 @@ var Map = React.createClass({
     };
   },
 
-  componentWillMount: function() {
-    MapStore.addChangeListener(this._mapStoreChange);
-  },
-
-  componentWillUnmount: function() {
-    MapStore.removeChangeListener(this._mapStoreChange);
-  },
-
-  _mapStoreChange: function() {
-    this.setState({
-      isCircleVisible: MapStore.isCircleVisible(),
-      lpoint: MapStore.getLPoint()
-    });
-  },
-
   componentDidMount: function() {
     var element = document.querySelector(this.props.selector);
 
@@ -57,16 +41,16 @@ var Map = React.createClass({
     google.maps.event.addListener(this._googleMap, 'click', this._onClick);
 
     this._renderHeatMap(this.props.heatMapData);
-    this._toggleCircle(this.state.isCircleVisible);
+    this._toggleCircle(this.props.isCircleVisible);
   },
 
   componentDidUpdate: function() {
-    debugger;
     this._toggleCircle();
     this._renderHeatMap(this.props.heatMapData);
   },
 
   _onClick: function(event) {
+    // get bounds for the click
     var bounds = new google.maps.Circle({
       center: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
       radius: this._getClickRadiusMeters()
@@ -91,7 +75,7 @@ var Map = React.createClass({
   },
 
   _showCircle: function() {
-    var lpoint = this.state.lpoint;
+    var lpoint = this.props.lpoint;
 
     this._hideCircle();
 
@@ -132,7 +116,7 @@ var Map = React.createClass({
   },
 
   _toggleCircle: function() {
-    if (this.state.isCircleVisible) {
+    if (this.props.isCircleVisible) {
       this._showCircle();
     } else {
       this._hideCircle();

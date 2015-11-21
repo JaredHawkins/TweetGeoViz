@@ -1,44 +1,35 @@
 'use strict';
 
-var React = require('react'),
-    DataPopupStore = require('../../../stores/dataPopupStore.js');
+var React = require('react');
 
 var DataPopup = React.createClass({
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
+    visible: React.PropTypes.bool,
+    point: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
     noDataText: React.PropTypes.string,
     rowClass: React.PropTypes.string
   },
 
-  getInitialState: function() {
-    return {
-      visible: DataPopupStore.isVisible(),
-      point: DataPopupStore.getPoint()
-    }
-  },
-
   getDefaultProps: function() {
     return {
       rowClass: 'tweetText',
-      noDataText: 'No Tweets Found'
+      noDataText: 'No Tweets Found',
+      visible: false,
+      point: {
+        left: undefined,
+        right: undefined
+      }
     };
   },
 
-  componentWillMount: function() {
-    DataPopupStore.addChangeListener(this._dataPopupStoreChange);
-  },
+  _onClose: function(event) {
+    event.preventDefault();
+    event.stopPropagation();
 
-  componentWillUnmount: function() {
-    DataPopupStore.removeChangeListener(this._dataPopupStoreChange);
-  },
-
-  _dataPopupStoreChange: function() {
-    this.setState({
-      visible: DataPopupStore.isVisible(),
-      point: DataPopupStore.getPoint()
-    });
+    this.props.onClose();
   },
 
   render: function() {
@@ -46,9 +37,9 @@ var DataPopup = React.createClass({
         popupHeader = self.props.data.length + ' Tweets';
 
     var popupStyle = {
-      display: self.state.visible ? 'block' : 'none',
-      left: self.state.point.x + 'px',
-      top: self.state.point.y + 'px'
+      display: self.props.visible ? 'block' : 'none',
+      left: self.props.point.x + 'px',
+      top: self.props.point.y + 'px'
     };
 
     var createRow = function(rowData) {
@@ -71,7 +62,7 @@ var DataPopup = React.createClass({
               type='button'
               className='close btn-xs'
               aria-describedby='descriptionClose'
-              onClick={self.props.onClose}>
+              onClick={self._onClose}>
             <span className='glyphicon glyphicon-remove' aria-hidden='true'></span>
             </button>
           </div>

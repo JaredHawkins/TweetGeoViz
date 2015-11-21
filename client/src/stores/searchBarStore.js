@@ -8,10 +8,10 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     CHANGE_EVENT = 'change';
 
 var _data = {
-  visible: false
+  searchQuery: ''
 };
 
-var SlidePanelStore = assign({}, EventEmitter.prototype, {
+var SearchBarStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -29,27 +29,13 @@ var SlidePanelStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-SlidePanelStore.dispatchToken = Dispatcher.register(function(action) {
+SearchBarStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.actionType) {
-    case ActionTypes.MAP_CLICK:
-      // if slide-panel was hidden already then do not do anything
-      if (!_data.visible) {
-        return;
-      }
+    case ActionTypes.SEARCHBAR_CHANGE_VALUE:
 
-      _data.visible = false;
+      _data[action.name] = action.value;
 
-      SlidePanelStore.emitChange();
-      break;
-    case ActionTypes.SEARCH_ONFOCUS:
-      // if slide-panel was shown already then do not do anything
-      if (_data.visible) {
-        return;
-      }
-
-      _data.visible = true;
-
-      SlidePanelStore.emitChange();
+      SearchBarStore.emitChange();
       break;
     default:
       // nothing to do
@@ -57,4 +43,4 @@ SlidePanelStore.dispatchToken = Dispatcher.register(function(action) {
   }
 });
 
-module.exports = SlidePanelStore;
+module.exports = SearchBarStore;

@@ -7,6 +7,14 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     apiConfig = require('../config/config.json').api;
 
 var TweetsActions = {
+  changeValue: function(name, value) {
+    Dispatcher.dispatch({
+      actionType: ActionTypes.TWEETS_CHANGE_VALUE,
+      name: name,
+      value: value
+    });
+  },
+
   search: function(query) {
     if (query.length < 3) {
       return;

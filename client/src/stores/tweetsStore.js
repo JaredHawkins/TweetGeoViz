@@ -7,9 +7,12 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     _ = require('lodash'),
     CHANGE_EVENT = 'change';
 
-var _tweets = [],
-    _selectedTweets = [],
-    _heatMapData = [];
+var _data = {
+  tweets: [],
+  selectedTweets: [],
+  heatmapData: [],
+  searchQuery: ''
+};
 
 var TweetsStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
@@ -24,16 +27,8 @@ var TweetsStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  getTweets: function() {
-    return _tweets;
-  },
-
-  getSelectedTweets: function() {
-    return _selectedTweets;
-  },
-
-  getHeatMapData: function() {
-    return _heatMapData;
+  getData: function() {
+    return _data;
   },
 
   _generateHeatMap: function(data) {
@@ -58,7 +53,7 @@ var TweetsStore = assign({}, EventEmitter.prototype, {
       return;
     }
 
-    _tweets.forEach(function(tweet) {
+    _data.tweets.forEach(function(tweet) {
       var coords = tweet.geometry.coordinates,
           latLng = new google.maps.LatLng(coords[1], coords[0]);
 
@@ -75,15 +70,26 @@ var TweetsStore = assign({}, EventEmitter.prototype, {
 
 TweetsStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.actionType) {
-    case ActionTypes.TWEETS_SEARCH:
-      _tweets = action.tweets;
+    case ActionTypes.TWEETS_CHANGE_VALUE:
+      _data[action.name] = action.value;
 
-      _heatMapData = TweetsStore._generateHeatMap(_tweets);
+      TweetsStore.emitChange();
+
+      break;
+    case ActionTypes.TWEETS_SEARCH:
+      _data.tweets = action.tweets;
+
+      _data.heatMapData = TweetsStore._generateHeatMap(_data.tweets);
 
       TweetsStore.emitChange();
       break;
     case ActionTypes.MAP_CLICK:
-      _selectedTweets = TweetsStore.getTweetsInBounds(action.bounds,
+      // if click is disabled then do not do any calculations at all
+      if (!action.showPopupOnClick) {
+        return;
+      }
+
+      _data.selectedTweets = TweetsStore.getTweetsInBounds(action.bounds,
         action.searchQuery);
 
       TweetsStore.emitChange();
