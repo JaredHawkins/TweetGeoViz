@@ -10,6 +10,7 @@ var Map = React.createClass({
     selector: React.PropTypes.string,
     clickRadius: React.PropTypes.number,
     heatMapData: React.PropTypes.array,
+    searchUUID: React.PropTypes.string,
     mapOptions: React.PropTypes.object
   },
 
@@ -28,7 +29,8 @@ var Map = React.createClass({
         zoom: 3,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         streetViewControl: false
-      }
+      },
+      searchUUID: undefined
     };
   },
 
@@ -44,9 +46,18 @@ var Map = React.createClass({
     this._toggleCircle(this.props.isCircleVisible);
   },
 
-  componentDidUpdate: function() {
-    this._toggleCircle();
-    this._renderHeatMap(this.props.heatMapData);
+  componentDidUpdate: function(prevProps) {
+    //debugger;
+
+    // work with map circle only if its property has changed
+    if (prevProps.isCircleVisible !== this.props.isCircleVisible) {
+      this._toggleCircle();
+    }
+
+    // re-render heatmap only if search was changed
+    if (prevProps.searchUUID !== this.props.searchUUID) {
+      this._renderHeatMap(this.props.heatMapData);
+    }
   },
 
   _onClick: function(event) {

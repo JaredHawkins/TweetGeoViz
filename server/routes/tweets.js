@@ -3,6 +3,7 @@
 /* global require, module */
 
 var monk = require('monk'),
+    uuid = require('node-uuid'),
     mongoConfig = require('../config/config.json').mongo;
 
 var tweets = {
@@ -45,7 +46,8 @@ var tweets = {
 
       var geoJSONlist = {
         type: 'FeatureCollection',    // empty geojson blob
-        features: features
+        features: features,
+        uuid: uuid.v1()
       };
 
       res.status(200);

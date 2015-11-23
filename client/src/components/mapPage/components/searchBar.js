@@ -17,23 +17,21 @@ var SearchBar = React.createClass({
     };
   },
 
-  componentDidMount: function() {
-    this.refs.searchQuery.onkeypress = function(event) {
-      var value = event.target.value;
+  _onKeyPress: function(event) {
+    var value = event.target.value;
 
-      if (!event) {
-        event = window.event;
+    if (!event) {
+      event = window.event;
+    }
+    var keyCode = event.keyCode || event.which;
+
+    if (keyCode == '13') {
+      if (!value) {
+        return false;
       }
-      var keyCode = event.keyCode || event.which;
 
-      if (keyCode == '13') {
-        if (!value) {
-          return false;
-        }
-
-        this._onClickSearch();
-      }
-    }.bind(this);
+      this._onClickSearch();
+    }
   },
 
   _onClickSearch: function() {
@@ -48,38 +46,39 @@ var SearchBar = React.createClass({
 
   render: function() {
     return (
-      <div id='searchBar' className='col-md-4'>
-        <div className='input-group'>
+      <div className='row'>
+        <div id='searchBar' className='col-md-4 col-xs-12'>
+          <div className='input-group'>
 
-          <span className='input-group-btn'>
-            <button
-              aria-label='Search'
-              className='btn btn-default'
-              onClick={this._onClickSearch} >
-                <span
-                  aria-hidden='true'
-                  className='glyphicon glyphicon-search'>
-                </span>
-                Search
-            </button>
-          </span>
+            <span className='input-group-btn'>
+              <button
+                aria-label='Search'
+                className='btn btn-default'
+                onClick={this._onClickSearch} >
+                  <span
+                    aria-hidden='true'
+                    className='glyphicon glyphicon-search'>
+                  </span>
+                  Search
+              </button>
+            </span>
 
-          <input
-            id='searchBar-queryText'
-            name='searchQuery'
-            ref = 'searchQuery'
-            placeholder='search keywords'
-            aria-describedby='basic-addon'
-            className='form-control'
-            type='text'
-            onChange={this.props.onChange}
-            onClick={this.props.onFocus}
-            value={this.props.searchQuery} />
-          <span
-            className='input-group-addon'
-            id='basic-addon'>
-            tweet keywords
-          </span>
+            <input
+              name='searchQuery'
+              placeholder='search keywords'
+              aria-describedby='basic-addon'
+              className='form-control'
+              type='text'
+              onChange={this.props.onChange}
+              onClick={this.props.onFocus}
+              onKeyPress = {this._onKeyPress}
+              value={this.props.searchQuery} />
+            <span
+              className='input-group-addon'
+              id='basic-addon'>
+              tweet keywords
+            </span>
+          </div>
         </div>
       </div>
     );

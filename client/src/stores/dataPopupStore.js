@@ -43,13 +43,6 @@ DataPopupStore.dispatchToken = Dispatcher.register(function(action) {
       DataPopupStore.emitChange();
       break;
     case ActionTypes.MAP_CLICK:
-      // if click is disabled and we show popup - hide it
-      if (!action.showPopupOnClick && _data.visible) {
-        _data.visible = false;
-
-        return DataPopupStore.emitChange();
-      }
-
       // if click is enabled and popup already shown - then do not do anything
       // wait until popup is closed
       if (_data.visible) {

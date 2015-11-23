@@ -10,7 +10,8 @@
   position: absolute;
 
   .panel-body {
-    overflow-y: auto;
+    /*overflow-y: auto;*/
+    /*padding: 0px;*/
     overflow-x: hidden;
     max-height: @tweetPopupMaxHeight;
 
@@ -19,14 +20,10 @@
       margin: 0;
       list-style-type: none;
 
-      li > .tweetText {
+      li .tweetText {
         padding: @padding;
         border-bottom: 1px solid @borderBottomColor;
-        border-top: 1px solid @borderTopColor;
-
-        .selection {
-          background-color: yellow;
-        }
+        /*border-top: 1px solid @borderTopColor;*/
       }
     }
   }

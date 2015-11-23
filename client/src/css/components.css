@@ -1,14 +1,17 @@
 .site-wrapper.snap-content {
   position: absolute;
-  display: table;
+  display: inline-block;
   height: 100%;
   min-height: 100%;
   width: 100%;
   z-index: 2;
 }
 .site-wrapper.snap-content .site-wrapper-inner {
-  display: table-cell;
+  display: inline-block;
   vertical-align: top;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
 }
 .site-wrapper.snap-content .site-wrapper-inner #map-canvas {
   width: 100%;
@@ -17,24 +20,9 @@
 
 #searchBar {
   padding: 5px;
-  /* need to remove this*/
-  z-index: 0;
   position: absolute;
   left: 113px;
   top: 0px;
-}
-#searchBar .searchBar-button {
-  backgroundColor: #fff;
-  borderStyle: solid;
-  borderWidth: 2px;
-  cursor: pointer;
-  textAlign: center;
-}
-#searchBar .searchBar-button .searchBar-button-buttonText {
-  fontFamily: 'Arial,sans-serif';
-  fontSize: 12px;
-  paddingLeft: 4px;
-  paddingRight: 4px;
 }
 
 .snap-drawers {
@@ -80,7 +68,8 @@
   position: absolute;
 }
 #tweetsPopup .panel-body {
-  overflow-y: auto;
+  /*overflow-y: auto;*/
+  /*padding: 0px;*/
   overflow-x: hidden;
   max-height: 420px;
 }
@@ -89,11 +78,8 @@
   margin: 0;
   list-style-type: none;
 }
-#tweetsPopup .panel-body ul li > .tweetText {
+#tweetsPopup .panel-body ul li .tweetText {
   padding: 15px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-#tweetsPopup .panel-body ul li > .tweetText .selection {
-  background-color: yellow;
+  /*border-top: 1px solid @borderTopColor;*/
 }

@@ -20,11 +20,12 @@ module.exports = keyMirror({
 
   // slidePanel
   SLIDEPANEL_CHANGE_VALUE: null,
+  SLIDEPANEL_HIDE: null,
 
   // tweets
   TWEETS_SEARCH: null,
   TWEETS_CHANGE_VALUE: null,
 
   // errors
-  ERROR: null
+  PAGE_ERROR: null
 });

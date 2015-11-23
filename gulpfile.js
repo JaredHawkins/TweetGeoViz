@@ -8,6 +8,7 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream'), // Use conventional text streams with Gulp
     concat = require('gulp-concat'), // concat files
     less = require('gulp-less'), // for LESS files
+    eslint = require('gulp-eslint'), // for ESLint
     lint = require('gulp-eslint'); // to lint our files including jsx
 
 var config = {
@@ -112,6 +113,19 @@ gulp.task('lint', function() {
   return gulp.src(config.paths.js)
     .pipe(lint({config: 'eslint.config.json'}))
     .pipe(lint.format());
+});
+
+gulp.task('eslint', function() {
+  return gulp.src(config.paths.js)
+    .pipe(eslint({
+      baseConfig: {
+        'ecmaFeatures': {
+           'jsx': true
+         }
+      }
+    }))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });
 
 gulp.task('watch', function() {

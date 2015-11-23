@@ -15,15 +15,15 @@ var TweetsActions = {
     });
   },
 
-  search: function(query) {
-    if (query.length < 3) {
+  search: function(searchQuery) {
+    if (searchQuery.length < 3) {
       return;
     }
 
     var callback = function(error, response, body) {
       if (error) {
         Dispatcher.dispatch({
-          actionType: ActionTypes.ERROR,
+          actionType: ActionTypes.PAGE_ERROR,
           error: 'Mongo Error :' + error
         });
 
@@ -32,6 +32,8 @@ var TweetsActions = {
 
       Dispatcher.dispatch({
         actionType: ActionTypes.TWEETS_SEARCH,
+        searchQuery: searchQuery,
+        searchUUID: body.uuid,
         tweets: body.features
       });
     };
@@ -39,7 +41,7 @@ var TweetsActions = {
     request({
       method: 'get',
       baseUrl: apiConfig.baseUrl,
-      url: apiConfig.urls.tweets + '?' + params.encode({ search: query }),
+      url: apiConfig.urls.tweets + '?' + params.encode({ search: searchQuery }),
       timeout: apiConfig.timeout,
       headers: {
         'x-access-token': apiConfig.xAccessToken

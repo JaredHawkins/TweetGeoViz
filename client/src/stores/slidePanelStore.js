@@ -31,7 +31,7 @@ var SlidePanelStore = assign({}, EventEmitter.prototype, {
 
 SlidePanelStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.actionType) {
-    case ActionTypes.MAP_CLICK:
+    case ActionTypes.SLIDEPANEL_HIDE:
       // if slide-panel was hidden already then do not do anything
       if (!_data.visible) {
         return;

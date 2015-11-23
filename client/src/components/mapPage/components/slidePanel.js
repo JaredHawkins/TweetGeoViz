@@ -10,15 +10,17 @@ var SlidePanel = React.createClass({
   propTypes: {
     visible: React.PropTypes.bool,
     onChange: React.PropTypes.func.isRequired,
-    clickRadius: React.PropTypes.number.isRequired,
-    showPopupOnClick: React.PropTypes.bool.isRequired,
+    clickRadius: React.PropTypes.number,
+    isMapClickEnabled: React.PropTypes.bool,
     contentSelector: React.PropTypes.string
   },
 
   getDefaultProps: function() {
     return {
       visible: false,
-      contentSelector: '.site-wrapper'
+      contentSelector: '.site-wrapper',
+      isMapClickEnabled: true,
+      clickRadius: 250
     };
   },
 
@@ -138,10 +140,10 @@ var SlidePanel = React.createClass({
               <span className='input-group-addon'>Enable Map Click</span>
               <span className='input-group-addon'>
                 <input
-                  name='showPopupOnClick'
+                  name='isMapClickEnabled'
                   aria-label='Show Popup on Click'
                   type='checkbox'
-                  checked={this.props.showPopupOnClick}
+                  checked={this.props.isMapClickEnabled}
                   onChange={this.props.onChange} />
               </span>
             </div>

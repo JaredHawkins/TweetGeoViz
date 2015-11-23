@@ -19,9 +19,7 @@ var MapActions = {
       actionType: ActionTypes.MAP_CLICK,
       point: options.point,
       lpoint: options.lpoint,
-      showPopupOnClick: options.showPopupOnClick,
-      bounds: options.bounds,
-      searchQuery: options.searchQuery
+      bounds: options.bounds
     });
   }
 };

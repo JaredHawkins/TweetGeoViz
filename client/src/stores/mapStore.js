@@ -13,7 +13,9 @@ var _data = {
     lng: 0
   },
   isCircleVisible: false,
-  clickRadius: 250
+  isMapClickEnabled: true,
+  clickRadius: 250,
+  error: undefined
 };
 
 var MapStore = assign({}, EventEmitter.prototype, {
@@ -37,6 +39,11 @@ var MapStore = assign({}, EventEmitter.prototype, {
 
 MapStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.actionType) {
+    case ActionTypes.PAGE_ERROR:
+      _data.error = action.error;
+
+      MapStore.emitChange();
+      break;
     case ActionTypes.MAP_CHANGE_VALUE:
 
       _data[action.name] = action.value;
@@ -44,13 +51,7 @@ MapStore.dispatchToken = Dispatcher.register(function(action) {
       MapStore.emitChange();
       break;
     case ActionTypes.MAP_CLICK:
-
-      // if click is disabled and we show circle - hide it
-      if (!action.showPopupOnClick && _data.isCircleVisible) {
-        _data.isCircleVisible = false;
-
-        return MapStore.emitChange();
-      }
+      debugger;
 
       // if click is enabled and circle already shown - then do not do anything
       // wait until popup is closed
@@ -60,7 +61,7 @@ MapStore.dispatchToken = Dispatcher.register(function(action) {
 
       // otherwise show the circle
       _data.isCircleVisible = true;
-      _data.lpoint = action.point;
+      _data.lpoint = action.lpoint;
 
       MapStore.emitChange();
       break;

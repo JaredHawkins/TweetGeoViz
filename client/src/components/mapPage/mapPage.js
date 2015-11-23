@@ -5,12 +5,13 @@ var toastr = require('toastr');
 var Map = require('./components/map.js');
 var SearchBar = require('./components/searchBar.js');
 var SlidePanel = require('./components/slidePanel.js');
-var DataPopup = require('./components/dataPopup.js');
+var DataPopup = require('./components/dataPopup/dataPopup.js');
 
 var MapActions = require('../../actions/mapActions.js');
 var TweetsActions = require('../../actions/tweetsActions.js');
 var PopupActions = require('../../actions/dataPopupActions.js');
 var SearchBarActions = require('../../actions/searchBarActions.js');
+var SlidePanelActions = require('../../actions/slidePanelActions.js');
 
 var DataPopupStore = require('../../stores/dataPopupStore.js');
 var SlidePanelStore = require('../../stores/slidePanelStore.js');
@@ -66,9 +67,15 @@ var MapPage = React.createClass({
   },
 
   _mapStoreChange: function() {
+    var mapData = MapStore.getData();
+
     this.setState({
-      mapData: MapStore.getData()
+      mapData: mapData
     });
+
+    if (mapData.error) {
+      toastr.error(mapData.error);
+    }
   },
 
   _tweetsStoreChange: function() {
@@ -82,7 +89,7 @@ var MapPage = React.createClass({
   },
 
   _onClickSearch: function() {
-    TweetsActions.search(this.state.searchQuery);
+    TweetsActions.search(this.state.searchBarData.searchQuery);
   },
 
   _onFocusSearchField: function() {
@@ -93,17 +100,14 @@ var MapPage = React.createClass({
     var name = event.target.name;
     var value = event.target.value;
 
-    if (name === 'showPopupOnClick') {
+    if (name === 'isMapClickEnabled') {
       value = event.target.checked;
-
-      return PopupActions.changeValue(name, value);
     }
-
-    if (name === 'clickRadius') {
+    else if (name === 'clickRadius') {
       value = parseInt(value, 10);
-
-      return MapActions.changeValue(name, value);
     }
+
+    return MapActions.changeValue(name, value);
   },
 
   _onPopupClose: function() {
@@ -113,24 +117,33 @@ var MapPage = React.createClass({
   _onMapClick: function(options) {
     options = options || {};
 
+    // hide slide panel if it is visible
+    if (this.state.slidePanelData.visible) {
+      SlidePanelActions.hide();
+    }
+
+    // if click is disabled then do not even trigger the click event
+    if (!this.state.mapData.isMapClickEnabled) {
+      return;
+    }
+
+    // trigger map click
     MapActions.click({
       point: options.point,
       lpoint: options.lpoint,
-      showPopupOnClick: this.state.showPopupOnClick,
-      bounds: options.bounds,
-      searchQuery: this.state.searchQuery
+      bounds: options.bounds
     });
   },
 
   render: function() {
     return (
-      <div>
+      <div className='container-fluid'>
         <div className='snap-drawers'>
           <div className='snap-drawer snap-drawer-left'>
             <SlidePanel
               visible = {this.state.slidePanelData.visible}
               clickRadius = {this.state.mapData.clickRadius}
-              showPopupOnClick = {this.state.popupData.showPopupOnClick}
+              isMapClickEnabled = {this.state.mapData.isMapClickEnabled}
               onChange = {this._slidePanelChange} />
           </div>
         </div>
@@ -143,6 +156,7 @@ var MapPage = React.createClass({
               lpoint = {this.state.mapData.lpoint}
               onClick = {this._onMapClick}
               clickRadius = {this.state.mapData.clickRadius}
+              searchUUID = {this.state.tweetsData.searchUUID}
               heatMapData = {this.state.tweetsData.heatMapData} />
 
             <SearchBar

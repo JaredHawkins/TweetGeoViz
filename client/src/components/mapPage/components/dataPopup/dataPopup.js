@@ -1,21 +1,21 @@
 'use strict';
 
-var React = require('react');
+var React = require('react'),
+    DataPopupRow = require('./components/dataPopupRow.js');
 
 var DataPopup = React.createClass({
 
   propTypes: {
-    data: React.PropTypes.array.isRequired,
+    data: React.PropTypes.array,
     visible: React.PropTypes.bool,
     point: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
-    noDataText: React.PropTypes.string,
-    rowClass: React.PropTypes.string
+    noDataText: React.PropTypes.string
   },
 
   getDefaultProps: function() {
     return {
-      rowClass: 'tweetText',
+      data: [],
       noDataText: 'No Tweets Found',
       visible: false,
       point: {
@@ -44,17 +44,13 @@ var DataPopup = React.createClass({
 
     var createRow = function(rowData) {
       return (
-        <li key={rowData._id}>
-          <div className={self.props.rowClass}>
-            <span dangerouslySetInnerHTML={{__html: rowData.text }}>
-            </span>
-          </div>
-        </li>
+        <DataPopupRow
+          data = {rowData}/>
       );
     };
 
     return (
-      <div id='tweetsPopup' className='col-md-2' style={popupStyle}>
+      <div id='tweetsPopup' className='col-xs-4' style={popupStyle}>
         <div className='panel panel-default'>
           <div className='panel-heading'>
             <strong>{popupHeader}</strong>

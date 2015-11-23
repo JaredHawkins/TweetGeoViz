@@ -1,9 +1,9 @@
 'use strict';
 
-var React = require('react'),
-    Router = require('react-router'),
-    routes = require('./routes.js'),
-    InitializeActions = require('./actions/initializeActions.js');
+var React = require('react');
+var Router = require('react-router');
+var routes = require('./routes.js');
+var InitializeActions = require('./actions/initializeActions.js');
 
 InitializeActions.initApp();
 
