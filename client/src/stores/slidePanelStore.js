@@ -41,7 +41,8 @@ SlidePanelStore.dispatchToken = Dispatcher.register(function(action) {
 
       SlidePanelStore.emitChange();
       break;
-    case ActionTypes.SEARCH_ONFOCUS:
+    case ActionTypes.SEARCHBAR_SEARCHQUERY_FOCUS:
+
       // if slide-panel was shown already then do not do anything
       if (_data.visible) {
         return;

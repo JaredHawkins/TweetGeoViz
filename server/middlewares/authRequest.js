@@ -7,12 +7,12 @@ var config = require('../config/config.json');
 module.exports = function(req, res, next) {
 
   var validateToken = function(token) {
-    return config.apiKey == token;
+    return config.apiKey === token;
   };
 
   // Do not check token if it is a ping method
-  if (req.baseUrl == config.apiPrefix + config.apiVersion + config.pingUrl
-        || req.baseUrl == config.apiPrefix + config.pingUrl) {
+  if (req.baseUrl === config.apiPrefix + config.apiVersion + config.pingUrl
+        || req.baseUrl === config.apiPrefix + config.pingUrl) {
     next(); // To move to next middleware
     return;
   }
@@ -43,7 +43,7 @@ module.exports = function(req, res, next) {
 
     next(); // To move to next middleware
 
-  } catch (err) {
+  } catch(err) {
     next(err); // To move to next error middleware
   }
 };

@@ -17,7 +17,6 @@ var DataPopupRow = React.createClass({
   },
 
   render: function() {
-    debugger;
     return (
       <li key={this.props.data._id}>
         <div className={this.props.rowClass}>

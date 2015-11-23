@@ -1,10 +1,10 @@
 'use strict';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js'),
-    ActionTypes = require('../constants/actionTypes.js'),
-    request = require('request'),
-    params = require('query-params'),
-    apiConfig = require('../config/config.json').api;
+var Dispatcher = require('../dispatcher/appDispatcher.js');
+var ActionTypes = require('../constants/actionTypes.js');
+var request = require('request');
+var params = require('query-params');
+var apiConfig = require('../config/config.json').api;
 
 var TweetsActions = {
   changeValue: function(name, value) {

@@ -2,23 +2,23 @@
 
 /* global require, process, console */
 
-var express = require('express'),
-    logger = require('morgan'),
-    bodyParser = require('body-parser'),
-    routes = require('./routes'),
-    config = require('./config/config.json'),
-    authRequest = require('./middlewares/authRequest.js'),
-    allowCORSHandler = require('./middlewares/allowCORS.js'),
-    notFoundRequest = require('./middlewares/notFound.js'),
-    logErrorsHandler = require('./middlewares/logErrors.js'),
-    errorHandler = require('./middlewares/serverError.js'),
-    fs = require('fs'),
-    moment = require('moment'),
-    app = express(),
-    ip = config.ip || 'localhost',
-    port = config.port || 3000,
-    apiPrefix = config.apiPrefix || 'api',
-    apiVersion = config.apiVersion || 'v1';
+var express = require('express');
+var logger = require('morgan');
+var bodyParser = require('body-parser');
+var routes = require('./routes');
+var config = require('./config/config.json');
+var authRequest = require('./middlewares/authRequest.js');
+var allowCORSHandler = require('./middlewares/allowCORS.js');
+var notFoundRequest = require('./middlewares/notFound.js');
+var logErrorsHandler = require('./middlewares/logErrors.js');
+var errorHandler = require('./middlewares/serverError.js');
+var fs = require('fs');
+var moment = require('moment');
+var app = express();
+var ip = config.ip || 'localhost';
+var port = config.port || 3000;
+var apiPrefix = config.apiPrefix || 'api';
+var apiVersion = config.apiVersion || 'v1';
 
 require('console-stamp')(console, {
   pattern: 'dd/mmm/yyyy:HH:MM:ss o'

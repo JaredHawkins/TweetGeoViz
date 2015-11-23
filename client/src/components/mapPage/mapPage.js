@@ -5,7 +5,7 @@ var toastr = require('toastr');
 var Map = require('./components/map.js');
 var SearchBar = require('./components/searchBar.js');
 var SlidePanel = require('./components/slidePanel.js');
-var DataPopup = require('./components/dataPopup/dataPopup.js');
+var DataPopup = require('./components/dataPopup.js');
 
 var MapActions = require('../../actions/mapActions.js');
 var TweetsActions = require('../../actions/tweetsActions.js');
@@ -124,6 +124,11 @@ var MapPage = React.createClass({
 
     // if click is disabled then do not even trigger the click event
     if (!this.state.mapData.isMapClickEnabled) {
+      return;
+    }
+
+    // if we see a popup already then do not trigger the click event
+    if (this.state.popupData.visible) {
       return;
     }
 

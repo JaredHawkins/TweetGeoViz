@@ -1,7 +1,6 @@
 'use strict';
 
-var React = require('react'),
-    Link = require('react-router').Link;
+var React = require('react');
 
 var NotFoundPage = React.createClass({
   render: function() {

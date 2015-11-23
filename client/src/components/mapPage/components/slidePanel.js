@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react'),
-    Snap = require('../../../libs/snap/snap.js');
+var React = require('react');
+var Snap = require('../../../libs/snap/snap.js');
 
 var SlidePanel = React.createClass({
 
@@ -35,8 +35,10 @@ var SlidePanel = React.createClass({
     this._togglePanel(this.props.visible);
   },
 
-  componentDidUpdate: function() {
-    this._togglePanel();
+  componentDidUpdate: function(prevProps) {
+    if (prevProps.visible !== this.props.visible) {
+      this._togglePanel();
+    }
   },
 
   _closePanel: function() {

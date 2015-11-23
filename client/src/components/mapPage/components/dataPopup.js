@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react'),
-    DataPopupRow = require('./components/dataPopupRow.js');
+var React = require('react');
+var DataPopupRow = require('./dataPopupRow.js');
 
 var DataPopup = React.createClass({
 
@@ -42,10 +42,15 @@ var DataPopup = React.createClass({
       top: self.props.point.y + 'px'
     };
 
-    var createRow = function(rowData) {
+    var noRows = function() {
       return (
-        <DataPopupRow
-          data = {rowData}/>
+        <li>
+          <div className={self.props.rowClass}>
+            <span>
+              {self.props.noDataText}
+            </span>
+          </div>
+        </li>
       );
     };
 
@@ -66,14 +71,14 @@ var DataPopup = React.createClass({
             <ul>
               {
                 self.props.data.length ?
-                self.props.data.map(createRow) :
-                <li>
-                  <div className={self.props.rowClass}>
-                    <span>
-                      {self.props.noDataText}
-                    </span>
-                  </div>
-                </li>
+                self.props.data.map(function(row) {
+                  return (
+                    <DataPopupRow
+                      key = {row._id}
+                      data = {row} />
+                  );
+                }) :
+                noRows()
               }
             </ul>
           </div>

@@ -56,7 +56,7 @@ DataPopupStore.dispatchToken = Dispatcher.register(function(action) {
       DataPopupStore.emitChange();
       break;
     case ActionTypes.CLOSE_POPUP:
-    case ActionTypes.SEARCH_ONFOCUS:
+    case ActionTypes.SEARCHBAR_SEARCHQUERY_FOCUS:
       // if popup is already hidden - do not do anything
       if (!_data.visible) {
         return;

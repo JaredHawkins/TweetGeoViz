@@ -2,9 +2,9 @@
 
 /* global require, document */
 
-var render = require('react-dom').render,
-    routes = require('./routes.js'),
-    InitializeActions = require('./actions/initializeActions.js');
+var render = require('react-dom').render;
+var routes = require('./routes.js');
+var InitializeActions = require('./actions/initializeActions.js');
 
 InitializeActions.initApp();
 

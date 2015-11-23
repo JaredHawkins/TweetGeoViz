@@ -25,7 +25,6 @@ var config = {
       './client/src/css/*.css',
       './client/src/libs/snap/snap.css',
       'node_modules/bootstrap/dist/css/bootstrap.min.css',
-      'node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
       'node_modules/toastr/toastr.scss'
     ],
     mainJs: './client/src/main.js',
