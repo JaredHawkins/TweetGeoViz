@@ -51,7 +51,6 @@ MapStore.dispatchToken = Dispatcher.register(function(action) {
       MapStore.emitChange();
       break;
     case ActionTypes.MAP_CLICK:
-      debugger;
 
       // if click is enabled and circle already shown - then do not do anything
       // wait until popup is closed

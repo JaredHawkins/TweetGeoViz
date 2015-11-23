@@ -2,14 +2,14 @@
 
 $ = jQuery = require('jquery');
 
-var React = require('react'),
-    RouteHandler = require('react-router').RouteHandler;
+var React = require('react');
 
 var App = React.createClass({
-
   render: function() {
     return (
-      <RouteHandler />
+      <div>
+        {this.props.children}
+      </div>
     );
   }
 });

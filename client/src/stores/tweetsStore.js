@@ -77,7 +77,6 @@ TweetsStore.dispatchToken = Dispatcher.register(function(action) {
 
       break;
     case ActionTypes.TWEETS_SEARCH:
-      debugger;
       _data.tweets = action.tweets;
       _data.searchQuery = action.searchQuery;
       _data.searchUUID = action.searchUUID;
@@ -87,7 +86,6 @@ TweetsStore.dispatchToken = Dispatcher.register(function(action) {
       TweetsStore.emitChange();
       break;
     case ActionTypes.MAP_CLICK:
-      debugger;
 
       // if there are no tweets at all, then do not even bother
       if (!_data.tweets.length) {

@@ -47,7 +47,6 @@ var Map = React.createClass({
   },
 
   componentDidUpdate: function(prevProps) {
-    //debugger;
 
     // work with map circle only if its property has changed
     if (prevProps.isCircleVisible !== this.props.isCircleVisible) {

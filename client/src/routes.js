@@ -1,21 +1,32 @@
 'use strict';
 
-var React = require('react');
-var Router = require('react-router');
-var DefaultRoute = Router.DefaultRoute;
-var Route = Router.Route;
-var NotFoundRoute = Router.NotFoundRoute;
-var Redirect = Router.Redirect;
+var React = require('react'),
+    ReactRouter = require('react-router'),
+    Router = ReactRouter.Router,
+    Route = ReactRouter.Route,
+    NotFoundRoute = ReactRouter.NotFoundRoute,
+    IndexRoute = require('react-router').IndexRoute,
+    createBrowserHistory = require('history/lib/createBrowserHistory'),
+    //Keeping createHistory around until we know for sure we aren't going to use hashed based history
+    //createHistory = require('history/lib/createHashHistory'),
+
+    App = require('./components/app.js'),
+    MapPage = require('./components/mapPage/mapPage.js'),
+    NotFoundPage = require('./components/notFoundPage/notFoundPage.js');
+
+// Remove this comment when we know fore sure we are not going to use
+// hash based url's which is needed to support IE8 and IE9.
+// var history = createHistory({
+//   queryKey: false
+// });
 
 var routes = (
-  <Route name='app' path='/' handler={require('./components/app.js')}>
-    <DefaultRoute handler={require('./components/mapPage/mapPage.js')} />
-
-    <Route name='search' handler={require('./components/mapPage/mapPage.js')} />
-
-    // not found page
-    <NotFoundRoute handler={require('./components/notFoundPage/notFoundPage.js')} />
-  </Route>
+  <Router history={createBrowserHistory()}>
+    <Route path='/' component={App} >
+      <IndexRoute component={MapPage} />
+      <Route path='*' component={NotFoundPage} />
+    </Route>
+  </Router>
 );
 
 module.exports = routes;

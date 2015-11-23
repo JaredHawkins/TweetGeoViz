@@ -110,7 +110,7 @@ gulp.task('images', function() {
 });
 
 gulp.task('lint', function() {
-  return gulp.src(config.paths.js)
+  return gulp.src([config.paths.js, '!./client/src/libs/**/*.js'])
     .pipe(lint({config: 'eslint.config.json'}))
     .pipe(lint.format());
 });

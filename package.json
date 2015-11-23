@@ -51,9 +51,13 @@
     "node-uuid": "^1.4.7",
     "object-assign": "^4.0.1",
     "query-params": "0.0.1",
-    "react": "^0.13.3",
-    "react-router": "^0.13.3",
+    "history": "1.13.0",
+    "react": "^0.14.2",
+    "react-dom": "0.14.2",
+    "react-addons-pure-render-mixin": "0.14.2",
+    "react-router": "1.0.0",
     "request": "^2.59.0",
+    "keymirror": "0.1.1",
     "toastr": "^2.1.2"
   },
   "devDependencies": {
