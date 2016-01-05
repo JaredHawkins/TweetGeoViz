@@ -1,21 +1,22 @@
-/*global module, require*/
+'use strict';
+
+/* global module, require */
 
 var express = require('express'),
-    router = express.Router();
+    router = express.Router(),
+    config = require('../config/config.json'),
+    tweets = require('./tweets.js');
 
-// Landing page
-router.get('/', function(req, res) {
-  var emptyBlob = {
-    features: []
-  };
-
-  res.render('demo.jade', {
-    pins: JSON.stringify(emptyBlob),
-    searchQuery: JSON.stringify(null)
+var ping = function(req, res) {
+  res.json({
+    message: 'pong'
   });
-});
+};
 
-// Adding extra routes here
-require('./search.js')(router);
+router.get(config.pingUrl, ping);
+
+//Tweets///////////////////////////////////
+router.get('/tweets', tweets.get);
+///////////////////////////////////////////
 
 module.exports = router;

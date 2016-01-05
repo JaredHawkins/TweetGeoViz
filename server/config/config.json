@@ -1,0 +1,13 @@
+{
+  "ip": "localhost",
+  "port": 2063,
+  "apiPrefix": "/tvapi",
+  "apiVersion": "/v1",
+  "apiKey": "914AF1EA-7B67-11E5-96EC-563519B61C82",
+  "pingUrl": "/ping",
+  "mongo": {
+    "server": "mongodb://127.0.0.1:27017/",
+    "databaseName": "twitter",
+    "collection": "ControlTweets"
+  }
+}

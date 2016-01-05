@@ -58,13 +58,21 @@ db.ControlTweets.ensureIndex({ t: "text" })
 exit
 ```
 
-Then start the app from the top directory of the project:
+App consists of 2 main components: Server and Client.
+
+To start the Server, run in a separate window (by default it will run on `http://localhost:2063/`)
 
 ```
 npm start
 ```
 
-And in a browser, navigate to `http://localhost:2063/`.
+To run the Client, run in a separate window (by default it will run on `http://localhost:9005/`)
+
+```
+gulp
+```
+
+And in a browser, navigate to `http://localhost:9005/`.
 
 #Database Schema
 
@@ -73,10 +81,10 @@ And in a browser, navigate to `http://localhost:2063/`.
 Each element in the database contains the following key / value pairs:
 
 ```
-"_id" : tweet ID (also the object ID for the mongo db)
-"lang" : language of tweet (should be mostly correct, but may have some mistakes)
-"loc" : user-entered location name
-"plt" : profile latitude coordinates
+ "_id" : tweet ID (also the object ID for the mongo db)
+ "lang" : language of tweet (should be mostly correct, but may have some mistakes)
+ "loc" : user-entered location name
+ "plt" : profile latitude coordinates
  "uid" : twitter user id
  "tlt" : tweet latitude
  "cc" : country code
@@ -93,7 +101,8 @@ Each element in the database contains the following key / value pairs:
 The `/search` route in `routes.js` chews up tweets from the database into [geoJSON format](http://geojson.org/) (not strictly necessary at present, but we'll use this format for serving raw data from the database, and for potentially interfacing with other mapping tools in future). The specific format to be used contains only the minimal information necessary for plotting on a map:
 
 ```
-{	type: "FeatureCollection",
+{	
+  type: "FeatureCollection",
   features: [...]
 }
 ```
@@ -111,14 +120,6 @@ where `features` is an array of objects of the format:
 ```
 
 where `tln` and `tlt` are the tweet longitude and lattitude pulled from the database.
-
-##Compiling CSS from LESS
-
-Run from the main directory
-
-```
-lessc libs/server/public/css/demo.less > libs/server/public/css/demo.css
-```
 
 ##Testing
 
