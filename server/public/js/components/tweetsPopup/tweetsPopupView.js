@@ -42,11 +42,19 @@ var tgv = tgv || {};
     var li = document.createElement('li'),
         div = document.createElement('div'),
         span = document.createElement('span'),
-        regex = new RegExp(appModel.searchQuery, 'ig');
+        keywords = appModel.searchQuery.split(','), // split searchQuery
+        html = tweet.text;
 
     div.className = 'tweetText';
-    span.innerHTML = tweet.text.replace(regex,
-      '<span class="selection">$&</span>');
+
+    // Assigning the selection class to every matched keyword
+    for(var i = 0; i < keywords.length; i++){
+      regex = new RegExp(keywords[i].trim(), 'ig');
+      html = html.replace(regex,
+        '<span class="selection">$&</span>');
+    }
+
+    span.innerHTML = html;
 
     div.appendChild(span);
     li.appendChild(div);

@@ -39,8 +39,6 @@ var tgv = tgv || {};
   };
 
   Map.prototype.mapClick = function Map_addHeatMap(x, y, lat, lng) {
-    events.emit('mapClick', [x, y, tweets]);
-
     // check if click is disabled in settings
     if (!appModel.getMapClickEnabled()) {
       return;
@@ -57,6 +55,8 @@ var tgv = tgv || {};
         tweets = this._tweetCollection.getTweetsInBounds(bounds);
 
     this.showingClickOverlay = true;
+
+    events.emit('mapClick', [x, y, tweets]);
   };
 
   Map.prototype.hideClickOverlay = function Map_hideClickOverlay() {
