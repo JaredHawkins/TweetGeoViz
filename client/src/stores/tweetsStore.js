@@ -48,7 +48,7 @@ var TweetsStore = assign({}, EventEmitter.prototype, {
 
   getTweetsInBounds: function(bounds, searchQuery) {
     var result = [];
-    var regex = new RegExp(searchQuery, 'ig');
+    var keywords = searchQuery.split(','); // split searchQuery
 
     if (!bounds) {
       return;
@@ -59,7 +59,14 @@ var TweetsStore = assign({}, EventEmitter.prototype, {
           latLng = new google.maps.LatLng(coords[1], coords[0]);
 
       if (bounds.contains(latLng)) {
-        tweet.text = tweet.text.replace(regex, '<mark>$&</mark>');
+        var text = tweet.text;
+        // highlighting matched keywords
+        for(var i = 0; i < keywords.length; i++) {
+          var regex = new RegExp(keywords[i].trim(), 'ig');
+          text = text.replace(regex, '<mark>$&</mark>');
+        }
+
+        tweet.text = text
         result.push(tweet);
       }
     });
