@@ -1,27 +1,28 @@
-'use strict';
+import Dispatcher from '../dispatcher/appDispatcher.js';
+const dispatch = Dispatcher.dispatch.bind(Dispatcher);
+import {
+  MAP_CHANGE_VALUE,
+  MAP_CLICK
+} from '../constants/actionTypes.js';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js');
-var ActionTypes = require('../constants/actionTypes.js');
-
-var MapActions = {
-  changeValue: function(name, value) {
-    Dispatcher.dispatch({
-      actionType: ActionTypes.MAP_CHANGE_VALUE,
-      name: name,
-      value: value
-    });
-  },
-
-  click: function(options) {
-    options = options || {};
-
-    Dispatcher.dispatch({
-      actionType: ActionTypes.MAP_CLICK,
-      point: options.point,
-      lpoint: options.lpoint,
-      bounds: options.bounds
-    });
-  }
+export function changeValue(name, value) {
+  dispatch({
+    type: MAP_CHANGE_VALUE,
+    name,
+    value
+  });
 };
 
-module.exports = MapActions;
+export function click(options = {}) {
+  dispatch({
+    type: MAP_CLICK,
+    point: options.point,
+    lpoint: options.lpoint,
+    bounds: options.bounds
+  });
+};
+
+export default {
+  changeValue,
+  click
+};

@@ -1,61 +1,42 @@
-'use strict';
+// webpack specific - including required JS and CSS files
+require('../../../less/mapPage/tweetsPopup.less');
 
-var React = require('react');
-var DataPopupRow = require('./dataPopupRow.js');
+import React, { Component, PropTypes } from 'react';
+import DataPopupRow from './dataPopupRow.js';
+import NoDataRow from './noDataRow.js';
 
-var DataPopup = React.createClass({
+class DataPopup extends Component {
+  _onClose = event => {
+    const { onClose } = this.props;
 
-  propTypes: {
-    data: React.PropTypes.array,
-    visible: React.PropTypes.bool,
-    point: React.PropTypes.object,
-    onClose: React.PropTypes.func.isRequired,
-    noDataText: React.PropTypes.string
-  },
-
-  getDefaultProps: function() {
-    return {
-      data: [],
-      noDataText: 'No Tweets Found',
-      visible: false,
-      point: {
-        left: undefined,
-        right: undefined
-      }
-    };
-  },
-
-  _onClose: function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    this.props.onClose();
-  },
+    onClose();
+  }
 
-  render: function() {
-    var self = this,
-        popupHeader = self.props.data.length + ' Tweets';
+  render() {
+    const {
+      data = [],
+      noDataText = 'No Tweets Found',
+      rowClass = 'tweetText',
+      visible = false,
+      point = {
+        left: undefined,
+        right: undefined
+      }
+    } = this.props;
 
-    var popupStyle = {
-      display: self.props.visible ? 'block' : 'none',
-      left: self.props.point.x + 'px',
-      top: self.props.point.y + 'px'
-    };
+    const popupHeader = data.length + ' Tweets';
 
-    var noRows = function() {
-      return (
-        <li>
-          <div className={self.props.rowClass}>
-            <span>
-              {self.props.noDataText}
-            </span>
-          </div>
-        </li>
-      );
+    const popupStyle = {
+      display: visible ? 'block' : 'none',
+      left: point.x + 'px',
+      top: point.y + 'px'
     };
 
     return (
-      <div id='tweetsPopup' className='col-xs-4' style={popupStyle}>
+      <div id='tweetsPopup' className='col-xs-3' style={popupStyle}>
         <div className='panel panel-default'>
           <div className='panel-heading'>
             <strong>{popupHeader}</strong>
@@ -63,22 +44,24 @@ var DataPopup = React.createClass({
               type='button'
               className='close btn-xs'
               aria-describedby='descriptionClose'
-              onClick={self._onClose}>
+              onClick={this._onClose}>
             <span className='glyphicon glyphicon-remove' aria-hidden='true'></span>
             </button>
           </div>
           <div className='panel-body'>
             <ul>
               {
-                self.props.data.length ?
-                self.props.data.map(function(row) {
-                  return (
-                    <DataPopupRow
-                      key = {row._id}
-                      data = {row} />
-                  );
-                }) :
-                noRows()
+                data.length ?
+                data.map(row =>
+                  <DataPopupRow
+                    text = {row.text}
+                    rowClass = {rowClass}
+                    key = {row._id} />
+                )
+                :
+                <NoDataRow
+                  noDataText = {noDataText}
+                  rowClass = {rowClass} />
               }
             </ul>
           </div>
@@ -86,6 +69,14 @@ var DataPopup = React.createClass({
       </div>
     );
   }
-});
+};
 
-module.exports = DataPopup;
+DataPopup.propTypes = {
+  data: PropTypes.array,
+  visible: PropTypes.bool,
+  point: PropTypes.object,
+  onClose: PropTypes.func.isRequired,
+  noDataText: PropTypes.string
+};
+
+export default DataPopup;

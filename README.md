@@ -17,10 +17,24 @@ A product of collaboration between HealthMap.org (Boston Children's Hospital), M
 ##Dependencies
 This project uses mongodb to manage its database, node.js for a server, and npm to manage dependencies. Install these on your machine to start:
 
- - [mongodb v2.6.4](http://docs.mongodb.org/manual/installation/)
- - [node v0.10.31](http://nodejs.org/download/) (comes with npm)
- - [control tweets](https://db.tt/29prxPri) (courtesy of HealthMap)
+ - [MongoDB v2.6.4 and higher](http://docs.mongodb.org/manual/installation/)
+ - [Node v0.10.31](http://nodejs.org/download/) (comes with npm)
+ - [Control Tweets](https://db.tt/29prxPri) (courtesy of HealthMap)
 
+##Technology used for this project
+ - [MongoDB](https://www.mongodb.org/)
+ - [Node](https://nodejs.org/en/)
+ - [Webpack](https://webpack.github.io/)
+ - [Gulp](http://gulpjs.com/)
+ - [React](http://facebook.github.io/react/)
+ - [Flux](https://facebook.github.io/flux/docs/overview.html)
+ - [ES6 by Babel](https://babeljs.io/)
+ - [LESS](http://lesscss.org/)
+ - [Express](http://expressjs.com/)
+ - [Google Maps APIs](https://www.google.ca/work/mapsearth/products/mapsapi.html)
+ - [Mocha testing](http://mochajs.org/)
+ - [ES2015](https://babeljs.io/docs/learn-es2015/)
+ 
 ##Setup
 In the top directory of the project, run
 
@@ -63,16 +77,16 @@ App consists of 2 main components: Server and Client.
 To start the Server, run in a separate window (by default it will run on `http://localhost:2063/`)
 
 ```
-npm start
+npm run server-start
 ```
 
-To run the Client, run in a separate window (by default it will run on `http://localhost:9005/`)
+To run the Client, run in a separate window (by default it will run on `http://localhost:8080/` or `http://localhost:8080/webpack-dev-server/` if you want live-reloading while developing)
 
 ```
-gulp
+npm run client-start
 ```
 
-And in a browser, navigate to `http://localhost:9005/`.
+And in a browser, navigate to `http://localhost:8080/`.
 
 #Database Schema
 
@@ -123,14 +137,42 @@ where `tln` and `tlt` are the tweet longitude and lattitude pulled from the data
 
 ##Testing
 
-You need to have Mocha installed on your computer
-
 ```
-npm install -g mocha
+npm test
 ```
 
-Then execute tests from the top directory of the project:
+##The whole list of NPM commands we have
+
+To run tests
 
 ```
 npm test
 ```
+
+To start Server API
+
+```
+npm run server-start
+```
+
+To start client for development
+
+```
+npm run client-start
+```
+
+To build development version of the client
+
+```
+npm run client-build-dev
+```
+
+To build production version of the client (striped of PropType checks and uglified)
+
+```
+npm run client-build-production
+```
+
+##LICENSE
+
+see [LICENSE](./LICENSE)

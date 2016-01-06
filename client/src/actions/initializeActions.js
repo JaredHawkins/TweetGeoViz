@@ -1,15 +1,16 @@
-'use strict';
+import Dispatcher from '../dispatcher/appDispatcher.js';
+const dispatch = Dispatcher.dispatch.bind(Dispatcher);
+import {
+  INITIALIZE
+} from '../constants/actionTypes.js';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js');
-var ActionTypes = require('../constants/actionTypes.js');
-
-var InitializeActions = {
-  initApp: function() {
-    Dispatcher.dispatch({
-      actionType: ActionTypes.INITIALIZE,
-      initialData: {}
-    });
-  }
+export function initApp() {
+  dispatch({
+    type: INITIALIZE,
+    initialData: {}
+  });
 };
 
-module.exports = InitializeActions;
+export default {
+  initApp
+};

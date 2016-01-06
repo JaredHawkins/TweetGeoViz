@@ -1,17 +1,17 @@
-/* eslint-disable strict */ // Disable check because we can't run strict mode. Need global vars.
+// webpack specific - including required JS and CSS files
+require('../../../node_modules/bootstrap/dist/css/bootstrap.min.css');
+require('../../../node_modules/bootstrap/dist/js/bootstrap.min.js');
 
-$ = jQuery = require('jquery');
+import React, { Component } from 'react';
 
-var React = require('react');
+class App extends Component {
+  render() {
+    const { children } = this.props;
 
-var App = React.createClass({
-  render: function() {
     return (
-      <div>
-        {this.props.children}
-      </div>
+      <div> {children} </div>
     );
   }
-});
+};
 
-module.exports = App;
+export default App;

@@ -1,29 +1,17 @@
-'use strict';
+// webpack specific - including required JS and CSS files
+require('../../../less/mapPage/searchBar.less');
 
-var React = require('react');
+import React, { Component, PropTypes } from 'react';
 
-var SearchBar = React.createClass({
-
-  propTypes: {
-    onChange: React.PropTypes.func.isRequired,
-    onClickSearch: React.PropTypes.func.isRequired,
-    onFocus: React.PropTypes.func,
-    searchQuery: React.PropTypes.string
-  },
-
-  getDefaultProps: function() {
-    return {
-      searchQuery: ''
-    };
-  },
-
-  _onKeyPress: function(event) {
-    var value = event.target.value;
+class SearchBar extends Component {
+  _onKeyPress = event => {
+    const { value } = event.target;
 
     if (!event) {
       event = window.event;
     }
-    var keyCode = event.keyCode || event.which;
+
+    let keyCode = event.keyCode || event.which;
 
     if (keyCode == '13') {
       if (!value) {
@@ -32,19 +20,29 @@ var SearchBar = React.createClass({
 
       this._onClickSearch();
     }
-  },
+  }
 
-  _onClickSearch: function() {
+  _onClickSearch = () => {
+    const {
+      searchQuery,
+      onClickSearch
+    } = this.props;
 
     // check first if there is anything to search for at all
-    if (!this.props.searchQuery.trim().length) {
+    if (!searchQuery.trim().length) {
       return;
     }
 
-    this.props.onClickSearch();
-  },
+    onClickSearch();
+  }
 
-  render: function() {
+  render() {
+    const {
+      searchQuery = '',
+      onFocus,
+      onChange
+    } = this.props;
+
     return (
       <div className='row'>
         <div id='searchBar' className='col-md-4 col-xs-12'>
@@ -69,10 +67,10 @@ var SearchBar = React.createClass({
               aria-describedby='basic-addon'
               className='form-control'
               type='text'
-              onChange={this.props.onChange}
-              onClick={this.props.onFocus}
+              onChange={onChange}
+              onClick={onFocus}
               onKeyPress = {this._onKeyPress}
-              value={this.props.searchQuery} />
+              value={searchQuery} />
             <span
               className='input-group-addon'
               id='basic-addon'>
@@ -83,6 +81,13 @@ var SearchBar = React.createClass({
       </div>
     );
   }
-});
+};
 
-module.exports = SearchBar;
+SearchBar.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  onClickSearch: PropTypes.func.isRequired,
+  onFocus: PropTypes.func,
+  searchQuery: PropTypes.string
+};
+
+export default SearchBar;

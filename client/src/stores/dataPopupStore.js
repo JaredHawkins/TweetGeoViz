@@ -7,7 +7,7 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     _ = require('lodash'),
     CHANGE_EVENT = 'change';
 
-var _data = {
+var state = {
   point: {
     left: undefined,
     right: undefined
@@ -29,41 +29,50 @@ var DataPopupStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  getData: function() {
-    return _data;
+  getState: function() {
+    return state;
   }
 });
 
 DataPopupStore.dispatchToken = Dispatcher.register(function(action) {
-  switch(action.actionType) {
+  switch(action.type) {
     case ActionTypes.POPUP_CHANGE_VALUE:
 
-      _data[action.name] = action.value;
+      state = {
+        ...state,
+        [action.name]: action.value
+      };
 
       DataPopupStore.emitChange();
       break;
     case ActionTypes.MAP_CLICK:
       // if click is enabled and popup already shown - then do not do anything
       // wait until popup is closed
-      if (_data.visible) {
-        return;
+      if (state.visible) {
+        return state;
       }
 
       // otherwise show the popup
-      _data.visible = true;
-      _data.point = action.point;
+      state = {
+        ...state,
+        visible: true,
+        point: action.point
+      };
 
       DataPopupStore.emitChange();
       break;
     case ActionTypes.CLOSE_POPUP:
     case ActionTypes.SEARCHBAR_SEARCHQUERY_FOCUS:
       // if popup is already hidden - do not do anything
-      if (!_data.visible) {
-        return;
+      if (!state.visible) {
+        return state;
       }
 
       // otherwise hide the popup
-      _data.visible = false;
+      state = {
+        ...state,
+        visible: false
+      };
 
       DataPopupStore.emitChange();
       break;
@@ -73,4 +82,4 @@ DataPopupStore.dispatchToken = Dispatcher.register(function(action) {
   }
 });
 
-module.exports = DataPopupStore;
+export default DataPopupStore;

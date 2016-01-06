@@ -7,12 +7,55 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     _ = require('lodash'),
     CHANGE_EVENT = 'change';
 
-var _data = {
+var state = {
   searchUUID: undefined,
   tweets: [],
   selectedTweets: [],
   heatmapData: [],
   searchQuery: ''
+};
+
+function generateHeatMap(state) {
+  const { tweets = [] } = state;
+
+  let heatmapData = [];
+
+  tweets.forEach(tweet => {
+    const coords = tweet.geometry.coordinates;
+    let latLng = new google.maps.LatLng(coords[1], coords[0]);
+    heatmapData.push(latLng);
+  });
+
+  return heatmapData;
+};
+
+function getTweetsInBounds(state, bounds) {
+  let result = [];
+  const { tweets = [], searchQuery } = state;
+  const keywords = searchQuery.split(','); // split searchQuery
+  const regex = new RegExp(keywords[i].trim(), 'ig');
+
+  if (!bounds) {
+    return;
+  }
+
+  tweets.forEach(tweet => {
+    const coords = tweet.geometry.coordinates;
+    let latLng = new google.maps.LatLng(coords[1], coords[0]);
+
+    if (bounds.contains(latLng)) {
+      let text = tweet.text;
+      // highlighting matched keywords
+      for (let i = 0; i < keywords.length; i++) {
+        text = text.replace(regex, '<mark>$&</mark>');
+      }
+
+      tweet.text = text
+      result.push(tweet);
+    }
+  });
+
+  return result;
 };
 
 var TweetsStore = assign({}, EventEmitter.prototype, {
@@ -28,79 +71,36 @@ var TweetsStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  getData: function() {
-    return _data;
-  },
-
-  _generateHeatMap: function(data) {
-    data = data || [];
-
-    var heatmapData = [];
-
-    data.forEach(function(pin) {
-      var coords = pin.geometry.coordinates,
-          latLng = new google.maps.LatLng(coords[1], coords[0]);
-      heatmapData.push(latLng);
-    });
-
-    return heatmapData;
-  },
-
-  getTweetsInBounds: function(bounds, searchQuery) {
-    var result = [];
-    var keywords = searchQuery.split(','); // split searchQuery
-
-    if (!bounds) {
-      return;
-    }
-
-    _data.tweets.forEach(function(tweet) {
-      var coords = tweet.geometry.coordinates,
-          latLng = new google.maps.LatLng(coords[1], coords[0]);
-
-      if (bounds.contains(latLng)) {
-        var text = tweet.text;
-        // highlighting matched keywords
-        for(var i = 0; i < keywords.length; i++) {
-          var regex = new RegExp(keywords[i].trim(), 'ig');
-          text = text.replace(regex, '<mark>$&</mark>');
-        }
-
-        tweet.text = text
-        result.push(tweet);
-      }
-    });
-
-    return result;
+  getState: function() {
+    return state;
   }
 });
 
 TweetsStore.dispatchToken = Dispatcher.register(function(action) {
-  switch(action.actionType) {
+  switch(action.type) {
     case ActionTypes.TWEETS_CHANGE_VALUE:
-      _data[action.name] = action.value;
+      state[action.name] = action.value;
 
       TweetsStore.emitChange();
 
       break;
     case ActionTypes.TWEETS_SEARCH:
-      _data.tweets = action.tweets;
-      _data.searchQuery = action.searchQuery;
-      _data.searchUUID = action.searchUUID;
+      state.tweets = action.tweets;
+      state.searchQuery = action.searchQuery;
+      state.searchUUID = action.searchUUID;
 
-      _data.heatMapData = TweetsStore._generateHeatMap(_data.tweets);
+      state.heatMapData = generateHeatMap(state);
 
       TweetsStore.emitChange();
       break;
     case ActionTypes.MAP_CLICK:
 
       // if there are no tweets at all, then do not even bother
-      if (!_data.tweets.length) {
+      if (!state.tweets.length) {
         return;
       }
 
-      _data.selectedTweets = TweetsStore.getTweetsInBounds(action.bounds,
-        _data.searchQuery);
+      state.selectedTweets = getTweetsInBounds(state, action.bounds);
 
       TweetsStore.emitChange();
       break;
@@ -110,4 +110,4 @@ TweetsStore.dispatchToken = Dispatcher.register(function(action) {
   }
 });
 
-module.exports = TweetsStore;
+export default TweetsStore;

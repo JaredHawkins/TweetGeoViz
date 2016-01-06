@@ -7,7 +7,7 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     _ = require('lodash'),
     CHANGE_EVENT = 'change';
 
-var _data = {
+var state = {
   lpoint: {
     lat: 0,
     lng: 0
@@ -31,22 +31,29 @@ var MapStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  getData: function() {
-    return _data;
+  getState: function() {
+    return state;
   }
 
 });
 
 MapStore.dispatchToken = Dispatcher.register(function(action) {
-  switch(action.actionType) {
+  switch(action.type) {
     case ActionTypes.PAGE_ERROR:
-      _data.error = action.error;
+
+      state = {
+        ...state,
+        error: action.error
+      };
 
       MapStore.emitChange();
       break;
     case ActionTypes.MAP_CHANGE_VALUE:
 
-      _data[action.name] = action.value;
+      state = {
+        ...state,
+        [action.name]: action.value
+      };
 
       MapStore.emitChange();
       break;
@@ -54,25 +61,32 @@ MapStore.dispatchToken = Dispatcher.register(function(action) {
 
       // if click is enabled and circle already shown - then do not do anything
       // wait until popup is closed
-      if (_data.isCircleVisible) {
-        return;
+      if (state.isCircleVisible) {
+        return state;
       }
 
       // otherwise show the circle
-      _data.isCircleVisible = true;
-      _data.lpoint = action.lpoint;
+      state = {
+        ...state,
+        isCircleVisible: true,
+        lpoint: action.lpoint
+      };
 
       MapStore.emitChange();
       break;
+    case ActionTypes.SEARCHBAR_SEARCHQUERY_FOCUS:
     case ActionTypes.CLOSE_POPUP:
 
       // if circle is already hidden - do not do anything
-      if (!_data.isCircleVisible) {
-        return;
+      if (!state.isCircleVisible) {
+        return state;
       }
 
       // otherwise hide the circle
-      _data.isCircleVisible = false;
+      state = {
+        ...state,
+        isCircleVisible: false
+      };
 
       MapStore.emitChange();
       break;
@@ -82,4 +96,4 @@ MapStore.dispatchToken = Dispatcher.register(function(action) {
   }
 });
 
-module.exports = MapStore;
+export default MapStore;

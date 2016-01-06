@@ -1,73 +1,74 @@
-'use strict';
+// webpack specific - including required JS and CSS files
+require('../../../../node_modules/toastr/toastr.scss');
 
-var React = require('react');
-var toastr = require('toastr');
-var Map = require('./components/map.js');
-var SearchBar = require('./components/searchBar.js');
-var SlidePanel = require('./components/slidePanel.js');
-var DataPopup = require('./components/dataPopup.js');
+import React, { Component, PropTypes } from 'react';
+import toastr from 'toastr';
+import Map from './components/map.js';
+import SearchBar from './components/searchBar.js';
+import SlidePanel from './components/slidePanel.js';
+import DataPopup from './components/dataPopup.js';
 
-var MapActions = require('../../actions/mapActions.js');
-var TweetsActions = require('../../actions/tweetsActions.js');
-var PopupActions = require('../../actions/dataPopupActions.js');
-var SearchBarActions = require('../../actions/searchBarActions.js');
-var SlidePanelActions = require('../../actions/slidePanelActions.js');
+import MapActions from '../../actions/mapActions.js';
+import TweetsActions from '../../actions/tweetsActions.js';
+import PopupActions from '../../actions/dataPopupActions.js';
+import SearchBarActions from '../../actions/searchBarActions.js';
+import SlidePanelActions from '../../actions/slidePanelActions.js';
 
-var DataPopupStore = require('../../stores/dataPopupStore.js');
-var SlidePanelStore = require('../../stores/slidePanelStore.js');
-var MapStore = require('../../stores/mapStore.js');
-var TweetsStore = require('../../stores/tweetsStore.js');
-var SearchBarStore = require('../../stores/searchBarStore.js');
+import DataPopupStore from '../../stores/dataPopupStore.js';
+import SlidePanelStore from '../../stores/slidePanelStore.js';
+import MapStore from '../../stores/mapStore.js';
+import TweetsStore from '../../stores/tweetsStore.js';
+import SearchBarStore from '../../stores/searchBarStore.js';
 
-var MapPage = React.createClass({
+class MapPage extends Component {
 
-  getInitialState: function() {
-    return {
-      popupData: DataPopupStore.getData(),
-      mapData: MapStore.getData(),
-      tweetsData: TweetsStore.getData(),
-      slidePanelData: SlidePanelStore.getData(),
-      searchBarData: SearchBarStore.getData(),
-      error: {}
-    }
-  },
+  state = {
+    popupData: DataPopupStore.getState(),
+    mapData: MapStore.getState(),
+    tweetsData: TweetsStore.getState(),
+    slidePanelData: SlidePanelStore.getState(),
+    searchBarData: SearchBarStore.getState(),
+    error: {}
+  }
 
-  componentWillMount: function() {
+  constructor(props) {
+    super(props);
+
     TweetsStore.addChangeListener(this._tweetsStoreChange);
     DataPopupStore.addChangeListener(this._dataPopupStoreChange);
     MapStore.addChangeListener(this._mapStoreChange);
     SlidePanelStore.addChangeListener(this._slidePanelStoreChange);
     SearchBarStore.addChangeListener(this._searchBarStoreChange);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount = () => {
     TweetsStore.removeChangeListener(this._tweetsStoreChange);
     DataPopupStore.addChangeListener(this._dataPopupStoreChange);
     MapStore.addChangeListener(this._mapStoreChange);
     SlidePanelStore.addChangeListener(this._slidePanelStoreChange);
     SearchBarStore.addChangeListener(this._searchBarStoreChange);
-  },
+  }
 
-  _searchBarStoreChange: function() {
+  _searchBarStoreChange = () => {
     this.setState({
-      searchBarData: SearchBarStore.getData()
+      searchBarData: SearchBarStore.getState()
     });
-  },
+  }
 
-  _slidePanelStoreChange: function() {
+  _slidePanelStoreChange = () => {
     this.setState({
-      slidePanelData: SlidePanelStore.getData()
+      slidePanelData: SlidePanelStore.getState()
     });
-  },
+  }
 
-  _dataPopupStoreChange: function() {
+  _dataPopupStoreChange = () => {
     this.setState({
-      popupData: DataPopupStore.getData()
+      popupData: DataPopupStore.getState()
     });
-  },
+  }
 
-  _mapStoreChange: function() {
-    var mapData = MapStore.getData();
+  _mapStoreChange = () => {
+    var mapData = MapStore.getState();
 
     this.setState({
       mapData: mapData
@@ -76,46 +77,45 @@ var MapPage = React.createClass({
     if (mapData.error) {
       toastr.error(mapData.error);
     }
-  },
+  }
 
-  _tweetsStoreChange: function() {
+  _tweetsStoreChange = () => {
     this.setState({
-      tweetsData: TweetsStore.getData()
+      tweetsData: TweetsStore.getState()
     });
-  },
+  }
 
-  _searchQueryChange: function(event) {
-    SearchBarActions.changeValue(event.target.name, event.target.value);
-  },
+  _searchQueryChange = event => {
+    let { name, value } = event.target;
+    SearchBarActions.changeValue(name, value);
+  }
 
-  _onClickSearch: function() {
+  _onClickSearch = () => {
     TweetsActions.search(this.state.searchBarData.searchQuery);
-  },
+  }
 
-  _onFocusSearchField: function() {
+  _onFocusSearchField = () => {
     SearchBarActions.focus();
-  },
+  }
 
-  _slidePanelChange: function(event) {
-    var name = event.target.name;
-    var value = event.target.value;
+  _slidePanelChange = event => {
+    let { name, value, checked } = event.target;
 
     if (name === 'isMapClickEnabled') {
-      value = event.target.checked;
+      value = checked;
     }
     else if (name === 'clickRadius') {
       value = parseInt(value, 10);
     }
 
-    return MapActions.changeValue(name, value);
-  },
+    MapActions.changeValue(name, value);
+  }
 
-  _onPopupClose: function() {
+  _onPopupClose = () => {
     PopupActions.close();
-  },
+  }
 
-  _onMapClick: function(options) {
-    options = options || {};
+  _onMapClick = (options = {}) => {
 
     // hide slide panel if it is visible
     if (this.state.slidePanelData.visible) {
@@ -138,9 +138,9 @@ var MapPage = React.createClass({
       lpoint: options.lpoint,
       bounds: options.bounds
     });
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <div className='container-fluid'>
         <div className='snap-drawers'>
@@ -180,6 +180,6 @@ var MapPage = React.createClass({
       </div>
     );
   }
-});
+};
 
-module.exports = MapPage;
+export default MapPage;

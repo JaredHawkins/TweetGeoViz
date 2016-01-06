@@ -1,71 +1,80 @@
-'use strict';
+// webpack specific - including required JS and CSS files
+require('../../../less/mapPage/slidePanel.less');
+require('../../../../../node_modules/snapjs/snap.css');
 
-var React = require('react');
-var Snap = require('../../../libs/snap/snap.js');
+import React, { Component, PropTypes } from 'react';
+import Snap from 'snapjs';
+import { version } from '../../../../../package.json';
 
-var SlidePanel = React.createClass({
+class SlidePanel extends Component {
+  static propTypes = {
+    visible: PropTypes.bool,
+    onChange: PropTypes.func.isRequired,
+    clickRadius: PropTypes.number,
+    isMapClickEnabled: PropTypes.bool,
+    contentSelector: PropTypes.string
+  }
 
-  _snapPanel: null,
+  static defaultProps = {
+    visible: false,
+    contentSelector: '.site-wrapper',
+    isMapClickEnabled: true,
+    clickRadius: 250
+  }
 
-  propTypes: {
-    visible: React.PropTypes.bool,
-    onChange: React.PropTypes.func.isRequired,
-    clickRadius: React.PropTypes.number,
-    isMapClickEnabled: React.PropTypes.bool,
-    contentSelector: React.PropTypes.string
-  },
+  componentDidMount = () => {
+   const {
+    contentSelector,
+    visible
+   } = this.props;
 
-  getDefaultProps: function() {
-    return {
-      visible: false,
-      contentSelector: '.site-wrapper',
-      isMapClickEnabled: true,
-      clickRadius: 250
-    };
-  },
-
-  componentDidMount: function() {
     this._snapPanel = new Snap({
-      element: document.querySelector(this.props.contentSelector),
+      element: document.querySelector(contentSelector),
       tapToClose: false,
       touchToDrag: false,
       hyperextensible: false
     });
 
-    this._togglePanel(this.props.visible);
-  },
+    this._togglePanel(visible);
+  }
 
-  componentDidUpdate: function(prevProps) {
-    if (prevProps.visible !== this.props.visible) {
-      this._togglePanel();
+  componentDidUpdate = prevProps => {
+    const { visible } = this.props;
+
+    if (prevProps.visible !== visible) {
+      this._togglePanel(visible);
     }
-  },
+  }
 
-  _closePanel: function() {
+  _closePanel = () => {
     this._snapPanel.close();
-  },
+  }
 
-  _openPanel: function() {
+  _openPanel = () => {
     this._snapPanel.open('left');
-  },
+  }
 
-  _togglePanel: function() {
-    if (this.props.visible) {
-      this._openPanel();
-    } else {
-      this._closePanel();
-    }
-  },
+  _togglePanel = visible => {
+    this[visible ? '_openPanel' : '_closePanel']();
+  }
 
-  render: function() {
-    var twitterFollowStyle = {
+  render() {
+    const {
+      visible = false,
+      contentSelector = '.site-wrapper',
+      isMapClickEnabled = true,
+      clickRadius = 250,
+      onChange
+    } = this.props;
+
+    const twitterFollowStyle = {
       position: 'static',
       visibility: 'visible',
       width: '115px',
       height: '20px'
     };
 
-    var twitterTweetStyle = {
+    const twitterTweetStyle = {
       position: 'static',
       visibility: 'visible',
       width: '55px',
@@ -124,8 +133,8 @@ var SlidePanel = React.createClass({
                 aria-describedby='cursor-click-radius-description'
                 className='form-control'
                 type='number'
-                value={this.props.clickRadius}
-                onChange={this.props.onChange} />
+                value={clickRadius}
+                onChange={onChange} />
               <span className='input-group-addon'>km</span>
             </div>
             <div className='input-group input-group-sm'>
@@ -145,8 +154,8 @@ var SlidePanel = React.createClass({
                   name='isMapClickEnabled'
                   aria-label='Show Popup on Click'
                   type='checkbox'
-                  checked={this.props.isMapClickEnabled}
-                  onChange={this.props.onChange} />
+                  checked={isMapClickEnabled}
+                  onChange={onChange} />
               </span>
             </div>
           </li>
@@ -155,12 +164,12 @@ var SlidePanel = React.createClass({
           <p>Visualization tool to view tweets by location and content.</p>
           <p>A product of collaboration between HealthMap.org (Boston Children&#39;s Hospital), Mozilla Science Lab and our community.</p>
           <p>
-            <span className='label label-primary'>v0.1.0</span>
+            <span className='label label-primary'>{version}</span>
           </p>
         </div>
       </div>
     );
   }
-});
+};
 
-module.exports = SlidePanel;
+export default SlidePanel;

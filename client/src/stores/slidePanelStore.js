@@ -7,7 +7,7 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     _ = require('lodash'),
     CHANGE_EVENT = 'change';
 
-var _data = {
+var state = {
   visible: false
 };
 
@@ -24,31 +24,37 @@ var SlidePanelStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  getData: function() {
-    return _data;
+  getState: function() {
+    return state;
   }
 });
 
 SlidePanelStore.dispatchToken = Dispatcher.register(function(action) {
-  switch(action.actionType) {
+  switch(action.type) {
     case ActionTypes.SLIDEPANEL_HIDE:
       // if slide-panel was hidden already then do not do anything
-      if (!_data.visible) {
-        return;
+      if (!state.visible) {
+        return state;
       }
 
-      _data.visible = false;
+      state = {
+        ...state,
+        visible: false
+      };
 
       SlidePanelStore.emitChange();
       break;
     case ActionTypes.SEARCHBAR_SEARCHQUERY_FOCUS:
 
       // if slide-panel was shown already then do not do anything
-      if (_data.visible) {
-        return;
+      if (state.visible) {
+        return state;
       }
 
-      _data.visible = true;
+      state = {
+        ...state,
+        visible: true
+      };
 
       SlidePanelStore.emitChange();
       break;
@@ -58,4 +64,4 @@ SlidePanelStore.dispatchToken = Dispatcher.register(function(action) {
   }
 });
 
-module.exports = SlidePanelStore;
+export default SlidePanelStore;
