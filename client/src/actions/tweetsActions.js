@@ -1,55 +1,65 @@
-'use strict';
+import Dispatcher from '../dispatcher/appDispatcher.js';
+const dispatch = Dispatcher.dispatch.bind(Dispatcher);
+import request from 'superagent';
+import params from 'query-params';
+import { api as apiConfig } from '../config/config.json';
+import {
+  TWEETS_CHANGE_VALUE,
+  PAGE_ERROR,
+  TWEETS_SEARCH
+} from '../constants/actionTypes.js';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js');
-var ActionTypes = require('../constants/actionTypes.js');
-var request = require('request');
-var params = require('query-params');
-var apiConfig = require('../config/config.json').api;
+export function changeValue(name, value) {
+  dispatch({
+    type: TWEETS_CHANGE_VALUE,
+    name,
+    value
+  });
+};
 
-var TweetsActions = {
-  changeValue: function(name, value) {
-    Dispatcher.dispatch({
-      actionType: ActionTypes.TWEETS_CHANGE_VALUE,
-      name: name,
-      value: value
+export function search(searchQuery) {
+  if (searchQuery.length < 3) {
+    dispatch({
+      type: PAGE_ERROR,
+      error: 'Search query is too small'
     });
-  },
 
-  search: function(searchQuery) {
-    if (searchQuery.length < 3) {
+    return;
+  }
+
+  let callback = (error, response, body) => {
+    if (error) {
+      dispatch({
+        type: PAGE_ERROR,
+        error: `Mongo Error :${error}`
+      });
+
       return;
     }
 
-    var callback = function(error, response, body) {
-      if (error) {
-        Dispatcher.dispatch({
-          actionType: ActionTypes.PAGE_ERROR,
-          error: 'Mongo Error :' + error
-        });
+    const {
+      uuid,
+      features
+    } = response.body;
 
-        return;
-      }
+    dispatch({
+      type: TWEETS_SEARCH,
+      searchQuery: searchQuery,
+      searchUUID: uuid,
+      tweets: features
+    });
+  };
 
-      Dispatcher.dispatch({
-        actionType: ActionTypes.TWEETS_SEARCH,
-        searchQuery: searchQuery,
-        searchUUID: body.uuid,
-        tweets: body.features
-      });
-    };
+  const url = apiConfig.baseUrl + apiConfig.urls.tweets + '?' +
+    params.encode({ search: searchQuery });
 
-    request({
-      method: 'get',
-      baseUrl: apiConfig.baseUrl,
-      url: apiConfig.urls.tweets + '?' + params.encode({ search: searchQuery }),
-      timeout: apiConfig.timeout,
-      headers: {
-        'x-access-token': apiConfig.xAccessToken
-      },
-      json: true,
-      gzip: true
-    }, callback);
-  }
+  request.get(url)
+    .timeout(apiConfig.timeout)
+    .set('x-access-token', apiConfig.xAccessToken)
+    .end(callback);
 };
 
-module.exports = TweetsActions;
+export default {
+  changeValue,
+  search
+};

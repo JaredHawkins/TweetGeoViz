@@ -1,97 +1,112 @@
-'use strict';
+// webpack specific - including required JS and CSS files
+require('../../../less/mapPage/map.less');
 
-var React = require('react');
+import React, { Component, PropTypes } from 'react';
 
-var Map = React.createClass({
-  propTypes: {
-    isCircleVisible: React.PropTypes.bool,
-    point: React.PropTypes.object,
-    onClick: React.PropTypes.func.isRequired,
-    selector: React.PropTypes.string,
-    clickRadius: React.PropTypes.number,
-    heatMapData: React.PropTypes.array,
-    searchUUID: React.PropTypes.string,
-    mapOptions: React.PropTypes.object
-  },
+class Map extends Component {
+  static propTypes = {
+    isCircleVisible: PropTypes.bool,
+    point: PropTypes.object,
+    onClick: PropTypes.func.isRequired,
+    selector: PropTypes.string,
+    clickRadius: PropTypes.number,
+    heatMapData: PropTypes.array,
+    searchUUID: PropTypes.string,
+    mapOptions: PropTypes.object
+  }
 
-  getDefaultProps: function() {
-    return {
-      isCircleVisible: false,
-      lpoint: {
-        lat: 0,
-        lng: 0
-      },
-      clickRadius: 250,
-      heatMapData: [],
-      selector: '#map-canvas',
-      mapOptions: {
-        center: new google.maps.LatLng(21.2125, 31.1973),
-        zoom: 3,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        streetViewControl: false
-      },
-      searchUUID: undefined
-    };
-  },
+  static defaultProps = {
+    isCircleVisible: false,
+    lpoint: {
+      lat: 0,
+      lng: 0
+    },
+    clickRadius: 250,
+    heatMapData: [],
+    selector: '#map-canvas',
+    mapOptions: {
+      center: new google.maps.LatLng(21.2125, 31.1973),
+      zoom: 3,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      streetViewControl: false
+    },
+    searchUUID: undefined
+  }
 
-  componentDidMount: function() {
-    var element = document.querySelector(this.props.selector);
+  componentDidMount = () => {
+    const {
+      selector,
+      mapOptions,
+      heatMapData,
+      isCircleVisible
+    } = this.props;
+    const element = document.querySelector(selector);
 
-    this._googleMap = new google.maps.Map(element, this.props.mapOptions);
+    this._googleMap = new google.maps.Map(element, mapOptions);
 
     // attach event to google map click
     google.maps.event.addListener(this._googleMap, 'click', this._onClick);
 
-    this._renderHeatMap(this.props.heatMapData);
-    this._toggleCircle(this.props.isCircleVisible);
-  },
+    this._renderHeatMap(heatMapData);
+    this._toggleCircle(isCircleVisible);
+  }
 
-  componentDidUpdate: function(prevProps) {
+  componentDidUpdate = prevProps => {
+    const {
+      isCircleVisible,
+      searchUUID,
+      heatMapData
+    } = this.props;
 
     // work with map circle only if its property has changed
-    if (prevProps.isCircleVisible !== this.props.isCircleVisible) {
-      this._toggleCircle();
+    if (prevProps.isCircleVisible !== isCircleVisible) {
+      this._toggleCircle(isCircleVisible);
     }
 
     // re-render heatmap only if search was changed
-    if (prevProps.searchUUID !== this.props.searchUUID) {
-      this._renderHeatMap(this.props.heatMapData);
+    if (prevProps.searchUUID !== searchUUID) {
+      this._renderHeatMap(heatMapData);
     }
-  },
+  }
 
-  _onClick: function(event) {
+  _onClick = event => {
+    const { onClick } = this.props;
+    const { latLng, pixel } = event;
+
     // get bounds for the click
     var bounds = new google.maps.Circle({
-      center: new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()),
+      center: new google.maps.LatLng(latLng.lat(), latLng.lng()),
       radius: this._getClickRadiusMeters()
     }).getBounds();
 
-    this.props.onClick({
+    onClick({
       point: {
-        x: event.pixel.x,
-        y: event.pixel.y
+        x: pixel.x,
+        y: pixel.y
       },
       lpoint: {
-        lat: event.latLng.lat(),
-        lng: event.latLng.lng()
+        lat: latLng.lat(),
+        lng: latLng.lng()
       },
       bounds: bounds
     });
-  },
+  }
 
-  _getClickRadiusMeters: function() {
-    var km = 1000;
-    return this.props.clickRadius * km;
-  },
+  _getClickRadiusMeters = () => {
+    const KM = 1000;
+    const { clickRadius } = this.props;
 
-  _showCircle: function() {
-    var lpoint = this.props.lpoint;
+    return clickRadius * KM;
+  }
+
+  _showCircle = () => {
+    const { lpoint: { lat, lng } } = this.props;
 
     this._hideCircle();
 
     this._mapCircle = new google.maps.Circle({
       map: this._googleMap,
-      center: new google.maps.LatLng(lpoint.lat, lpoint.lng),
+      center: new google.maps.LatLng(lat, lng),
       clickable: false,
       radius: this._getClickRadiusMeters(),
       fillColor: '#fff',
@@ -108,9 +123,9 @@ var Map = React.createClass({
       panControl: false,
       disableDoubleClickZoom: true
     });
-  },
+  }
 
-  _hideCircle: function() {
+  _hideCircle = () => {
     if (!this._mapCircle) {
       return;
     }
@@ -123,19 +138,13 @@ var Map = React.createClass({
       panControl: true,
       disableDoubleClickZoom: false
     });
-  },
+  }
 
-  _toggleCircle: function() {
-    if (this.props.isCircleVisible) {
-      this._showCircle();
-    } else {
-      this._hideCircle();
-    }
-  },
+  _toggleCircle = isCircleVisible => {
+    this[isCircleVisible ? '_showCircle' : '_hideCircle']();
+  }
 
-  _renderHeatMap: function(heatMapData) {
-    heatMapData = heatMapData || [];
-
+  _renderHeatMap = (heatMapData = []) => {
     // remove old heatmap if it was present
     if (this._heatMap) {
       this._heatMap.setMap(null);
@@ -151,15 +160,15 @@ var Map = React.createClass({
       radius: 5,
       map: this._googleMap
     });
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <div id='map-canvas'>
         Loading map...
       </div>
     );
   }
-});
+};
 
-module.exports = Map;
+export default Map;

@@ -1,9 +1,7 @@
-'use strict';
+import React, { Component } from 'react';
 
-var React = require('react');
-
-var NotFoundPage = React.createClass({
-  render: function() {
+class NotFoundPage extends Component {
+  render() {
     return (
       <div>
         <h1>Page Not Found</h1>
@@ -11,6 +9,6 @@ var NotFoundPage = React.createClass({
       </div>
     );
   }
-});
+};
 
-module.exports = NotFoundPage;
+export default NotFoundPage;

@@ -1,30 +1,25 @@
-'use strict';
+import React, { Component, PropTypes } from 'react';
 
-var React = require('react');
+class DataPopupRow extends Component {
+  render() {
+    const {
+      text,
+      rowClass
+    } = this.props;
 
-var DataPopupRow = React.createClass({
-
-  propTypes: {
-    data: React.PropTypes.object,
-    rowClass: React.PropTypes.string
-  },
-
-  getDefaultProps: function() {
-    return {
-      data: {},
-      rowClass: 'tweetText'
-    };
-  },
-
-  render: function() {
     return (
-      <li key={this.props.data._id}>
-        <div className={this.props.rowClass}>
-          <span dangerouslySetInnerHTML={{__html: this.props.data.text }}></span>
+      <li>
+        <div className={rowClass}>
+          <span dangerouslySetInnerHTML={{__html: text }}></span>
         </div>
       </li>
     );
   }
-});
+};
 
-module.exports = DataPopupRow;
+DataPopupRow.propTypes = {
+  text: PropTypes.string,
+  rowClass: PropTypes.string
+};
+
+export default DataPopupRow;

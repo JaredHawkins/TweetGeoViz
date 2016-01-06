@@ -1,22 +1,25 @@
-'use strict';
+import Dispatcher from '../dispatcher/appDispatcher.js';
+const dispatch = Dispatcher.dispatch.bind(Dispatcher);
+import {
+  SEARCHBAR_CHANGE_VALUE,
+  SEARCHBAR_SEARCHQUERY_FOCUS
+} from '../constants/actionTypes.js';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js');
-var ActionTypes = require('../constants/actionTypes.js');
-
-var SearchBarActions = {
-  changeValue: function(name, value) {
-    Dispatcher.dispatch({
-      actionType: ActionTypes.SEARCHBAR_CHANGE_VALUE,
-      name: name,
-      value: value
-    });
-  },
-
-  focus: function() {
-    Dispatcher.dispatch({
-      actionType: ActionTypes.SEARCHBAR_SEARCHQUERY_FOCUS
-    });
-  }
+export function changeValue(name, value) {
+  dispatch({
+    type: SEARCHBAR_CHANGE_VALUE,
+    name,
+    value
+  });
 };
 
-module.exports = SearchBarActions;
+export function focus() {
+  dispatch({
+    type: SEARCHBAR_SEARCHQUERY_FOCUS
+  });
+};
+
+export default {
+  changeValue,
+  focus
+};

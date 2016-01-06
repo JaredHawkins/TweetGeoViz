@@ -7,7 +7,7 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
     _ = require('lodash'),
     CHANGE_EVENT = 'change';
 
-var _data = {
+var state = {
   searchQuery: ''
 };
 
@@ -24,16 +24,19 @@ var SearchBarStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  getData: function() {
-    return _data;
+  getState: function() {
+    return state;
   }
 });
 
 SearchBarStore.dispatchToken = Dispatcher.register(function(action) {
-  switch(action.actionType) {
+  switch(action.type) {
     case ActionTypes.SEARCHBAR_CHANGE_VALUE:
 
-      _data[action.name] = action.value;
+      state = {
+        ...state,
+        [action.name]: action.value
+      };
 
       SearchBarStore.emitChange();
       break;
@@ -43,4 +46,4 @@ SearchBarStore.dispatchToken = Dispatcher.register(function(action) {
   }
 });
 
-module.exports = SearchBarStore;
+export default SearchBarStore;

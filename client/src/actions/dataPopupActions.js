@@ -1,22 +1,25 @@
-'use strict';
+import Dispatcher from '../dispatcher/appDispatcher.js';
+const dispatch = Dispatcher.dispatch.bind(Dispatcher);
+import {
+  POPUP_CHANGE_VALUE,
+  CLOSE_POPUP
+} from '../constants/actionTypes.js';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js');
-var ActionTypes = require('../constants/actionTypes.js');
-
-var DataPopupActions = {
-  changeValue: function(name, value) {
-    Dispatcher.dispatch({
-      actionType: ActionTypes.POPUP_CHANGE_VALUE,
-      name: name,
-      value: value
-    });
-  },
-
-  close: function() {
-    Dispatcher.dispatch({
-      actionType: ActionTypes.CLOSE_POPUP
-    });
-  }
+export function changeValue(name, value) {
+  dispatch({
+    type: POPUP_CHANGE_VALUE,
+    name,
+    value
+  });
 };
 
-module.exports = DataPopupActions;
+export function close() {
+  dispatch({
+    type: CLOSE_POPUP
+  });
+};
+
+export default {
+  changeValue,
+  close
+};

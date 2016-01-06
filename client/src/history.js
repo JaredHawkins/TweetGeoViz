@@ -1,5 +1,3 @@
-var createBrowserHistory = require('history/lib/createBrowserHistory');
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 
-var history = createBrowserHistory();
-
-module.exports = history;
+export default createBrowserHistory();
