@@ -13,14 +13,14 @@ class SlidePanel extends Component {
     clickRadius: PropTypes.number,
     isMapClickEnabled: PropTypes.bool,
     contentSelector: PropTypes.string
-  }
+  };
 
   static defaultProps = {
     visible: false,
     contentSelector: '.site-wrapper',
     isMapClickEnabled: true,
     clickRadius: 250
-  }
+  };
 
   componentDidMount = () => {
    const {
@@ -36,7 +36,7 @@ class SlidePanel extends Component {
     });
 
     this._togglePanel(visible);
-  }
+  };
 
   componentDidUpdate = prevProps => {
     const { visible } = this.props;
@@ -44,19 +44,19 @@ class SlidePanel extends Component {
     if (prevProps.visible !== visible) {
       this._togglePanel(visible);
     }
-  }
+  };
 
   _closePanel = () => {
     this._snapPanel.close();
-  }
+  };
 
   _openPanel = () => {
     this._snapPanel.open('left');
-  }
+  };
 
   _togglePanel = visible => {
     this[visible ? '_openPanel' : '_closePanel']();
-  }
+  };
 
   render() {
     const {

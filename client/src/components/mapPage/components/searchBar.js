@@ -20,7 +20,7 @@ class SearchBar extends Component {
 
       this._onClickSearch();
     }
-  }
+  };
 
   _onClickSearch = () => {
     const {
@@ -34,7 +34,7 @@ class SearchBar extends Component {
     }
 
     onClickSearch();
-  }
+  };
 
   render() {
     const {
