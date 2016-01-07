@@ -1,6 +1,6 @@
 {
   "name": "TweetGeoViz",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Visualization tool to view tweets by location and content.",
   "author": "Jared Hawkins",
   "contributors": [
@@ -60,6 +60,8 @@
     "react": "^0.14.2",
     "react-dom": "0.14.2",
     "react-router": "1.0.0",
+    "snapjs": "^1.2.1",
+    "superagent": "^1.6.1",
     "toastr": "^2.1.2",
     "validator": "^4.5.0"
   },

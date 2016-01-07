@@ -13,7 +13,7 @@ class Map extends Component {
     heatMapData: PropTypes.array,
     searchUUID: PropTypes.string,
     mapOptions: PropTypes.object
-  }
+  };
 
   static defaultProps = {
     isCircleVisible: false,
@@ -31,7 +31,7 @@ class Map extends Component {
       streetViewControl: false
     },
     searchUUID: undefined
-  }
+  };
 
   componentDidMount = () => {
     const {
@@ -49,7 +49,7 @@ class Map extends Component {
 
     this._renderHeatMap(heatMapData);
     this._toggleCircle(isCircleVisible);
-  }
+  };
 
   componentDidUpdate = prevProps => {
     const {
@@ -67,7 +67,7 @@ class Map extends Component {
     if (prevProps.searchUUID !== searchUUID) {
       this._renderHeatMap(heatMapData);
     }
-  }
+  };
 
   _onClick = event => {
     const { onClick } = this.props;
@@ -90,14 +90,14 @@ class Map extends Component {
       },
       bounds: bounds
     });
-  }
+  };
 
   _getClickRadiusMeters = () => {
     const KM = 1000;
     const { clickRadius } = this.props;
 
     return clickRadius * KM;
-  }
+  };
 
   _showCircle = () => {
     const { lpoint: { lat, lng } } = this.props;
@@ -123,7 +123,7 @@ class Map extends Component {
       panControl: false,
       disableDoubleClickZoom: true
     });
-  }
+  };
 
   _hideCircle = () => {
     if (!this._mapCircle) {
@@ -138,11 +138,11 @@ class Map extends Component {
       panControl: true,
       disableDoubleClickZoom: false
     });
-  }
+  };
 
   _toggleCircle = isCircleVisible => {
     this[isCircleVisible ? '_showCircle' : '_hideCircle']();
-  }
+  };
 
   _renderHeatMap = (heatMapData = []) => {
     // remove old heatmap if it was present
@@ -160,7 +160,7 @@ class Map extends Component {
       radius: 5,
       map: this._googleMap
     });
-  }
+  };
 
   render() {
     return (

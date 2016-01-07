@@ -29,7 +29,7 @@ class MapPage extends Component {
     slidePanelData: SlidePanelStore.getState(),
     searchBarData: SearchBarStore.getState(),
     error: {}
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -47,25 +47,25 @@ class MapPage extends Component {
     MapStore.addChangeListener(this._mapStoreChange);
     SlidePanelStore.addChangeListener(this._slidePanelStoreChange);
     SearchBarStore.addChangeListener(this._searchBarStoreChange);
-  }
+  };
 
   _searchBarStoreChange = () => {
     this.setState({
       searchBarData: SearchBarStore.getState()
     });
-  }
+  };
 
   _slidePanelStoreChange = () => {
     this.setState({
       slidePanelData: SlidePanelStore.getState()
     });
-  }
+  };
 
   _dataPopupStoreChange = () => {
     this.setState({
       popupData: DataPopupStore.getState()
     });
-  }
+  };
 
   _mapStoreChange = () => {
     var mapData = MapStore.getState();
@@ -77,26 +77,26 @@ class MapPage extends Component {
     if (mapData.error) {
       toastr.error(mapData.error);
     }
-  }
+  };
 
   _tweetsStoreChange = () => {
     this.setState({
       tweetsData: TweetsStore.getState()
     });
-  }
+  };
 
   _searchQueryChange = event => {
     let { name, value } = event.target;
     SearchBarActions.changeValue(name, value);
-  }
+  };
 
   _onClickSearch = () => {
     TweetsActions.search(this.state.searchBarData.searchQuery);
-  }
+  };
 
   _onFocusSearchField = () => {
     SearchBarActions.focus();
-  }
+  };
 
   _slidePanelChange = event => {
     let { name, value, checked } = event.target;
@@ -109,11 +109,11 @@ class MapPage extends Component {
     }
 
     MapActions.changeValue(name, value);
-  }
+  };
 
   _onPopupClose = () => {
     PopupActions.close();
-  }
+  };
 
   _onMapClick = (options = {}) => {
 
@@ -138,7 +138,7 @@ class MapPage extends Component {
       lpoint: options.lpoint,
       bounds: options.bounds
     });
-  }
+  };
 
   render() {
     return (
