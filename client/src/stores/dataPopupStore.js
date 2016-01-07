@@ -9,8 +9,8 @@ var Dispatcher = require('../dispatcher/appDispatcher.js'),
 
 var state = {
   point: {
-    left: undefined,
-    right: undefined
+    x: undefined,
+    y: undefined
   },
   visible: false,
   showPopupOnClick: true

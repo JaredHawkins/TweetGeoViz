@@ -52,12 +52,13 @@ class SearchBar extends Component {
               <button
                 aria-label='Search'
                 className='btn btn-default'
-                onClick={this._onClickSearch} >
-                  <span
-                    aria-hidden='true'
-                    className='glyphicon glyphicon-search'>
-                  </span>
-                  Search
+                onClick={this._onClickSearch}
+              >
+                <span
+                  aria-hidden='true'
+                  className='glyphicon glyphicon-search'>
+                </span>
+                Search
               </button>
             </span>
 
@@ -73,7 +74,8 @@ class SearchBar extends Component {
               value={searchQuery} />
             <span
               className='input-group-addon'
-              id='basic-addon'>
+              id='basic-addon'
+            >
               tweet keywords
             </span>
           </div>

@@ -6,15 +6,6 @@ import DataPopupRow from './dataPopupRow.js';
 import NoDataRow from './noDataRow.js';
 
 class DataPopup extends Component {
-  _onClose = event => {
-    const { onClose } = this.props;
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    onClose();
-  }
-
   render() {
     const {
       data = [],
@@ -22,9 +13,10 @@ class DataPopup extends Component {
       rowClass = 'tweetText',
       visible = false,
       point = {
-        left: undefined,
-        right: undefined
-      }
+        x: undefined,
+        y: undefined
+      },
+      onClose
     } = this.props;
 
     const popupHeader = data.length + ' Tweets';
@@ -44,8 +36,14 @@ class DataPopup extends Component {
               type='button'
               className='close btn-xs'
               aria-describedby='descriptionClose'
-              onClick={this._onClose}>
-            <span className='glyphicon glyphicon-remove' aria-hidden='true'></span>
+              onClick={event => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                onClose();
+              }}
+            >
+              <span className='glyphicon glyphicon-remove' aria-hidden='true'></span>
             </button>
           </div>
           <div className='panel-body'>

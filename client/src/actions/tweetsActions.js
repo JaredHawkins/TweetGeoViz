@@ -17,7 +17,7 @@ export function changeValue(name, value) {
   });
 };
 
-export function search(searchQuery) {
+export function search(searchQuery = '') {
   if (searchQuery.length < 3) {
     dispatch({
       type: PAGE_ERROR,
@@ -27,7 +27,7 @@ export function search(searchQuery) {
     return;
   }
 
-  let callback = (error, response, body) => {
+  let callback = (error, response) => {
     if (error) {
       dispatch({
         type: PAGE_ERROR,
