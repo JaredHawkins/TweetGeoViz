@@ -125,7 +125,7 @@ class SlidePanel extends Component {
           <li>
             <div className='input-group input-group-sm'>
               <span id='cursor-click-radius-description' className='input-group-addon'>
-                  Cursor Click Radius
+                Cursor Click Radius
               </span>
               <input
                 name='clickRadius'
