@@ -15,9 +15,7 @@ var state = {
   searchQuery: ''
 };
 
-function generateHeatMap(state) {
-  const { tweets = [] } = state;
-
+function generateHeatMap(tweets = []) {
   let heatmapData = [];
 
   tweets.forEach(tweet => {
@@ -33,7 +31,6 @@ function getTweetsInBounds(state, bounds) {
   let result = [];
   const { tweets = [], searchQuery } = state;
   const keywords = searchQuery.split(','); // split searchQuery
-  const regex = new RegExp(keywords[i].trim(), 'ig');
 
   if (!bounds) {
     return;
@@ -47,6 +44,7 @@ function getTweetsInBounds(state, bounds) {
       let text = tweet.text;
       // highlighting matched keywords
       for (let i = 0; i < keywords.length; i++) {
+        let regex = new RegExp(keywords[i].trim(), 'ig');
         text = text.replace(regex, '<mark>$&</mark>');
       }
 
@@ -79,17 +77,23 @@ var TweetsStore = assign({}, EventEmitter.prototype, {
 TweetsStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.type) {
     case ActionTypes.TWEETS_CHANGE_VALUE:
-      state[action.name] = action.value;
+
+      state = {
+        ...state,
+        [action.name]: action.value
+      };
 
       TweetsStore.emitChange();
 
       break;
     case ActionTypes.TWEETS_SEARCH:
-      state.tweets = action.tweets;
-      state.searchQuery = action.searchQuery;
-      state.searchUUID = action.searchUUID;
-
-      state.heatMapData = generateHeatMap(state);
+      state = {
+        tweets: action.tweets,
+        searchQuery: action.searchQuery,
+        searchUUID: action.searchUUID,
+        heatMapData: generateHeatMap(action.tweets),
+        selectedTweets: []
+      };
 
       TweetsStore.emitChange();
       break;
@@ -97,10 +101,13 @@ TweetsStore.dispatchToken = Dispatcher.register(function(action) {
 
       // if there are no tweets at all, then do not even bother
       if (!state.tweets.length) {
-        return;
+        return state;
       }
 
-      state.selectedTweets = getTweetsInBounds(state, action.bounds);
+      state = {
+        ...state,
+        selectedTweets: getTweetsInBounds(state, action.bounds)
+      };
 
       TweetsStore.emitChange();
       break;
