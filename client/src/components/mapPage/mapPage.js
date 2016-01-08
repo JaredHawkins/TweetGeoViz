@@ -13,12 +13,14 @@ import TweetsActions from '../../actions/tweetsActions.js';
 import PopupActions from '../../actions/dataPopupActions.js';
 import SearchBarActions from '../../actions/searchBarActions.js';
 import SlidePanelActions from '../../actions/slidePanelActions.js';
+import LanguageActions from '../../actions/languageActions.js';
 
 import DataPopupStore from '../../stores/dataPopupStore.js';
 import SlidePanelStore from '../../stores/slidePanelStore.js';
 import MapStore from '../../stores/mapStore.js';
 import TweetsStore from '../../stores/tweetsStore.js';
 import SearchBarStore from '../../stores/searchBarStore.js';
+import LanguageStore from '../../stores/languageStore.js';
 
 class MapPage extends Component {
 
@@ -28,6 +30,7 @@ class MapPage extends Component {
     tweetsData: TweetsStore.getState(),
     slidePanelData: SlidePanelStore.getState(),
     searchBarData: SearchBarStore.getState(),
+    language: LanguageStore.getState(),
     error: {}
   };
 
@@ -39,14 +42,22 @@ class MapPage extends Component {
     MapStore.addChangeListener(this._mapStoreChange);
     SlidePanelStore.addChangeListener(this._slidePanelStoreChange);
     SearchBarStore.addChangeListener(this._searchBarStoreChange);
+    LanguageStore.addChangeListener(this._languageStoreChange);
   }
 
   componentWillUnmount = () => {
     TweetsStore.removeChangeListener(this._tweetsStoreChange);
-    DataPopupStore.addChangeListener(this._dataPopupStoreChange);
-    MapStore.addChangeListener(this._mapStoreChange);
-    SlidePanelStore.addChangeListener(this._slidePanelStoreChange);
-    SearchBarStore.addChangeListener(this._searchBarStoreChange);
+    DataPopupStore.removeChangeListener(this._dataPopupStoreChange);
+    MapStore.removeChangeListener(this._mapStoreChange);
+    SlidePanelStore.removeChangeListener(this._slidePanelStoreChange);
+    SearchBarStore.removeChangeListener(this._searchBarStoreChange);
+    LanguageStore.removeChangeListener(this._languageStoreChange);
+  };
+
+  _languageStoreChange = () => {
+    this.setState({
+      language: LanguageStore.getState(),
+    });
   };
 
   _searchBarStoreChange = () => {
@@ -101,6 +112,10 @@ class MapPage extends Component {
   _slidePanelChange = event => {
     let { name, value, checked } = event.target;
 
+    if (name === 'selectedLanguageId') {
+      return LanguageActions.changeValue(value);
+    }
+
     if (name === 'isMapClickEnabled') {
       value = checked;
     }
@@ -149,6 +164,7 @@ class MapPage extends Component {
               visible = {this.state.slidePanelData.visible}
               clickRadius = {this.state.mapData.clickRadius}
               isMapClickEnabled = {this.state.mapData.isMapClickEnabled}
+              selectedLanguage = {this.state.language}
               onChange = {this._slidePanelChange} />
           </div>
         </div>

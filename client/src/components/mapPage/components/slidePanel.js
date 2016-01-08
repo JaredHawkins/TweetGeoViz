@@ -4,12 +4,15 @@ require('../../../../../node_modules/snapjs/snap.css');
 
 import React, { Component, PropTypes } from 'react';
 import Snap from 'snapjs';
+import DropDown from './dropDown.js';
 import { version } from '../../../../../package.json';
+import { T__, languages } from '../../../stores/languageStore.js';
 
 class SlidePanel extends Component {
   static propTypes = {
     visible: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
+    selectedLanguage: PropTypes.object.isRequired,
     clickRadius: PropTypes.number,
     isMapClickEnabled: PropTypes.bool,
     contentSelector: PropTypes.string
@@ -64,6 +67,7 @@ class SlidePanel extends Component {
       contentSelector = '.site-wrapper',
       isMapClickEnabled = true,
       clickRadius = 250,
+      selectedLanguage,
       onChange
     } = this.props;
 
@@ -120,12 +124,25 @@ class SlidePanel extends Component {
             height='20'
             width='120'></iframe>
         </div>
-        <h4>Controls</h4>
+        <h4>{T__('mapPage.slidePanel.header')}</h4>
         <ul>
           <li>
             <div className='input-group input-group-sm'>
+              <span className='input-group-addon'>
+                {T__('mapPage.slidePanel.languageSelector.label')}
+              </span>
+              <DropDown
+                name = 'selectedLanguageId'
+                data = {languages}
+                dataKey = 'id'
+                dataValue = 'id'
+                dataName = 'name'
+                selectedValue = {selectedLanguage.id}
+                onChange = {onChange} />
+            </div>
+            <div className='input-group input-group-sm'>
               <span id='cursor-click-radius-description' className='input-group-addon'>
-                Cursor Click Radius
+                {T__('mapPage.slidePanel.clickRadius.label')}
               </span>
               <input
                 name='clickRadius'
@@ -138,21 +155,13 @@ class SlidePanel extends Component {
               <span className='input-group-addon'>km</span>
             </div>
             <div className='input-group input-group-sm'>
-              <span className='input-group-addon'>Keyword Part of Another Word</span>
               <span className='input-group-addon'>
-                <input
-                  aria-label='Keyword Part of Another Word'
-                  checked='checked'
-                  disabled='disabled'
-                  type='checkbox' />
+                {T__('mapPage.slidePanel.mapClick.label')}
               </span>
-            </div>
-            <div className='input-group input-group-sm'>
-              <span className='input-group-addon'>Enable Map Click</span>
               <span className='input-group-addon'>
                 <input
                   name='isMapClickEnabled'
-                  aria-label='Show Popup on Click'
+                  aria-label={T__('mapPage.slidePanel.mapClick.label')}
                   type='checkbox'
                   checked={isMapClickEnabled}
                   onChange={onChange} />
@@ -161,8 +170,8 @@ class SlidePanel extends Component {
           </li>
         </ul>
         <div>
-          <p>Visualization tool to view tweets by location and content.</p>
-          <p>A product of collaboration between HealthMap.org (Boston Children&#39;s Hospital), Mozilla Science Lab and our community.</p>
+          <p>{T__('mapPage.slidePanel.footer1')}</p>
+          <p>{T__('mapPage.slidePanel.footer2')}</p>
           <p>
             <span className='label label-primary'>{version}</span>
           </p>

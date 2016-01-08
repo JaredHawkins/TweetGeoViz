@@ -4,6 +4,9 @@ module.exports = keyMirror({
   // init
   INITIALIZE: null,
 
+  // language
+  LANGUAGE_CHANGE_LANGUAGE: null,
+
   // map
   MAP_CLICK: null,
   MAP_CHANGE_VALUE: null,

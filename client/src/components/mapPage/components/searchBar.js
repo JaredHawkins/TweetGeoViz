@@ -2,6 +2,7 @@
 require('../../../less/mapPage/searchBar.less');
 
 import React, { Component, PropTypes } from 'react';
+import { T__ } from '../../../stores/languageStore.js';
 
 class SearchBar extends Component {
   _onKeyPress = event => {
@@ -58,13 +59,13 @@ class SearchBar extends Component {
                   aria-hidden='true'
                   className='glyphicon glyphicon-search'>
                 </span>
-                Search
+                {T__('mapPage.searchBar.searchButton.label')}
               </button>
             </span>
 
             <input
               name='searchQuery'
-              placeholder='search keywords'
+              placeholder={T__('mapPage.searchBar.searchInput.placeholder')}
               aria-describedby='basic-addon'
               className='form-control'
               type='text'
@@ -76,7 +77,7 @@ class SearchBar extends Component {
               className='input-group-addon'
               id='basic-addon'
             >
-              tweet keywords
+              {T__('mapPage.searchBar.searchLabel')}
             </span>
           </div>
         </div>
