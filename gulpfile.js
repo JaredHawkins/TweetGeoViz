@@ -2,7 +2,7 @@
 
 var gulp = require('gulp');
 var runSequence = require('run-sequence'); // run tasks in sequence
-var clean = require('gulp-clean'); // cleaning directories
+var del = require('del');
 
 var config = {
   paths: {
@@ -14,8 +14,7 @@ var config = {
 };
 
 gulp.task('clean', function () {
-  return gulp.src(config.paths.dist, {read: false})
-    .pipe(clean());
+  return del(config.paths.dist);
 });
 
 // move html to dist folder and reload browser immediately

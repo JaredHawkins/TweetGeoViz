@@ -1,6 +1,9 @@
 TweetGeoViz
 ===========
 
+[![Dependency Status](https://david-dm.org/JaredHawkins/TweetGeoViz.svg?style=flat-square)](https://david-dm.org/JaredHawkins/TweetGeoViz)
+[![devDependency Status](https://david-dm.org/JaredHawkins/TweetGeoViz/dev-status.svg?style=flat-square)](https://david-dm.org/JaredHawkins/TweetGeoViz#info=devDependencies)
+
 Visualization tool to view tweets by location and content.
 
 ------
@@ -34,7 +37,7 @@ This project uses mongodb to manage its database, node.js for a server, and npm 
  - [Google Maps APIs](https://www.google.ca/work/mapsearth/products/mapsapi.html)
  - [Mocha testing](http://mochajs.org/)
  - [ES2015](https://babeljs.io/docs/learn-es2015/)
- 
+
 ##Setup
 In the top directory of the project, run
 
@@ -115,7 +118,7 @@ Each element in the database contains the following key / value pairs:
 The `/search` route in `routes.js` chews up tweets from the database into [geoJSON format](http://geojson.org/) (not strictly necessary at present, but we'll use this format for serving raw data from the database, and for potentially interfacing with other mapping tools in future). The specific format to be used contains only the minimal information necessary for plotting on a map:
 
 ```
-{	
+{
   type: "FeatureCollection",
   features: [...]
 }
