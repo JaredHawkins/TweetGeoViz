@@ -4,12 +4,13 @@ require('../../../less/mapPage/tweetsPopup.less');
 import React, { Component, PropTypes } from 'react';
 import DataPopupRow from './dataPopupRow.js';
 import NoDataRow from './noDataRow.js';
+import { T__ } from '../../../stores/languageStore.js';
 
 class DataPopup extends Component {
   render() {
     const {
       data = [],
-      noDataText = 'No Tweets Found',
+      noDataText = T__('mapPage.dataPopup.noDataText'),
       rowClass = 'tweetText',
       visible = false,
       point = {
@@ -19,7 +20,7 @@ class DataPopup extends Component {
       onClose
     } = this.props;
 
-    const popupHeader = data.length + ' Tweets';
+    const popupHeader = T__('mapPage.dataPopup.header', data.length);
 
     const popupStyle = {
       display: visible ? 'block' : 'none',

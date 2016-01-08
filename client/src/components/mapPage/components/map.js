@@ -2,6 +2,7 @@
 require('../../../less/mapPage/map.less');
 
 import React, { Component, PropTypes } from 'react';
+import { T__ } from '../../../stores/languageStore.js';
 
 class Map extends Component {
   static propTypes = {
@@ -164,9 +165,7 @@ class Map extends Component {
 
   render() {
     return (
-      <div id='map-canvas'>
-        Loading map...
-      </div>
+      <div id='map-canvas'></div>
     );
   }
 };
