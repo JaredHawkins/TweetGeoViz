@@ -1,6 +1,6 @@
 {
   "name": "TweetGeoViz",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Visualization tool to view tweets by location and content.",
   "author": "Jared Hawkins",
   "contributors": [
@@ -46,11 +46,11 @@
     "cookie-parser": "^1.3.3",
     "express": "^4.11.2",
     "flux": "^2.1.1",
-    "history": "1.13.0",
+    "history": "^1.13.0",
     "jquery": "^2.1.4",
-    "keymirror": "0.1.1",
+    "keymirror": "^0.1.1",
     "lodash": "^3.10.1",
-    "moment": "2.10.6",
+    "moment": "^2.10.6",
     "monk": "^0.9.1",
     "morgan": "^1.5.1",
     "node-uuid": "^1.4.7",
@@ -58,8 +58,8 @@
     "promise": "^7.1.1",
     "query-params": "0.0.1",
     "react": "^0.14.2",
-    "react-dom": "0.14.2",
-    "react-router": "1.0.0",
+    "react-dom": "^0.14.2",
+    "react-router": "^1.0.0",
     "snapjs": "^1.2.1",
     "superagent": "^1.6.1",
     "toastr": "^2.1.2",
@@ -74,9 +74,9 @@
     "babel-preset-stage-0": "^6.3.13",
     "chai": "^3.4.1",
     "css-loader": "^0.23.1",
+    "del": "^2.2.0",
     "file-loader": "^0.8.5",
     "gulp": "^3.9.0",
-    "gulp-clean": "^0.3.1",
     "json-loader": "^0.5.4",
     "less": "^2.5.3",
     "less-loader": "^2.2.2",
@@ -93,5 +93,5 @@
     "node": "0.10.x",
     "npm": "1.2.32"
   },
-  "license": "Apache"
+  "license": "Apache-2.0"
 }
