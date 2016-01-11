@@ -173,7 +173,7 @@ class SlidePanel extends Component {
           <p>{T__('mapPage.slidePanel.footer1')}</p>
           <p>{T__('mapPage.slidePanel.footer2')}</p>
           <p>
-            <span className='label label-primary'>{version}</span>
+            <span className='label label-primary'>v{version}</span>
           </p>
         </div>
       </div>
