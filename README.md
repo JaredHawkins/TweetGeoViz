@@ -24,17 +24,19 @@ This project uses mongodb to manage its database, node.js for a server, and npm 
  - [Node v0.10.31](http://nodejs.org/download/) (comes with npm)
  - [Control Tweets](https://db.tt/29prxPri) (courtesy of HealthMap)
 
-##Technology used for this project
+##Technology Used for This Project
  - [MongoDB](https://www.mongodb.org/)
  - [Node](https://nodejs.org/en/)
  - [Webpack](https://webpack.github.io/)
  - [Gulp](http://gulpjs.com/)
  - [React](http://facebook.github.io/react/)
  - [Flux](https://facebook.github.io/flux/docs/overview.html)
+ - [Bootstrap] (http://getbootstrap.com/)
  - [ES6 by Babel](https://babeljs.io/)
  - [LESS](http://lesscss.org/)
  - [Express](http://expressjs.com/)
  - [Google Maps APIs](https://www.google.ca/work/mapsearth/products/mapsapi.html)
+ - [Polyglot] (http://airbnb.io/polyglot.js/)
  - [Mocha testing](http://mochajs.org/)
  - [ES2015](https://babeljs.io/docs/learn-es2015/)
 
@@ -93,7 +95,7 @@ And in a browser, navigate to `http://localhost:8080/`.
 
 #Database Schema
 
-##mongodb
+##MongoDB
 
 Each element in the database contains the following key / value pairs:
 
@@ -138,13 +140,24 @@ where `features` is an array of objects of the format:
 
 where `tln` and `tlt` are the tweet longitude and lattitude pulled from the database.
 
+##Multi-Language Support
+
+Supported languages:
+
+ - English
+ - Spanish
+ 
+####Adding Another Language
+
+In order to add a new language bundle just add another `<language>.js` file into `/client/src/translations/`. Then modify `/client/src/stores/languageStore.js` according to comments inside it.
+
 ##Testing
 
 ```
 npm test
 ```
 
-##The whole list of NPM commands we have
+##Available NPM Commands
 
 To run tests
 
