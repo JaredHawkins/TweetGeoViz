@@ -132,12 +132,12 @@ class SlidePanel extends Component {
                 {T__('mapPage.slidePanel.languageSelector.label')}
               </span>
               <DropDown
-                name = 'selectedLanguageId'
+                name = 'selectedLanguageCode'
                 data = {languages}
                 dataKey = 'id'
-                dataValue = 'id'
+                dataValue = 'code'
                 dataName = 'name'
-                selectedValue = {selectedLanguage.id}
+                selectedValue = {selectedLanguage.code}
                 onChange = {onChange} />
             </div>
             <div className='input-group input-group-sm'>

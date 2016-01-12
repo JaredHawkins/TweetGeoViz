@@ -1,17 +1,17 @@
-'use strict';
+import _ from 'lodash';
+import assign from 'object-assign';
+import { EventEmitter } from 'events';
+import Dispatcher, { CHANGE_EVENT } from '../dispatcher/appDispatcher.js';
+import {
+  SLIDEPANEL_HIDE,
+  SEARCHBAR_SEARCHQUERY_FOCUS
+} from '../constants/actionTypes.js';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js'),
-    ActionTypes = require('../constants/actionTypes.js'),
-    EventEmitter = require('events').EventEmitter,
-    assign = require('object-assign'),
-    _ = require('lodash'),
-    CHANGE_EVENT = 'change';
-
-var state = {
+let state = {
   visible: false
 };
 
-var SlidePanelStore = assign({}, EventEmitter.prototype, {
+let SlidePanelStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -31,7 +31,7 @@ var SlidePanelStore = assign({}, EventEmitter.prototype, {
 
 SlidePanelStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.type) {
-    case ActionTypes.SLIDEPANEL_HIDE:
+    case SLIDEPANEL_HIDE:
       // if slide-panel was hidden already then do not do anything
       if (!state.visible) {
         return state;
@@ -44,7 +44,7 @@ SlidePanelStore.dispatchToken = Dispatcher.register(function(action) {
 
       SlidePanelStore.emitChange();
       break;
-    case ActionTypes.SEARCHBAR_SEARCHQUERY_FOCUS:
+    case SEARCHBAR_SEARCHQUERY_FOCUS:
 
       // if slide-panel was shown already then do not do anything
       if (state.visible) {

@@ -1,4 +1,10 @@
-'use strict';
+import _ from 'lodash';
+import assign from 'object-assign';
+import { EventEmitter } from 'events';
+import Dispatcher, { CHANGE_EVENT } from '../dispatcher/appDispatcher.js';
+import {
+  LANGUAGE_CHANGE_LANGUAGE
+} from '../constants/actionTypes.js';
 
 import en from '../translations/en.js';
 import es from '../translations/es.js';
@@ -18,35 +24,26 @@ export var languages = [
   // <--- add new language bundles HERE
 ];
 
+export var defaultLanguage = languages[0];
+
 const languagePack = {
   en,
   es,
   // <--- add new language bundles HERE
 };
 
-export var defaultLanguage = languages[0];
-
-var Dispatcher = require('../dispatcher/appDispatcher.js'),
-    ActionTypes = require('../constants/actionTypes.js'),
-    EventEmitter = require('events').EventEmitter,
-    assign = require('object-assign'),
-    _ = require('lodash'),
-    CHANGE_EVENT = 'change';
-
-var Polyglot = require('node-polyglot');
-var polyglot = new Polyglot({ locale: defaultLanguage.code });
+let Polyglot = require('node-polyglot');
+let polyglot = new Polyglot({ locale: defaultLanguage.code });
 
 polyglot.extend(languagePack);
 
-var state = {
-  language: defaultLanguage
-};
+let state = defaultLanguage;
 
 export function T__(key, data) {
   return polyglot.t(polyglot.locale() + '.' + key, data);
 };
 
-var TranslationsStore = assign({}, EventEmitter.prototype, {
+let TranslationsStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -66,16 +63,11 @@ var TranslationsStore = assign({}, EventEmitter.prototype, {
 
 TranslationsStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.actionType) {
-    case ActionTypes.LANGUAGE_CHANGE_LANGUAGE:
+    case LANGUAGE_CHANGE_LANGUAGE:
 
-      let language = _.find(languages, { id: action.value }) || defaultLanguage;
+      state = _.find(languages, { code: action.value }) || defaultLanguage;
 
-      state = {
-        ...state,
-        language
-      }
-
-      polyglot.locale(language.code);
+      polyglot.locale(state.code);
 
       TranslationsStore.emitChange();
       break;

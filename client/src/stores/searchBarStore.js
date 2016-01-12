@@ -1,17 +1,16 @@
-'use strict';
+import _ from 'lodash';
+import assign from 'object-assign';
+import { EventEmitter } from 'events';
+import Dispatcher, { CHANGE_EVENT } from '../dispatcher/appDispatcher.js';
+import {
+  SEARCHBAR_CHANGE_VALUE
+} from '../constants/actionTypes.js';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js'),
-    ActionTypes = require('../constants/actionTypes.js'),
-    EventEmitter = require('events').EventEmitter,
-    assign = require('object-assign'),
-    _ = require('lodash'),
-    CHANGE_EVENT = 'change';
-
-var state = {
+let state = {
   searchQuery: ''
 };
 
-var SearchBarStore = assign({}, EventEmitter.prototype, {
+let SearchBarStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -31,7 +30,7 @@ var SearchBarStore = assign({}, EventEmitter.prototype, {
 
 SearchBarStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.type) {
-    case ActionTypes.SEARCHBAR_CHANGE_VALUE:
+    case SEARCHBAR_CHANGE_VALUE:
 
       state = {
         ...state,

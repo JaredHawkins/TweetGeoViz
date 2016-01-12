@@ -1,13 +1,15 @@
-'use strict';
+import _ from 'lodash';
+import assign from 'object-assign';
+import { EventEmitter } from 'events';
+import Dispatcher, { CHANGE_EVENT } from '../dispatcher/appDispatcher.js';
+import {
+  POPUP_CHANGE_VALUE,
+  MAP_CLICK,
+  CLOSE_POPUP,
+  SEARCHBAR_SEARCHQUERY_FOCUS
+} from '../constants/actionTypes.js';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js'),
-    ActionTypes = require('../constants/actionTypes.js'),
-    EventEmitter = require('events').EventEmitter,
-    assign = require('object-assign'),
-    _ = require('lodash'),
-    CHANGE_EVENT = 'change';
-
-var state = {
+let state = {
   point: {
     x: undefined,
     y: undefined
@@ -16,7 +18,7 @@ var state = {
   showPopupOnClick: true
 };
 
-var DataPopupStore = assign({}, EventEmitter.prototype, {
+let DataPopupStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -36,7 +38,7 @@ var DataPopupStore = assign({}, EventEmitter.prototype, {
 
 DataPopupStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.type) {
-    case ActionTypes.POPUP_CHANGE_VALUE:
+    case POPUP_CHANGE_VALUE:
 
       state = {
         ...state,
@@ -45,7 +47,7 @@ DataPopupStore.dispatchToken = Dispatcher.register(function(action) {
 
       DataPopupStore.emitChange();
       break;
-    case ActionTypes.MAP_CLICK:
+    case MAP_CLICK:
       // if click is enabled and popup already shown - then do not do anything
       // wait until popup is closed
       if (state.visible) {
@@ -61,8 +63,8 @@ DataPopupStore.dispatchToken = Dispatcher.register(function(action) {
 
       DataPopupStore.emitChange();
       break;
-    case ActionTypes.CLOSE_POPUP:
-    case ActionTypes.SEARCHBAR_SEARCHQUERY_FOCUS:
+    case CLOSE_POPUP:
+    case SEARCHBAR_SEARCHQUERY_FOCUS:
       // if popup is already hidden - do not do anything
       if (!state.visible) {
         return state;
