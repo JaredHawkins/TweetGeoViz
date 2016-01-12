@@ -1,7 +1,7 @@
 'use strict';
 
 import en from '../translations/en.js';
-import sp from '../translations/sp.js';
+import es from '../translations/es.js';
 // <--- add new language bundles HERE
 
 export var languages = [
@@ -12,7 +12,7 @@ export var languages = [
   },
   {
     name: 'Español',
-    code: 'sp',
+    code: 'es',
     id: 2
   },
   // <--- add new language bundles HERE
@@ -20,7 +20,7 @@ export var languages = [
 
 const languagePack = {
   en,
-  sp,
+  es,
   // <--- add new language bundles HERE
 };
 
