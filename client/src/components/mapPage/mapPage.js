@@ -1,6 +1,7 @@
 // webpack specific - including required JS and CSS files
 require('../../../../node_modules/toastr/toastr.scss');
 
+import { paths } from '../../config/config.json';
 import React, { Component, PropTypes } from 'react';
 import toastr from 'toastr';
 import Map from './components/map.js';
@@ -20,7 +21,12 @@ import SlidePanelStore from '../../stores/slidePanelStore.js';
 import MapStore from '../../stores/mapStore.js';
 import TweetsStore from '../../stores/tweetsStore.js';
 import SearchBarStore from '../../stores/searchBarStore.js';
-import LanguageStore from '../../stores/languageStore.js';
+import LanguageStore, {
+  languages,
+  defaultLanguage
+} from '../../stores/languageStore.js';
+
+import history from '../../history.js';
 
 class MapPage extends Component {
 
@@ -52,6 +58,32 @@ class MapPage extends Component {
     SlidePanelStore.removeChangeListener(this._slidePanelStoreChange);
     SearchBarStore.removeChangeListener(this._searchBarStoreChange);
     LanguageStore.removeChangeListener(this._languageStoreChange);
+  };
+
+  componentDidMount = () => {
+    // get language from URL
+    let code = this.props.params.languageCode;
+    const language = _.find(languages, { code });
+
+    // if it is unknown language code
+    if (!language) {
+      code = defaultLanguage.code;
+      history.replace(paths.urlBase + code);
+    }
+
+    this._setLocale(code);
+  };
+
+  _setLocale = code => {
+    // if language was not changed then do nothing
+    if (code === this.state.language.code) {
+      return;
+    }
+
+    LanguageActions.changeValue(code);
+
+    // set path and translate
+    history.replace(paths.urlBase + code);
   };
 
   _languageStoreChange = () => {
@@ -112,8 +144,8 @@ class MapPage extends Component {
   _slidePanelChange = event => {
     let { name, value, checked } = event.target;
 
-    if (name === 'selectedLanguageId') {
-      return LanguageActions.changeValue(value);
+    if (name === 'selectedLanguageCode') {
+      return this._setLocale(value);
     }
 
     if (name === 'isMapClickEnabled') {

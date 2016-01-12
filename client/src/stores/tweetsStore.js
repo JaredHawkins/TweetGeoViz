@@ -1,13 +1,14 @@
-'use strict';
+import _ from 'lodash';
+import assign from 'object-assign';
+import { EventEmitter } from 'events';
+import Dispatcher, { CHANGE_EVENT } from '../dispatcher/appDispatcher.js';
+import {
+  TWEETS_CHANGE_VALUE,
+  TWEETS_SEARCH,
+  MAP_CLICK
+} from '../constants/actionTypes.js';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js'),
-    ActionTypes = require('../constants/actionTypes.js'),
-    EventEmitter = require('events').EventEmitter,
-    assign = require('object-assign'),
-    _ = require('lodash'),
-    CHANGE_EVENT = 'change';
-
-var state = {
+let state = {
   searchUUID: undefined,
   tweets: [],
   selectedTweets: [],
@@ -56,7 +57,7 @@ function getTweetsInBounds(state, bounds) {
   return result;
 };
 
-var TweetsStore = assign({}, EventEmitter.prototype, {
+let TweetsStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -76,7 +77,7 @@ var TweetsStore = assign({}, EventEmitter.prototype, {
 
 TweetsStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.type) {
-    case ActionTypes.TWEETS_CHANGE_VALUE:
+    case TWEETS_CHANGE_VALUE:
 
       state = {
         ...state,
@@ -86,7 +87,7 @@ TweetsStore.dispatchToken = Dispatcher.register(function(action) {
       TweetsStore.emitChange();
 
       break;
-    case ActionTypes.TWEETS_SEARCH:
+    case TWEETS_SEARCH:
       state = {
         tweets: action.tweets,
         searchQuery: action.searchQuery,
@@ -97,7 +98,7 @@ TweetsStore.dispatchToken = Dispatcher.register(function(action) {
 
       TweetsStore.emitChange();
       break;
-    case ActionTypes.MAP_CLICK:
+    case MAP_CLICK:
 
       // if there are no tweets at all, then do not even bother
       if (!state.tweets.length) {

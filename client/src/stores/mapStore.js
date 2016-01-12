@@ -1,13 +1,16 @@
-'use strict';
+import _ from 'lodash';
+import assign from 'object-assign';
+import { EventEmitter } from 'events';
+import Dispatcher, { CHANGE_EVENT } from '../dispatcher/appDispatcher.js';
+import {
+  PAGE_ERROR,
+  MAP_CHANGE_VALUE,
+  MAP_CLICK,
+  SEARCHBAR_SEARCHQUERY_FOCUS,
+  CLOSE_POPUP
+} from '../constants/actionTypes.js';
 
-var Dispatcher = require('../dispatcher/appDispatcher.js'),
-    ActionTypes = require('../constants/actionTypes.js'),
-    EventEmitter = require('events').EventEmitter,
-    assign = require('object-assign'),
-    _ = require('lodash'),
-    CHANGE_EVENT = 'change';
-
-var state = {
+let state = {
   lpoint: {
     lat: 0,
     lng: 0
@@ -18,7 +21,7 @@ var state = {
   error: undefined
 };
 
-var MapStore = assign({}, EventEmitter.prototype, {
+let MapStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -39,7 +42,7 @@ var MapStore = assign({}, EventEmitter.prototype, {
 
 MapStore.dispatchToken = Dispatcher.register(function(action) {
   switch(action.type) {
-    case ActionTypes.PAGE_ERROR:
+    case PAGE_ERROR:
 
       state = {
         ...state,
@@ -48,7 +51,7 @@ MapStore.dispatchToken = Dispatcher.register(function(action) {
 
       MapStore.emitChange();
       break;
-    case ActionTypes.MAP_CHANGE_VALUE:
+    case MAP_CHANGE_VALUE:
 
       state = {
         ...state,
@@ -57,7 +60,7 @@ MapStore.dispatchToken = Dispatcher.register(function(action) {
 
       MapStore.emitChange();
       break;
-    case ActionTypes.MAP_CLICK:
+    case MAP_CLICK:
 
       // if click is enabled and circle already shown - then do not do anything
       // wait until popup is closed
@@ -74,8 +77,8 @@ MapStore.dispatchToken = Dispatcher.register(function(action) {
 
       MapStore.emitChange();
       break;
-    case ActionTypes.SEARCHBAR_SEARCHQUERY_FOCUS:
-    case ActionTypes.CLOSE_POPUP:
+    case SEARCHBAR_SEARCHQUERY_FOCUS:
+    case CLOSE_POPUP:
 
       // if circle is already hidden - do not do anything
       if (!state.isCircleVisible) {

@@ -6,5 +6,9 @@
     },
     "timeout": 12000,
     "xAccessToken": "914AF1EA-7B67-11E5-96EC-563519B61C82"
+  },
+  "paths": {
+    "urlBase": "/",
+    "routeBase": "(:languageCode)"
   }
 }
