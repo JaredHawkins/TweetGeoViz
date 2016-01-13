@@ -4,7 +4,7 @@ require('../../../less/mapPage/tweetsPopup.less');
 import React, { Component, PropTypes } from 'react';
 import DataPopupRow from './dataPopupRow.js';
 import NoDataRow from './noDataRow.js';
-import { T__ } from '../../../stores/languageStore.js';
+import { T__ } from '../../../reducers/language.js';
 
 class DataPopup extends Component {
   render() {

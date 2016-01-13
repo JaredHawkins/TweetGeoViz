@@ -1,32 +1,26 @@
-import keyMirror from 'keymirror';
+// language
+export const LANGUAGE_CHANGE_LANGUAGE = 'LANGUAGE_CHANGE_LANGUAGE';
 
-module.exports = keyMirror({
-  // init
-  INITIALIZE: null,
+// map
+export const MAP_CLICK = 'MAP_CLICK';
+export const MAP_CHANGE_VALUE = 'MAP_CHANGE_VALUE';
 
-  // language
-  LANGUAGE_CHANGE_LANGUAGE: null,
+// searchBar
+export const SEARCHBAR_SEARCHQUERY_FOCUS = 'SEARCHBAR_SEARCHQUERY_FOCUS';
+export const SEARCHBAR_CHANGE_VALUE = 'SEARCHBAR_CHANGE_VALUE';
 
-  // map
-  MAP_CLICK: null,
-  MAP_CHANGE_VALUE: null,
+// tweetsPopup
+export const POPUP_CLOSE = 'POPUP_CLOSE';
+export const POPUP_CHANGE_VALUE = 'POPUP_CHANGE_VALUE';
 
-  // searchBar
-  SEARCHBAR_SEARCHQUERY_FOCUS: null,
-  SEARCHBAR_CHANGE_VALUE: null,
+// slidePanel
+export const SLIDEPANEL_CHANGE_VALUE = 'SLIDEPANEL_CHANGE_VALUE';
+export const SLIDEPANEL_HIDE = 'SLIDEPANEL_HIDE';
 
-  // tweetsPopup
-  POPUP_CLOSE: null,
-  POPUP_CHANGE_VALUE: null,
+// tweets
+export const TWEETS_REQUEST_TWEETS = 'TWEETS_REQUEST';
+export const TWEETS_RECEIVE_TWEETS = 'TWEETS_RECEIVE_TWEETS';
 
-  // slidePanel
-  SLIDEPANEL_CHANGE_VALUE: null,
-  SLIDEPANEL_HIDE: null,
-
-  // tweets
-  TWEETS_SEARCH: null,
-  TWEETS_CHANGE_VALUE: null,
-
-  // errors
-  PAGE_ERROR: null
-});
+// errors
+export const PAGE_ERROR = 'PAGE_ERROR';
+export const PAGE_NO_ERROR = 'PAGE_NO_ERROR';

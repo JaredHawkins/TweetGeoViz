@@ -1,15 +1,7 @@
-import _ from 'lodash';
-import assign from 'object-assign';
-import { EventEmitter } from 'events';
-import Dispatcher, { CHANGE_EVENT } from '../dispatcher/appDispatcher.js';
-import {
-  TWEETS_CHANGE_VALUE,
-  TWEETS_SEARCH,
-  MAP_CLICK
-} from '../constants/actionTypes.js';
+import * as types from '../constants/actionTypes.js';
 
-let state = {
-  searchUUID: undefined,
+const initialState = {
+  uuid: undefined,
   tweets: [],
   selectedTweets: [],
   heatmapData: [],
@@ -57,65 +49,30 @@ function getTweetsInBounds(state, bounds) {
   return result;
 };
 
-let TweetsStore = assign({}, EventEmitter.prototype, {
-  addChangeListener: function(callback) {
-    this.on(CHANGE_EVENT, callback);
-  },
-
-  removeChangeListener: function(callback) {
-    this.removeListener(CHANGE_EVENT, callback);
-  },
-
-  emitChange: function() {
-    this.emit(CHANGE_EVENT);
-  },
-
-  getState: function() {
-    return state;
-  }
-});
-
-TweetsStore.dispatchToken = Dispatcher.register(function(action) {
+export default function tweets(state = initialState, action) {
   switch(action.type) {
-    case TWEETS_CHANGE_VALUE:
-
-      state = {
-        ...state,
-        [action.name]: action.value
-      };
-
-      TweetsStore.emitChange();
-
-      break;
-    case TWEETS_SEARCH:
-      state = {
+    case types.TWEETS_RECEIVE_TWEETS:
+      return {
         tweets: action.tweets,
         searchQuery: action.searchQuery,
-        searchUUID: action.searchUUID,
+        uuid: action.uuid,
         heatMapData: generateHeatMap(action.tweets),
         selectedTweets: []
       };
 
-      TweetsStore.emitChange();
-      break;
-    case MAP_CLICK:
-
+    case types.MAP_CLICK:
       // if there are no tweets at all, then do not even bother
       if (!state.tweets.length) {
         return state;
       }
 
-      state = {
+      return {
         ...state,
         selectedTweets: getTweetsInBounds(state, action.bounds)
       };
 
-      TweetsStore.emitChange();
-      break;
     default:
       // nothing to do
-      break;
+      return state;
   }
-});
-
-export default TweetsStore;
+};
