@@ -2,7 +2,7 @@
 require('../../../less/mapPage/searchBar.less');
 
 import React, { Component, PropTypes } from 'react';
-import { T__ } from '../../../stores/languageStore.js';
+import { T__ } from '../../../reducers/language.js';
 
 class SearchBar extends Component {
   _onKeyPress = event => {

@@ -10,5 +10,6 @@
   "paths": {
     "urlBase": "/",
     "routeBase": "(:languageCode)"
-  }
+  },
+  "minQueryLength": 3
 }

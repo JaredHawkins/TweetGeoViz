@@ -6,7 +6,7 @@ import React, { Component, PropTypes } from 'react';
 import Snap from 'snapjs';
 import DropDown from './dropDown.js';
 import { version } from '../../../../../package.json';
-import { T__, languages } from '../../../stores/languageStore.js';
+import { T__, languages } from '../../../reducers/language.js';
 
 class SlidePanel extends Component {
   static propTypes = {

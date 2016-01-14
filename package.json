@@ -1,6 +1,6 @@
 {
   "name": "TweetGeoViz",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "Visualization tool to view tweets by location and content.",
   "author": "Jared Hawkins",
   "contributors": [
@@ -47,8 +47,8 @@
     "express": "^4.11.2",
     "flux": "^2.1.1",
     "history": "^1.13.0",
+    "isomorphic-fetch": "^2.2.0",
     "jquery": "^2.1.4",
-    "keymirror": "^0.1.1",
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "monk": "^0.9.1",
@@ -61,8 +61,10 @@
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "react-router": "^1.0.0",
+    "redux": "^3.0.5",
+    "redux-logger": "^2.3.2",
+    "redux-thunk": "^1.0.3",
     "snapjs": "^1.2.1",
-    "superagent": "^1.6.1",
     "toastr": "^2.1.2",
     "validator": "^4.5.0"
   },

@@ -2,7 +2,7 @@
 require('../../../less/mapPage/map.less');
 
 import React, { Component, PropTypes } from 'react';
-import { T__ } from '../../../stores/languageStore.js';
+import { T__ } from '../../../reducers/language.js';
 
 class Map extends Component {
   static propTypes = {
