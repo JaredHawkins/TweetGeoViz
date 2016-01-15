@@ -30,7 +30,7 @@ This project uses mongodb to manage its database, node.js for a server, and npm 
  - [Webpack](https://webpack.github.io/)
  - [Gulp](http://gulpjs.com/)
  - [React](http://facebook.github.io/react/)
- - [Flux](https://facebook.github.io/flux/docs/overview.html)
+ - [Redux](http://redux.js.org/)
  - [Bootstrap] (http://getbootstrap.com/)
  - [ES6 by Babel](https://babeljs.io/)
  - [LESS](http://lesscss.org/)
@@ -149,7 +149,7 @@ Supported languages:
  
 ####Adding Another Language
 
-In order to add a new language bundle just add another `<language>.js` file into `/client/src/translations/`. Then modify `/client/src/stores/languageStore.js` according to comments inside it.
+In order to add a new language bundle just add another `<language>.js` file into `/client/src/translations/`. Then modify `/client/src/reducers/language.js` according to comments inside it.
 
 ##Testing
 

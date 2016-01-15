@@ -7,11 +7,15 @@ import map from './map.js';
 import tweets from './tweets.js';
 import language from './language.js';
 
+import { routeReducer } from 'redux-simple-router';
+
 export default combineReducers({
   dataPopup,
   slidePanel,
   searchBar,
   map,
   tweets,
-  language
+  language,
+
+  routing: routeReducer
 });

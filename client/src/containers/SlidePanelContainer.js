@@ -1,17 +1,21 @@
 // webpack specific - including required JS and CSS files
-require('../../../less/mapPage/slidePanel.less');
-require('../../../../../node_modules/snapjs/snap.css');
+require('../less/mapPage/slidePanel.less');
+require('../../../node_modules/snapjs/snap.css');
 
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Snap from 'snapjs';
-import DropDown from './dropDown.js';
-import { version } from '../../../../../package.json';
-import { T__, languages } from '../../../reducers/language.js';
+import DropDown from '../components/DropDown.js';
+import { version } from '../../../package.json';
+import { T__, languages } from '../reducers/language.js';
+import { changeValue } from '../actions/mapActions.js';
+import { routeActions } from 'redux-simple-router';
 
-class SlidePanel extends Component {
+import { paths } from '../config/config.json';
+
+class SlidePanelContainer extends Component {
   static propTypes = {
     visible: PropTypes.bool,
-    onChange: PropTypes.func.isRequired,
     selectedLanguage: PropTypes.object.isRequired,
     clickRadius: PropTypes.number,
     isMapClickEnabled: PropTypes.bool,
@@ -59,6 +63,25 @@ class SlidePanel extends Component {
 
   _togglePanel = visible => {
     this[visible ? '_openPanel' : '_closePanel']();
+  };
+
+  _onChange = event => {
+    const { changeValue } = this.props;
+    const { urlReplace } = this.props;
+    let { name, value, checked } = event.target;
+
+    if (name === 'selectedLanguageCode') {
+      return urlReplace(paths.urlBase + value);
+    }
+
+    if (name === 'isMapClickEnabled') {
+      value = checked;
+    }
+    else if (name === 'clickRadius') {
+      value = parseInt(value, 10);
+    }
+
+    changeValue(name, value);
   };
 
   render() {
@@ -138,7 +161,7 @@ class SlidePanel extends Component {
                 dataValue = 'code'
                 dataName = 'name'
                 selectedValue = {selectedLanguage.code}
-                onChange = {onChange} />
+                onChange = {this._onChange} />
             </div>
             <div className='input-group input-group-sm'>
               <span id='cursor-click-radius-description' className='input-group-addon'>
@@ -151,7 +174,7 @@ class SlidePanel extends Component {
                 className='form-control'
                 type='number'
                 value={clickRadius}
-                onChange={onChange} />
+                onChange={this._onChange} />
               <span className='input-group-addon'>km</span>
             </div>
             <div className='input-group input-group-sm'>
@@ -164,7 +187,7 @@ class SlidePanel extends Component {
                   aria-label={T__('mapPage.slidePanel.mapClick.label')}
                   type='checkbox'
                   checked={isMapClickEnabled}
-                  onChange={onChange} />
+                  onChange={this._onChange} />
               </span>
             </div>
           </li>
@@ -181,4 +204,23 @@ class SlidePanel extends Component {
   }
 };
 
-export default SlidePanel;
+function mapStateToProps(state) {
+  const { visible } = state.slidePanel;
+  const selectedLanguage = state.language;
+  const { clickRadius, isMapClickEnabled } = state.map;
+
+  return {
+    visible,
+    selectedLanguage,
+    clickRadius,
+    isMapClickEnabled
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  {
+    changeValue,
+    urlReplace: routeActions.replace
+  }
+)(SlidePanelContainer);

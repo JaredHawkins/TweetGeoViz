@@ -1,26 +1,24 @@
 // webpack specific - including required JS and CSS files
-require('../../../less/mapPage/tweetsPopup.less');
+require('../less/mapPage/tweetsPopup.less');
 
 import React, { Component, PropTypes } from 'react';
-import DataPopupRow from './dataPopupRow.js';
-import NoDataRow from './noDataRow.js';
-import { T__ } from '../../../reducers/language.js';
+import DataPopupRow from './DataPopupRow.js';
+import NoDataRow from './NoDataRow.js';
 
 class DataPopup extends Component {
   render() {
     const {
       data = [],
-      noDataText = T__('mapPage.dataPopup.noDataText'),
-      rowClass = 'tweetText',
+      noDataText,
+      rowClass = '',
       visible = false,
       point = {
         x: undefined,
         y: undefined
       },
+      popupHeader = '',
       onClose
     } = this.props;
-
-    const popupHeader = T__('mapPage.dataPopup.header', data.length);
 
     const popupStyle = {
       display: visible ? 'block' : 'none',
@@ -74,6 +72,8 @@ DataPopup.propTypes = {
   data: PropTypes.array,
   visible: PropTypes.bool,
   point: PropTypes.object,
+  popupHeader: PropTypes.string,
+  rowClass: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   noDataText: PropTypes.string
 };

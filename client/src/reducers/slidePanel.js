@@ -6,8 +6,7 @@ const initialState = {
 
 export default function slidePanel(state = initialState, action) {
   switch(action.type) {
-    case types.SLIDEPANEL_HIDE:
-      // if slide-panel was hidden already then do not do anything
+    case types.MAP_CLICK:
       if (!state.visible) {
         return state;
       }

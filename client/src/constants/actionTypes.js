@@ -1,6 +1,3 @@
-// language
-export const LANGUAGE_CHANGE_LANGUAGE = 'LANGUAGE_CHANGE_LANGUAGE';
-
 // map
 export const MAP_CLICK = 'MAP_CLICK';
 export const MAP_CHANGE_VALUE = 'MAP_CHANGE_VALUE';
@@ -11,11 +8,6 @@ export const SEARCHBAR_CHANGE_VALUE = 'SEARCHBAR_CHANGE_VALUE';
 
 // tweetsPopup
 export const POPUP_CLOSE = 'POPUP_CLOSE';
-export const POPUP_CHANGE_VALUE = 'POPUP_CHANGE_VALUE';
-
-// slidePanel
-export const SLIDEPANEL_CHANGE_VALUE = 'SLIDEPANEL_CHANGE_VALUE';
-export const SLIDEPANEL_HIDE = 'SLIDEPANEL_HIDE';
 
 // tweets
 export const TWEETS_REQUEST_TWEETS = 'TWEETS_REQUEST';
