@@ -1,14 +1,15 @@
 // webpack specific - including required JS and CSS files
-require('../../../less/mapPage/map.less');
+require('../less/mapPage/map.less');
 
 import React, { Component, PropTypes } from 'react';
-import { T__ } from '../../../reducers/language.js';
+import { connect } from 'react-redux';
+import { T__ } from '../reducers/language.js';
+import { click } from '../actions/mapActions.js';
 
-class Map extends Component {
+class MapContainer extends Component {
   static propTypes = {
     isCircleVisible: PropTypes.bool,
     point: PropTypes.object,
-    onClick: PropTypes.func.isRequired,
     selector: PropTypes.string,
     clickRadius: PropTypes.number,
     heatMapData: PropTypes.array,
@@ -30,8 +31,7 @@ class Map extends Component {
       zoom: 3,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       streetViewControl: false
-    },
-    searchUUID: undefined
+    }
   };
 
   componentDidMount = () => {
@@ -71,8 +71,13 @@ class Map extends Component {
   };
 
   _onClick = event => {
-    const { onClick } = this.props;
+    const { click, isCircleVisible } = this.props;
     const { latLng, pixel } = event;
+
+    // if we show a circle on the map already then just stop
+    if (isCircleVisible) {
+      return;
+    }
 
     // get bounds for the click
     var bounds = new google.maps.Circle({
@@ -80,7 +85,7 @@ class Map extends Component {
       radius: this._getClickRadiusMeters()
     }).getBounds();
 
-    onClick({
+    click({
       point: {
         x: pixel.x,
         y: pixel.y
@@ -170,4 +175,20 @@ class Map extends Component {
   }
 };
 
-export default Map;
+function mapStateToProps(state) {
+  const { isCircleVisible, lpoint, clickRadius } = state.map;
+  const { uuid: searchUUID, heatMapData } = state.tweets;
+
+  return {
+    isCircleVisible,
+    lpoint,
+    clickRadius,
+    searchUUID,
+    heatMapData
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  { click }
+)(MapContainer);

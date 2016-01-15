@@ -10,12 +10,6 @@ const initialState = {
 
 export default function dataPopup(state = initialState, action) {
   switch(action.type) {
-    case types.POPUP_CHANGE_VALUE:
-      return {
-        ...state,
-        [action.name]: action.value
-      };
-
     case types.MAP_CLICK:
       // if click is enabled and popup already shown - then do not do anything
       // wait until popup is closed

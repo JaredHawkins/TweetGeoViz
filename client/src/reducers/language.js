@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as types from '../constants/actionTypes.js';
+import { UPDATE_LOCATION } from 'redux-simple-router';
 import en from '../translations/en.js';
 import es from '../translations/es.js';
 // <--- add new language bundles HERE
@@ -37,15 +38,28 @@ export function T__(key, data) {
   return polyglot.t(polyglot.locale() + '.' + key, data);
 };
 
+function getLanguageByCode(code) {
+  return _.find(languages, { code });
+};
+
+export function validLanguageCode(code) {
+  return !!getLanguageByCode(code);
+};
+
 export default function language(state = initialState, action) {
   switch(action.type) {
-    case types.LANGUAGE_CHANGE_LANGUAGE:
+    case UPDATE_LOCATION:
+      const { pathname } = action.location;
+      const code = pathname.substr(1);
 
-      language = _.find(languages, { code: action.value }) || defaultLanguage;
+      // if it is unknown language code
+      if (!validLanguageCode(code)) {
+        polyglot.locale(defaultLanguage.code);
+        return defaultLanguage;
+      }
 
-      polyglot.locale(language.code);
-
-      return _.clone(language);
+      polyglot.locale(code);
+      return getLanguageByCode(code);
     default:
       // nothing to do
       return state;
