@@ -1,6 +1,6 @@
 {
   "name": "TweetGeoViz",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Visualization tool to view tweets by location and content.",
   "author": "Jared Hawkins",
   "contributors": [
@@ -20,6 +20,7 @@
   "main": "app.js",
   "scripts": {
     "server-start": "node app.js",
+    "server-start-dev": "nodemon --watch app.js --watch server/",
     "test": "node node_modules/mocha/bin/mocha --reporter spec tests/*",
     "devServer": "./node_modules/.bin/webpack-dev-server -d --progress -colors --hot",
     "webpackProd": "./node_modules/.bin/webpack --config webpack-production.config -p",
@@ -51,7 +52,7 @@
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
-    "monk": "^0.9.1",
+    "mongoose": "^4.3.7",
     "morgan": "^1.5.1",
     "node-polyglot": "^1.0.0",
     "node-uuid": "^1.4.7",

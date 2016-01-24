@@ -19,6 +19,7 @@ var ip = config.ip || 'localhost';
 var port = config.port || 3000;
 var apiPrefix = config.apiPrefix || 'api';
 var apiVersion = config.apiVersion || 'v1';
+var db = require('./db');
 
 require('console-stamp')(console, {
   pattern: 'dd/mmm/yyyy:HH:MM:ss o'
@@ -38,6 +39,9 @@ app.use(notFoundRequest);
 
 app.use(logErrorsHandler);
 app.use(errorHandler);
+
+// connect to mongodb
+db.connect();
 
 // set the port for the webservice
 if (process.argv.length > 2) {
