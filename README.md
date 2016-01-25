@@ -171,6 +171,12 @@ To start Server API
 npm run server-start
 ```
 
+To start Server API for development using [nodemon](https://github.com/remy/nodemon)
+
+```
+npm run server-start-dev
+```
+
 To start client for development
 
 ```
