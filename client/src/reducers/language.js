@@ -49,7 +49,7 @@ export function validLanguageCode(code) {
 export default function language(state = initialState, action) {
   switch(action.type) {
     case UPDATE_LOCATION:
-      const { pathname } = action.location;
+      const { pathname } = action.payload;
       const code = pathname.substr(1);
 
       // if it is unknown language code
