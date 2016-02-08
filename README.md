@@ -38,6 +38,8 @@ This project uses mongodb to manage its database, node.js for a server, and npm 
  - [Google Maps APIs](https://www.google.ca/work/mapsearth/products/mapsapi.html)
  - [Polyglot] (http://airbnb.io/polyglot.js/)
  - [Mocha testing](http://mochajs.org/)
+ - [SnapJS](https://github.com/jakiestfu/Snap.js)
+ - [Postman](http://www.getpostman.com/)
  - [ES2015](https://babeljs.io/docs/learn-es2015/)
 
 ##Setup
@@ -194,6 +196,9 @@ To build production version of the client (striped of PropType checks and uglifi
 ```
 npm run client-build-production
 ```
+##Manual API Testing + Postman Files
+
+To test API manually you can find Postman Collection and Environment files inside `postman/` folder.
 
 ##LICENSE
 

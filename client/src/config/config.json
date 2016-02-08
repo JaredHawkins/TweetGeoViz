@@ -1,6 +1,6 @@
 {
   "api": {
-    "baseUrl": "http://localhost:2063/tvapi/v1",
+    "baseUrl": "http://localhost:2063/tgvapi/v1",
     "urls": {
       "tweets": "/tweets"
     },
