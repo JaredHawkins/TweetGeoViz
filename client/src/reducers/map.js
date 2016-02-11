@@ -34,7 +34,7 @@ export default function map(state = initialState, action) {
     case types.MAP_CLICK:
       // if click is enabled and circle already shown - then do not do anything
       // wait until popup is closed
-      if (state.isCircleVisible) {
+      if (state.isCircleVisible || !state.isMapClickEnabled) {
         return state;
       }
 

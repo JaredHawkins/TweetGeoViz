@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import { connect } from 'react-redux';
 import { fetchTweets } from '../actions/tweetsActions.js';
 import { focus, changeValue } from '../actions/searchBarActions.js';
-import SearchBar from '../components/SearchBar.js';
+import SearchBar from '../components/SearchBar/SearchBar.js';
 
 class SearchBarContainer extends Component {
   _onKeyPress = event => {

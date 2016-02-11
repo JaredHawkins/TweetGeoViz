@@ -8,6 +8,7 @@ export const SEARCHBAR_CHANGE_VALUE = 'SEARCHBAR_CHANGE_VALUE';
 
 // tweetsPopup
 export const POPUP_CLOSE = 'POPUP_CLOSE';
+export const POPUP_SHOW = 'POPUP_SHOW';
 
 // tweets
 export const TWEETS_REQUEST_TWEETS = 'TWEETS_REQUEST';

@@ -10,7 +10,7 @@ const initialState = {
 
 export default function dataPopup(state = initialState, action) {
   switch(action.type) {
-    case types.MAP_CLICK:
+    case types.POPUP_SHOW:
       // if click is enabled and popup already shown - then do not do anything
       // wait until popup is closed
       if (state.visible) {
@@ -24,8 +24,8 @@ export default function dataPopup(state = initialState, action) {
         point: action.point
       };
 
-    case types.POPUP_CLOSE:
     case types.SEARCHBAR_SEARCHQUERY_FOCUS:
+    case types.POPUP_CLOSE:
       // if popup is already hidden - do not do anything
       if (!state.visible) {
         return state;
