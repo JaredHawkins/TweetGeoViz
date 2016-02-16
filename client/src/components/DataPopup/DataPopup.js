@@ -1,9 +1,9 @@
 // webpack specific - including required JS and CSS files
-require('../less/mapPage/tweetsPopup.less');
+require('./dataPopup.less');
 
 import React, { Component, PropTypes } from 'react';
-import DataPopupRow from './DataPopupRow.js';
-import NoDataRow from './NoDataRow.js';
+import DataPopupRow from '../DataPopupRow.js';
+import NoDataRow from '../NoDataRow.js';
 
 class DataPopup extends Component {
   render() {

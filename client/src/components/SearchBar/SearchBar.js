@@ -1,8 +1,8 @@
 // webpack specific - including required JS and CSS files
-require('../less/mapPage/searchBar.less');
+require('./searchBar.less');
 
 import React, { Component, PropTypes } from 'react';
-import { T__ } from '../reducers/language.js';
+import { T__ } from '../../reducers/language.js';
 
 class SearchBar extends Component {
   render() {

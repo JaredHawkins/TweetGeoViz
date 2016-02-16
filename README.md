@@ -21,7 +21,7 @@ A product of collaboration between HealthMap.org (Boston Children's Hospital), M
 This project uses mongodb to manage its database, node.js for a server, and npm to manage dependencies. Install these on your machine to start:
 
  - [MongoDB v2.6.4 and higher](http://docs.mongodb.org/manual/installation/)
- - [Node v0.10.31](http://nodejs.org/download/) (comes with npm)
+ - [Node v0.12.7](http://nodejs.org/download/) (comes with npm)
  - [Control Tweets](https://db.tt/29prxPri) (courtesy of HealthMap)
 
 ##Technology Used for This Project

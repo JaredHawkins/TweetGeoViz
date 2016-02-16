@@ -8,12 +8,11 @@ export function changeValue(name, value) {
   };
 };
 
-export function click(options = {}) {
+export function click(bounds, lpoint) {
   return {
     type: types.MAP_CLICK,
-    point: options.point,
-    lpoint: options.lpoint,
-    bounds: options.bounds
+    bounds,
+    lpoint
   };
 };
 

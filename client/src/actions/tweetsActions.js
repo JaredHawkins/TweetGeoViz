@@ -49,9 +49,6 @@ export function fetchTweets(searchQuery) {
       .then(json => dispatch(
         receiveTweets(searchQuery, json.features, json.uuid))
       )
-      .catch(error => {
-        debugger;
-        dispatch(requestError(errorMessage))
-      });
+      .catch(error => dispatch(requestError(errorMessage)));
   };
 };

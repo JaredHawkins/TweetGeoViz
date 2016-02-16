@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import DataPopup from '../components/DataPopup.js';
+import DataPopup from '../components/DataPopup/DataPopup.js';
 import { T__ } from '../reducers/language.js';
 import { close } from '../actions/dataPopupActions.js';
 

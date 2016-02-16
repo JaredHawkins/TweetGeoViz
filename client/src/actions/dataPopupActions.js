@@ -5,3 +5,10 @@ export function close() {
     type: types.POPUP_CLOSE
   };
 };
+
+export function show(point) {
+  return {
+    type: types.POPUP_SHOW,
+    point
+  }
+};
