@@ -7,24 +7,11 @@ const initialState = {
   },
   isCircleVisible: false,
   isMapClickEnabled: true,
-  clickRadius: 250,
-  error: undefined
+  clickRadius: 250
 };
 
 export default function map(state = initialState, action) {
-  switch(action.type) {
-    case types.PAGE_NO_ERROR:
-      return {
-        ...state,
-        error: undefined
-      };
-
-    case types.PAGE_ERROR:
-      return {
-        ...state,
-        error: action.error
-      };
-
+  switch (action.type) {
     case types.MAP_CHANGE_VALUE:
       return {
         ...state,
@@ -62,4 +49,4 @@ export default function map(state = initialState, action) {
       // nothing to do
       return state;
   }
-};
+}

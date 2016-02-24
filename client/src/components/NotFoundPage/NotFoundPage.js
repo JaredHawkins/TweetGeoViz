@@ -9,6 +9,6 @@ class NotFoundPage extends Component {
       </div>
     );
   }
-};
+}
 
 export default NotFoundPage;

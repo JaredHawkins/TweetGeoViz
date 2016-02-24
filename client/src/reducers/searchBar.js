@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export default function searchBar(state = initialState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case types.SEARCHBAR_CHANGE_VALUE:
       return {
         ...state,
@@ -16,4 +16,4 @@ export default function searchBar(state = initialState, action) {
       // nothing to do
       return state;
   }
-};
+}

@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export default function slidePanel(state = initialState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case types.MAP_CLICK:
       if (!state.visible) {
         return state;
@@ -31,4 +31,4 @@ export default function slidePanel(state = initialState, action) {
       // nothing to do
       return state;
   }
-};
+}

@@ -1,3 +1,5 @@
+/* global google */
+
 // webpack specific - including required JS and CSS files
 require('./map.less');
 
@@ -50,7 +52,7 @@ class Map extends Component {
     this._toggleCircle(isCircleVisible);
   };
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps) => {
     const {
       isCircleVisible,
       searchUUID,
@@ -132,10 +134,8 @@ class Map extends Component {
   };
 
   render() {
-    return (
-      <div id='map-canvas'></div>
-    );
+    return <div id="map-canvas"></div>;
   }
-};
+}
 
 export default Map;

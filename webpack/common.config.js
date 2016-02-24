@@ -1,26 +1,17 @@
+'use strict';
+
 var path = require('path');
-var webpack = require('webpack');
 
 module.exports = {
-  context: path.resolve('./client/src'),
-  entry: './index.js',
-  output: {
-    path: path.resolve('client/dist/'),
-    filename: 'scripts/bundle.js'
-  },
-
-  devServer: {
-    contentBase: 'client/dist',
-    historyApiFallback: true
-  },
-
-  plugins: [
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery'
-    })
+  entry: [
+    './client/src/index.js'
   ],
+
+  output: {
+    path: path.resolve('client/dist'),
+    filename: 'bundle.js',
+    publicPath: '/'
+  },
 
   module: {
     loaders: [

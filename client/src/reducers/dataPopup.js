@@ -9,7 +9,7 @@ const initialState = {
 };
 
 export default function dataPopup(state = initialState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case types.POPUP_SHOW:
       // if click is enabled and popup already shown - then do not do anything
       // wait until popup is closed
@@ -41,4 +41,4 @@ export default function dataPopup(state = initialState, action) {
       // nothing to do
       return state;
   }
-};
+}

@@ -1,14 +1,10 @@
 import * as types from '../constants/actionTypes.js';
 
-export function close() {
-  return {
-    type: types.POPUP_CLOSE
-  };
-};
+export const close = () => ({
+  type: types.POPUP_CLOSE
+});
 
-export function show(point) {
-  return {
-    type: types.POPUP_SHOW,
-    point
-  }
-};
+export const show = (point) => ({
+  type: types.POPUP_SHOW,
+  point
+});

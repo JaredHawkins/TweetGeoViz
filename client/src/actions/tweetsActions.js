@@ -1,43 +1,33 @@
 import * as types from '../constants/actionTypes.js';
+import * as tweetsApi from '../api/tweetsApi.js';
 import { minQueryLength } from '../config/config.json';
-import { getTweets } from '../api/tweets.js';
+import { pageError } from './appActions.js';
 
-function requestTweets(searchQuery) {
-  return {
-    type: types.TWEETS_REQUEST_TWEETS,
-    searchQuery
-  };
-};
+export const requestTweets = (searchQuery) => ({
+  type: types.TWEETS_SEARCH_FETCHING,
+  searchQuery
+});
 
-function receiveTweets(searchQuery, tweets, uuid) {
-  return {
-    type: types.TWEETS_RECEIVE_TWEETS,
-    receivedAt: Date.now(),
-    searchQuery,
-    tweets,
-    uuid
-  };
-};
+export const receiveTweets = (searchQuery, tweets, uuid) => ({
+  type: types.TWEETS_SEARCH_FINISHED,
+  receivedAt: Date.now(),
+  searchQuery,
+  tweets,
+  uuid
+});
 
-function requestError(error) {
-  return {
-    type: types.PAGE_ERROR,
-    error
-  };
-};
-
-function shouldFetchTweets(state, searchQuery) {
+const shouldFetchTweets = (state, searchQuery) => {
   const previousSearchQuery = state.tweets.searchQuery;
 
   return previousSearchQuery !== searchQuery;
 };
 
-export function fetchTweets(searchQuery) {
-  if (searchQuery.length <= minQueryLength) {
-    return requestError('Search query is too small.');
-  }
-
+export const fetchTweets = (searchQuery) => {
   return (dispatch, getState) => {
+    if (searchQuery.length <= minQueryLength) {
+      return dispatch(pageError('Search query is too small.'));
+    }
+
     // check if we just did the same search before
     if (!shouldFetchTweets(getState(), searchQuery)) {
       return Promise.resolve();
@@ -45,10 +35,11 @@ export function fetchTweets(searchQuery) {
 
     dispatch(requestTweets(searchQuery));
 
-    getTweets(searchQuery)
+    tweetsApi
+      .getTweets(searchQuery)
       .then(json => dispatch(
         receiveTweets(searchQuery, json.features, json.uuid))
       )
-      .catch(error => dispatch(requestError(errorMessage)));
+      .catch(error => dispatch(pageError(error)));
   };
 };
