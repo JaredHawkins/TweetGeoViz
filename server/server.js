@@ -19,7 +19,7 @@ var ip = config.ip || 'localhost';
 var port = config.port || 3000;
 var apiPrefix = config.apiPrefix || 'api';
 var apiVersion = config.apiVersion || 'v1';
-var db = require('./db');
+var db = require('./store/db');
 
 require('console-stamp')(console, {
   pattern: 'dd/mmm/yyyy:HH:MM:ss o'

@@ -8,6 +8,13 @@
   "mongo": {
     "server": "mongodb://127.0.0.1:27017/",
     "databaseName": "twitter",
-    "collection": "ControlTweets"
+    "collection": "ControlTweets",
+    "connectionOptions": {
+      "server": {
+        "auto_reconnect": true,
+        "reconnectTries": 50,
+        "reconnectInterval": 5000
+      }
+    }
   }
 }

@@ -2,22 +2,26 @@
 
 /* global require, module */
 
-var tweetsCollection = require('../models/tweets'),
+var tweetsStore = require('../store/tweetsStore'),
     uuid = require('node-uuid'),
     Promise = require('promise'),
     validator = require('validator');
 
 var tweets = {
   get: function(req, res, next) {
+    if (!req.query.search) {
+      res.status(200);
+      res.json({
+        type: 'FeatureCollection',
+        features: [],
+        uuid: uuid.v1()
+      });
+      return;
+    }
+
     var q = req.query.search.split(','),
         queries = [],
         features = [];
-
-
-    if (tweetsCollection.db._readyState == 0 || tweetsCollection.db._readyState > 1) {
-      console.log('Database is not responding');
-      res.status(503).send('Database is not responding');
-    }
 
     // process db results
     function getResults(values) {
@@ -55,16 +59,10 @@ var tweets = {
       res.json(geoJSONlist);
     }
 
-    // multiple find statements for search multiple keywords
+    // multiple find statements for searching multiple keywords
     q.forEach(function(value) {
       var val = validator.trim(validator.escape(value));
-      var query = {
-        $text: {
-          $search: '"'+val+'"' // double quotes helps to search phrases with a space
-        }
-      };
-
-      var promise = tweetsCollection.find(query).sort({ tln: 1, tlt: 1 }).exec();
+      var promise = tweetsStore.get(val);
       queries.push(promise);
     });
 
@@ -74,7 +72,7 @@ var tweets = {
       .then(getResults)
       .catch(function(err) {
         console.error(err);
-        res.status(503).send('Query errors');
+        res.status(503).send(err.message);
       });
   }
 };
