@@ -1,11 +1,12 @@
+/* global Polyglot */
+
 import _ from 'lodash';
-import * as types from '../constants/actionTypes.js';
-import { UPDATE_LOCATION } from 'redux-simple-router';
+import { UPDATE_LOCATION } from 'react-router-redux';
 import en from '../translations/en.js';
 import es from '../translations/es.js';
 // <--- add new language bundles HERE
 
-export var languages = [
+export const languages = [
   {
     name: 'English',
     code: 'en',
@@ -19,7 +20,7 @@ export var languages = [
   // <--- add new language bundles HERE
 ];
 
-export var defaultLanguage = languages[0];
+export const defaultLanguage = languages[0];
 
 const languagePack = {
   en,
@@ -27,29 +28,29 @@ const languagePack = {
   // <--- add new language bundles HERE
 };
 
-let Polyglot = require('node-polyglot');
-let polyglot = new Polyglot({ locale: defaultLanguage.code });
+const Polyglot = require('node-polyglot');
+const polyglot = new Polyglot({ locale: defaultLanguage.code });
 
 polyglot.extend(languagePack);
 
-let initialState = defaultLanguage;
+const initialState = defaultLanguage;
 
 export function T__(key, data) {
-  return polyglot.t(polyglot.locale() + '.' + key, data);
-};
+  return polyglot.t(`${polyglot.locale()}.${key}`, data);
+}
 
 function getLanguageByCode(code) {
   return _.find(languages, { code });
-};
+}
 
 export function validLanguageCode(code) {
   return !!getLanguageByCode(code);
-};
+}
 
 export default function language(state = initialState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case UPDATE_LOCATION:
-      const { pathname } = action.location;
+      const { pathname } = action.payload;
       const code = pathname.substr(1);
 
       // if it is unknown language code
@@ -63,5 +64,5 @@ export default function language(state = initialState, action) {
     default:
       // nothing to do
       return state;
-    }
-};
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "parser": "babel-eslint",
+  "extends": "eslint-config-airbnb",
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true
+  },
+  "globals": {
+    "connect": true
+  },
+  "rules": {
+    "comma-dangle": 0,
+    "consistent-return": 0,
+    "no-case-declarations": 0,
+    "react/jsx-no-bind": 0,
+    "no-shadow": 0
+  },
+  "plugins": [
+    "react"
+  ]
+}

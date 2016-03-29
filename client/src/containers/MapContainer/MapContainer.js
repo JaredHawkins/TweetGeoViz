@@ -1,11 +1,13 @@
+/* global google */
+
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { click } from '../actions/mapActions.js';
-import { show } from '../actions/dataPopupActions.js';
-import Map from '../components/Map/Map.js';
+import * as mapActions from '../../actions/mapActions.js';
+import * as dataPopupActions from '../../actions/dataPopupActions.js';
+import { Map } from '../../components';
 
 class MapContainer extends Component {
-  _onClick = event => {
+  _onClick = (event) => {
     const {
       click,
       show,
@@ -22,7 +24,7 @@ class MapContainer extends Component {
     }
 
     // get bounds for the click
-    var bounds = new google.maps.Circle({
+    const bounds = new google.maps.Circle({
       center: new google.maps.LatLng(latLng.lat(), latLng.lng()),
       radius: clickRadius
     }).getBounds();
@@ -44,17 +46,19 @@ class MapContainer extends Component {
   };
 
   render() {
-    return <Map {...this.props}
-      onClick={this._onClick} />;
+    return <Map {...this.props} onClick={this._onClick} />;
   }
-};
+}
 
 MapContainer.propTypes = {
   isCircleVisible: PropTypes.bool,
+  isMapClickEnabled: PropTypes.bool,
   lpoint: PropTypes.object,
   clickRadius: PropTypes.number,
   heatMapData: PropTypes.array,
-  searchUUID: PropTypes.string
+  searchUUID: PropTypes.string,
+  click: PropTypes.func.isRequired,
+  show: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -73,13 +77,13 @@ function mapStateToProps(state) {
     clickRadius,
     searchUUID,
     heatMapData
-  }
+  };
 }
 
 export default connect(
   mapStateToProps,
   {
-    click,
-    show
+    click: mapActions.click,
+    show: dataPopupActions.show
   }
 )(MapContainer);

@@ -1,15 +1,11 @@
 {
   "api": {
-    "baseUrl": "http://localhost:2063/tgvapi/v1",
     "urls": {
+      "base": "http://localhost:2063/tgvapi/v1",
       "tweets": "/tweets"
     },
-    "timeout": 12000,
+    "timeout": 8000,
     "xAccessToken": "914AF1EA-7B67-11E5-96EC-563519B61C82"
-  },
-  "paths": {
-    "urlBase": "/",
-    "routeBase": "(:languageCode)"
   },
   "minQueryLength": 3
 }

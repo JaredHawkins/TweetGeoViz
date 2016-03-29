@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import DataPopup from '../components/DataPopup/DataPopup.js';
-import { T__ } from '../reducers/language.js';
-import { close } from '../actions/dataPopupActions.js';
+import { T__ } from '../../reducers/language.js';
+import { DataPopup } from '../../components';
+import * as dataPopupActions from '../../actions/dataPopupActions.js';
 
 class DataPopupContainer extends Component {
   render() {
     const {
-      searchQuery,
       close,
       visible,
       data
@@ -19,21 +18,21 @@ class DataPopupContainer extends Component {
 
     const popupHeader = T__('mapPage.dataPopup.header', data.length);
     const noDataText = T__('mapPage.dataPopup.noDataText');
-    const rowClass = 'tweetText';
 
     return <DataPopup {...this.props}
-      popupHeader = {popupHeader}
-      noDataText = {noDataText}
-      rowClass = {rowClass}
-      onClose = {() => close()} />
+      popupHeader={popupHeader}
+      noDataText={noDataText}
+      onClose={close}
+    />;
   }
-};
+}
 
 DataPopupContainer.propTypes = {
   data: PropTypes.array,
   visible: PropTypes.bool,
   point: PropTypes.object,
-  noDataText: PropTypes.string
+  noDataText: PropTypes.string,
+  close: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -44,10 +43,12 @@ function mapStateToProps(state) {
     data,
     visible,
     point
-  }
-};
+  };
+}
 
 export default connect(
   mapStateToProps,
-  { close }
+  {
+    close: dataPopupActions.close
+  }
 )(DataPopupContainer);

@@ -1,21 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
 class DropDown extends Component {
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    data: PropTypes.array.isRequired,
-    dataKey: PropTypes.string,
-    dataValue: PropTypes.string,
-    dataName: PropTypes.string,
-    firstDefaultItem: PropTypes.string,
-    id: PropTypes.string,
-    selectedValue: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ])
-  };
-
   render() {
     const {
       name,
@@ -31,26 +16,42 @@ class DropDown extends Component {
 
     return (
       <select name={name}
+        className="form-control"
         value={selectedValue}
-        className='form-control'
         onChange={onChange}
         id={id}
       >
         {
           firstDefaultItem
-          ? <option value='' key=''>{firstDefaultItem}</option>
+          ? <option value="" key="">{firstDefaultItem}</option>
           : null
         }
         {data.map(item =>
           <option
             key={item[dataKey] || item[dataValue]}
-            value={item[dataValue]}>
-              {item[dataName]}
+            value={item[dataValue]}
+          >
+            {item[dataName]}
           </option>
         )}
       </select>
     );
   }
+}
+
+DropDown.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  data: PropTypes.array.isRequired,
+  dataKey: PropTypes.string,
+  dataValue: PropTypes.string,
+  dataName: PropTypes.string,
+  firstDefaultItem: PropTypes.string,
+  id: PropTypes.string,
+  selectedValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ])
 };
 
 export default DropDown;

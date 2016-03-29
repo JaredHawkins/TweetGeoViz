@@ -1,20 +1,11 @@
 import React from 'react';
-import { Router, Route, IndexRoute } from 'react-router';
-import history from './history.js';
-import AppContainer from './containers/App.js';
-import App from './app.js';
-import NotFoundPage from './components/NotFoundPage.js';
-import { paths } from './config/config.json';
+import { Route, IndexRoute } from 'react-router';
+import { App } from './containers';
+import { NotFoundPage } from './components';
 
-const { urlBase, routeBase } = paths;
-
-const routes = (
-  <Router history={history}>
-    <Route path={urlBase + routeBase} component={App} >
-      <IndexRoute component={AppContainer} />
-      <Route path='*' component={NotFoundPage} />
-    </Route>
-  </Router>
+export default (
+  <Route path="/(:languageCode)" component={App}>
+    <IndexRoute component={App} />
+    <Route path="*" component={NotFoundPage} status={404} />
+  </Route>
 );
-
-export default routes;

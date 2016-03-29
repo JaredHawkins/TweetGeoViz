@@ -1,3 +1,5 @@
+/* global google */
+
 import * as types from '../constants/actionTypes.js';
 
 const initialState = {
@@ -13,12 +15,12 @@ function generateHeatMap(tweets = []) {
 
   tweets.forEach(tweet => {
     const coords = tweet.geometry.coordinates;
-    let latLng = new google.maps.LatLng(coords[1], coords[0]);
+    const latLng = new google.maps.LatLng(coords[1], coords[0]);
     heatmapData.push(latLng);
   });
 
   return heatmapData;
-};
+}
 
 function getTweetsInBounds(state, bounds) {
   let result = [];
@@ -31,27 +33,31 @@ function getTweetsInBounds(state, bounds) {
 
   tweets.forEach(tweet => {
     const coords = tweet.geometry.coordinates;
-    let latLng = new google.maps.LatLng(coords[1], coords[0]);
+    const latLng = new google.maps.LatLng(coords[1], coords[0]);
 
-    if (bounds.contains(latLng)) {
-      let text = tweet.text;
-      // highlighting matched keywords
-      for (let i = 0; i < keywords.length; i++) {
-        let regex = new RegExp(keywords[i].trim(), 'ig');
-        text = text.replace(regex, '<mark>$&</mark>');
-      }
-
-      tweet.text = text
-      result.push(tweet);
+    if (!bounds.contains(latLng)) {
+      return;
     }
+
+    let text = tweet.text;
+    // highlighting matched keywords
+    for (let i = 0; i < keywords.length; i++) {
+      const regex = new RegExp(keywords[i].trim(), 'ig');
+      text = text.replace(regex, '<mark>$&</mark>');
+    }
+
+    result.push({
+      ...tweet,
+      text
+    });
   });
 
   return result;
-};
+}
 
 export default function tweets(state = initialState, action) {
-  switch(action.type) {
-    case types.TWEETS_RECEIVE_TWEETS:
+  switch (action.type) {
+    case types.TWEETS_SEARCH_FINISHED:
       return {
         tweets: action.tweets,
         searchQuery: action.searchQuery,
@@ -75,4 +81,4 @@ export default function tweets(state = initialState, action) {
       // nothing to do
       return state;
   }
-};
+}

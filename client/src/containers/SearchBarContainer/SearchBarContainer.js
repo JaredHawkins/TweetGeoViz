@@ -1,20 +1,18 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchTweets } from '../actions/tweetsActions.js';
-import { focus, changeValue } from '../actions/searchBarActions.js';
-import SearchBar from '../components/SearchBar/SearchBar.js';
+import * as tweetsActions from '../../actions/tweetsActions.js';
+import * as searchBarActions from '../../actions/searchBarActions.js';
+import { SearchBar } from '../../components';
+
+const ENTER_KEY_CODE = '13';
 
 class SearchBarContainer extends Component {
-  _onKeyPress = event => {
+  _onKeyPress = (event = window.event) => {
     const { value } = event.target;
 
-    if (!event) {
-      event = window.event;
-    }
+    const keyCode = event.keyCode || event.which;
 
-    let keyCode = event.keyCode || event.which;
-
-    if (keyCode == '13') {
+    if (keyCode.toString() === ENTER_KEY_CODE) {
       if (!value) {
         return false;
       }
@@ -37,7 +35,7 @@ class SearchBarContainer extends Component {
     fetchTweets(searchQuery);
   };
 
-  _onChange = event => {
+  _onChange = (event) => {
     const { name, value } = event.target;
     const { changeValue } = this.props;
     changeValue(name, value);
@@ -50,16 +48,20 @@ class SearchBarContainer extends Component {
     } = this.props;
 
     return <SearchBar
-      searchQuery = {searchQuery}
-      onKeyPress = {this._onKeyPress}
-      onFocus = {() => focus()}
-      onClickSearch = {this._onClickSearch}
-      onChange = {this._onChange} />;
+      searchQuery={searchQuery}
+      onKeyPress={this._onKeyPress}
+      onFocus={focus}
+      onClickSearch={this._onClickSearch}
+      onChange={this._onChange}
+    />;
   }
-};
+}
 
 SearchBarContainer.propTypes = {
-  searchQuery: PropTypes.string
+  searchQuery: PropTypes.string,
+  fetchTweets: PropTypes.func.isRequired,
+  focus: PropTypes.func.isRequired,
+  changeValue: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -67,10 +69,14 @@ function mapStateToProps(state) {
 
   return {
     searchQuery
-  }
+  };
 }
 
 export default connect(
   mapStateToProps,
-  { fetchTweets, focus, changeValue }
+  {
+    fetchTweets: tweetsActions.fetchTweets,
+    focus: searchBarActions.focus,
+    changeValue: searchBarActions.changeValue
+  }
 )(SearchBarContainer);

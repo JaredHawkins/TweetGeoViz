@@ -11,9 +11,8 @@ export const POPUP_CLOSE = 'POPUP_CLOSE';
 export const POPUP_SHOW = 'POPUP_SHOW';
 
 // tweets
-export const TWEETS_REQUEST_TWEETS = 'TWEETS_REQUEST';
-export const TWEETS_RECEIVE_TWEETS = 'TWEETS_RECEIVE_TWEETS';
+export const TWEETS_SEARCH_FETCHING = 'TWEETS_REQUEST';
+export const TWEETS_SEARCH_FINISHED = 'TWEETS_SEARCH_FINISHED';
 
 // errors
 export const PAGE_ERROR = 'PAGE_ERROR';
-export const PAGE_NO_ERROR = 'PAGE_NO_ERROR';

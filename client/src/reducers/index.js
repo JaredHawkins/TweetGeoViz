@@ -7,7 +7,7 @@ import map from './map.js';
 import tweets from './tweets.js';
 import language from './language.js';
 
-import { routeReducer } from 'redux-simple-router';
+import { routeReducer } from 'react-router-redux';
 
 export default combineReducers({
   dataPopup,

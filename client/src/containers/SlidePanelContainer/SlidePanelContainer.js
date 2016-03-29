@@ -1,27 +1,23 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { languages } from '../reducers/language.js';
-import { changeValue } from '../actions/mapActions.js';
-import { routeActions } from 'redux-simple-router';
-import SlidePanel from '../components/SlidePanel/SlidePanel.js';
+import { languages } from '../../reducers/language.js';
+import * as mapActions from '../../actions/mapActions.js';
+import { routeActions } from 'react-router-redux';
+import { version, name } from '../../../../package.json';
 
-import { paths } from '../config/config.json';
-import { version, name } from '../../../package.json';
+import { SlidePanel } from '../../components';
 
 class SlidePanelContainer extends Component {
-  _onChange = event => {
-    const { changeValue } = this.props;
-    const { urlReplace } = this.props;
-    let { name, value, checked } = event.target;
+  _onChange = (event) => {
+    const { changeValue, urlReplace } = this.props;
+    const { name, checked } = event.target;
+    let { value } = event.target;
 
     if (name === 'selectedLanguageCode') {
-      return urlReplace(paths.urlBase + value);
-    }
-
-    if (name === 'isMapClickEnabled') {
+      return urlReplace(`/${value}`);
+    } else if (name === 'isMapClickEnabled') {
       value = checked;
-    }
-    else if (name === 'clickRadius') {
+    } else if (name === 'clickRadius') {
       value = parseInt(value, 10);
     }
 
@@ -29,16 +25,17 @@ class SlidePanelContainer extends Component {
   };
 
   render() {
-    return <SlidePanel {...this.props}
-      onChange={this._onChange} />;
+    return <SlidePanel {...this.props} onChange={this._onChange} />;
   }
-};
+}
 
 SlidePanelContainer.propTypes = {
   visible: PropTypes.bool,
   selectedLanguage: PropTypes.object.isRequired,
   clickRadius: PropTypes.number,
-  isMapClickEnabled: PropTypes.bool
+  isMapClickEnabled: PropTypes.bool,
+  changeValue: PropTypes.func.isRequired,
+  urlReplace: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -55,13 +52,13 @@ function mapStateToProps(state) {
     selectedLanguage,
     clickRadius,
     isMapClickEnabled
-  }
+  };
 }
 
 export default connect(
   mapStateToProps,
   {
-    changeValue,
+    changeValue: mapActions.changeValue,
     urlReplace: routeActions.replace
   }
 )(SlidePanelContainer);
