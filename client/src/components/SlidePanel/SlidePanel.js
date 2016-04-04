@@ -3,6 +3,7 @@ require('./slidePanel.less');
 require('../../../../node_modules/snapjs/snap.css');
 
 import React, { Component, PropTypes } from 'react';
+import LeftNav from 'material-ui/lib/left-nav';
 import Snap from 'snapjs';
 import { T__ } from '../../reducers/language.js';
 
@@ -89,7 +90,7 @@ class SlidePanel extends Component {
     };
 
     return (
-      <div id="slidePanel">
+      <LeftNav open={this.props.visible}>
         <h3>{header}</h3>
         <div className="slidePanel-social">
           <iframe
@@ -190,7 +191,7 @@ class SlidePanel extends Component {
             <span className="label label-primary">v{version}</span>
           </p>
         </div>
-      </div>
+      </LeftNav>
     );
   }
 }

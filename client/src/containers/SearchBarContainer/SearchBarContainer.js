@@ -7,20 +7,6 @@ import { SearchBar } from '../../components';
 const ENTER_KEY_CODE = '13';
 
 class SearchBarContainer extends Component {
-  _onKeyPress = (event = window.event) => {
-    const { value } = event.target;
-
-    const keyCode = event.keyCode || event.which;
-
-    if (keyCode.toString() === ENTER_KEY_CODE) {
-      if (!value) {
-        return false;
-      }
-
-      this._onClickSearch();
-    }
-  };
-
   _onClickSearch = () => {
     const {
       searchQuery,
@@ -35,24 +21,19 @@ class SearchBarContainer extends Component {
     fetchTweets(searchQuery);
   };
 
-  _onChange = (event) => {
-    const { name, value } = event.target;
-    const { changeValue } = this.props;
-    changeValue(name, value);
-  };
-
   render() {
     const {
       searchQuery,
+      changeValue,
       focus
     } = this.props;
 
     return <SearchBar
       searchQuery={searchQuery}
-      onKeyPress={this._onKeyPress}
+      onEnterKeyDown={this._onClickSearch}
       onFocus={focus}
       onClickSearch={this._onClickSearch}
-      onChange={this._onChange}
+      onChange={changeValue}
     />;
   }
 }

@@ -3,6 +3,7 @@ require('./dataPopup.less');
 
 import React, { Component, PropTypes } from 'react';
 import { DataPopupRow, NoDataRow } from '../';
+import Paper from 'material-ui/lib/paper';
 
 class DataPopup extends Component {
   render() {
@@ -27,7 +28,7 @@ class DataPopup extends Component {
 
     return (
       <div id="tweetsPopup" className="col-xs-3" style={popupStyle}>
-        <div className="panel panel-default">
+        <Paper className="panel panel-default" zDepth={4}>
           <div className="panel-heading">
             <strong>{popupHeader}</strong>
             <button
@@ -60,7 +61,7 @@ class DataPopup extends Component {
               }
             </ul>
           </div>
-        </div>
+        </Paper>
       </div>
     );
   }

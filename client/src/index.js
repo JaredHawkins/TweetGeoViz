@@ -5,7 +5,9 @@ import { Provider } from 'react-redux';
 import routes from './routes.js';
 import { browserHistory } from 'react-router';
 import configureStore from './store/configureStore.js';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
+injectTapEventPlugin();
 const store = configureStore();
 
 ReactDOM.render(

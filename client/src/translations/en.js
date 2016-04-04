@@ -8,7 +8,7 @@ export default {
       },
       searchLabel: 'tweet keywords',
       searchInput: {
-        placeholder: 'search keywords: keyword1, keyword2, ...'
+        placeholder: 'search keywords'
       }
     },
     slidePanel: {
