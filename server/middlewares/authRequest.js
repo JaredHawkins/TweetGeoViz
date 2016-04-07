@@ -1,30 +1,39 @@
-'use strict';
+import {
+  apiPrefix,
+  apiVersion,
+  pingUrl,
+  token,
+  httpCodes
+} from '../config/config.js';
 
-/*global module, require*/
+const {
+  secret,
+  headerName
+} = token;
 
-var config = require('../config/config.json');
+const {
+  HTTP_INVALID_TOKEN,
+  HTTP_NOT_AUTHORIZED
+} = httpCodes;
 
-module.exports = function(req, res, next) {
-
-  var validateToken = function(token) {
-    return config.apiKey === token;
-  };
+export default function(req, res, next) {
+  const validateToken = token => secret === token;
 
   // Do not check token if it is a ping method
-  if (req.baseUrl === config.apiPrefix + config.apiVersion + config.pingUrl
-        || req.baseUrl === config.apiPrefix + config.pingUrl) {
+  if (req.baseUrl === apiPrefix + apiVersion + pingUrl
+        || req.baseUrl === apiPrefix + pingUrl) {
     next(); // To move to next middleware
     return;
   }
 
-  var token = (req.body && req.body.access_token) ||
-              (req.query && req.query.access_token) ||
-              req.headers['x-access-token'];
+  const token = (req.body && req.body[headerName]) ||
+              (req.query && req.query[headerName]) ||
+              req.headers[headerName];
 
   if (!token) {
-    res.status(401);
+    res.status(HTTP_INVALID_TOKEN);
     res.json({
-      status: 401,
+      status: HTTP_INVALID_TOKEN,
       message: 'Invalid Token'
     });
     return;
@@ -33,17 +42,16 @@ module.exports = function(req, res, next) {
   try {
     // Authorize the user to see if s/he can access our resources
     if (!validateToken(token)) {
-      res.status(403);
+      res.status(HTTP_NOT_AUTHORIZED);
       res.json({
-        status: 403,
+        status: HTTP_NOT_AUTHORIZED,
         message: 'Not Authorized'
       });
       return;
     }
 
     next(); // To move to next middleware
-
-  } catch(err) {
+  } catch (err) {
     next(err); // To move to next error middleware
   }
-};
+}

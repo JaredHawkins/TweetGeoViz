@@ -7,48 +7,42 @@ import * as dataPopupActions from '../../actions/dataPopupActions.js';
 class DataPopupContainer extends Component {
   render() {
     const {
+      ...props,
       close,
-      visible,
-      data
+      changeValue
     } = this.props;
 
-    if (!visible) {
+    if (!props.visible) {
       return <div />;
     }
 
-    const popupHeader = T__('mapPage.dataPopup.header', data.length);
-    const noDataText = T__('mapPage.dataPopup.noDataText');
-
-    return <DataPopup {...this.props}
-      popupHeader={popupHeader}
-      noDataText={noDataText}
+    return <DataPopup {...props}
+      popupHeader={T__('mapPage.dataPopup.header', props.data.length)}
+      noDataText={T__('mapPage.dataPopup.noDataText')}
       onClose={close}
+      onChange={changeValue}
     />;
   }
 }
 
-DataPopupContainer.propTypes = {
-  data: PropTypes.array,
-  visible: PropTypes.bool,
-  point: PropTypes.object,
-  noDataText: PropTypes.string,
-  close: PropTypes.func.isRequired
-};
-
 function mapStateToProps(state) {
-  const { selectedTweets: data } = state.tweets;
-  const { visible, point } = state.dataPopup;
+  const { filterText } = state.dataPopup;
+  const { selectedTweets } = state.tweets;
+
+  const data = filterText.length
+    ? selectedTweets.filter(tweet => tweet.text.indexOf(filterText) >= 0)
+    : selectedTweets;
 
   return {
-    data,
-    visible,
-    point
+    ...state.dataPopup,
+    data
   };
 }
 
 export default connect(
   mapStateToProps,
   {
-    close: dataPopupActions.close
+    close: dataPopupActions.close,
+    changeValue: dataPopupActions.changeValue
   }
 )(DataPopupContainer);

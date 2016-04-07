@@ -4,6 +4,9 @@ require('./dataPopup.less');
 import React, { Component, PropTypes } from 'react';
 import { DataPopupRow, NoDataRow } from '../';
 import Paper from 'material-ui/lib/paper';
+import TextField from 'material-ui/lib/text-field';
+import IconButton from 'material-ui/lib/icon-button';
+import CloseIcon from 'material-ui/lib/svg-icons/navigation/close';
 
 class DataPopup extends Component {
   render() {
@@ -16,8 +19,12 @@ class DataPopup extends Component {
         x: undefined,
         y: undefined
       },
+      filterText,
+      showFilter,
+      showTimeStamps,
       popupHeader = '',
-      onClose
+      onClose,
+      onChange
     } = this.props;
 
     const popupStyle = {
@@ -27,34 +34,45 @@ class DataPopup extends Component {
     };
 
     return (
-      <div id="tweetsPopup" className="col-xs-3" style={popupStyle}>
+      <div id="tweetsPopup" className="col-xs-10 col-sm-6 col-md-4 col-lg-4" style={popupStyle}>
         <Paper className="panel panel-default" zDepth={4}>
           <div className="panel-heading">
             <strong>{popupHeader}</strong>
-            <button
-              type="button"
-              className="close btn-xs"
-              aria-describedby="descriptionClose"
-              onClick={event => {
-                event.preventDefault();
-                event.stopPropagation();
-
-                onClose();
-              }}
+            <IconButton
+              tooltip="Close Popup"
+              touch={true}
+              className="close tgv-closePopup"
+              onClick={onClose}
             >
-              <span className="glyphicon glyphicon-remove" aria-hidden="true">
-              </span>
-            </button>
+              <CloseIcon />
+            </IconButton>
           </div>
-          <div className="panel-body">
+          {
+            showFilter && (filterText.length || data.length) ?
+            <Paper className="panel-body filter-panel">
+              <TextField
+                hintText="Filter Tweets..."
+                fullWidth={true}
+                value={filterText}
+                onChange={event => {
+                  const { value } = event.target;
+                  onChange('filterText', value.trim());
+                }}
+              />
+            </Paper>
+            : null
+          }
+          <div className="panel-body tweet-panel">
             <ul>
               {
                 data.length ?
                 data.map(row =>
                   <DataPopupRow
+                    showTimeStamps={showTimeStamps}
+                    timeStamp={row.timeStamp}
                     text={row.text}
                     rowClass={rowClass}
-                    key={row._id}
+                    key={row._id || row.timeStamp}
                   />
                 )
                 : <NoDataRow noDataText={noDataText} rowClass={rowClass} />

@@ -8,3 +8,9 @@ export const show = (point) => ({
   type: types.POPUP_SHOW,
   point
 });
+
+export const changeValue = (name, value) => ({
+  type: types.POPUP_CHANGE_VALUE,
+  name,
+  value
+});

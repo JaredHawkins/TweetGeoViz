@@ -4,6 +4,7 @@ import * as types from '../constants/actionTypes.js';
 
 const initialState = {
   uuid: undefined,
+  isSearching: false,
   tweets: [],
   selectedTweets: [],
   heatmapData: [],
@@ -57,13 +58,19 @@ function getTweetsInBounds(state, bounds) {
 
 export default function tweets(state = initialState, action) {
   switch (action.type) {
+    case types.TWEETS_SEARCH_FETCHING:
+      return {
+        ...state,
+        isSearching: true
+      };
     case types.TWEETS_SEARCH_FINISHED:
       return {
         tweets: action.tweets,
         searchQuery: action.searchQuery,
         uuid: action.uuid,
         heatMapData: generateHeatMap(action.tweets),
-        selectedTweets: []
+        selectedTweets: [],
+        isSearching: false
       };
 
     case types.MAP_CLICK:

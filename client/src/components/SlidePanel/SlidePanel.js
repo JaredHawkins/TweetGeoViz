@@ -1,77 +1,22 @@
 // webpack specific - including required JS and CSS files
 require('./slidePanel.less');
-require('../../../../node_modules/snapjs/snap.css');
 
 import React, { Component, PropTypes } from 'react';
 import LeftNav from 'material-ui/lib/left-nav';
-import Snap from 'snapjs';
+import SelectField from 'material-ui/lib/select-field';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import Checkbox from 'material-ui/lib/checkbox';
+import TextField from 'material-ui/lib/text-field';
 import { T__ } from '../../reducers/language.js';
-
 import { DropDown } from '../';
 
 class SlidePanel extends Component {
-  static propTypes = {
-    visible: PropTypes.bool,
-    selectedLanguage: PropTypes.object.isRequired,
-    clickRadius: PropTypes.number,
-    isMapClickEnabled: PropTypes.bool,
-    contentSelector: PropTypes.string,
-    languages: PropTypes.array,
-    version: PropTypes.string,
-    header: PropTypes.string,
-    onChange: PropTypes.func
-  };
-
-  static defaultProps = {
-    visible: false,
-    isMapClickEnabled: true,
-    clickRadius: 250000
-  };
-
-  componentDidMount = () => {
-    const {
-      contentSelector,
-      visible
-    } = this.props;
-
-    this._snapPanel = new Snap({
-      element: document.querySelector(contentSelector),
-      tapToClose: false,
-      touchToDrag: false,
-      hyperextensible: false
-    });
-
-    this._togglePanel(visible);
-  };
-
-  componentDidUpdate = (prevProps) => {
-    const { visible } = this.props;
-
-    if (prevProps.visible !== visible) {
-      this._togglePanel(visible);
-    }
-  };
-
-  _closePanel = () => {
-    this._snapPanel.close();
-  };
-
-  _openPanel = () => {
-    this._snapPanel.open('left');
-  };
-
-  _togglePanel = (visible) => {
-    this[visible ? '_openPanel' : '_closePanel']();
-  };
-
   render() {
     const {
       isMapClickEnabled = true,
       clickRadius = 250,
       selectedLanguage,
       languages,
-      version,
-      header,
       onChange
     } = this.props;
 
@@ -89,9 +34,22 @@ class SlidePanel extends Component {
       height: '20px'
     };
 
+    const sizeStyle = {
+      maxWidth: '226px'
+    };
+
+    const textStyle = {
+      color: '#eee'
+    };
+
+    const floatingLabelStyle = {
+      ...textStyle,
+      opacity: 0.5
+    };
+
     return (
-      <LeftNav open={this.props.visible}>
-        <h3>{header}</h3>
+      <LeftNav open={this.props.visible} className="tgv-slidePanel">
+        <h3>{this.props.header}</h3>
         <div className="slidePanel-social">
           <iframe
             data-url="https://github.com/JaredHawkins/TweetGeoViz"
@@ -139,61 +97,100 @@ class SlidePanel extends Component {
         <h4>{T__('mapPage.slidePanel.header')}</h4>
         <ul>
           <li>
-            <div className="input-group input-group-sm">
-              <span className="input-group-addon">
-                {T__('mapPage.slidePanel.languageSelector.label')}
-              </span>
-              <DropDown
-                name = "selectedLanguageCode"
-                data = {languages}
-                dataKey = "id"
-                dataValue = "code"
-                dataName = "name"
-                selectedValue = {selectedLanguage.code}
-                onChange = {onChange}
-              />
-            </div>
-            <div className="input-group input-group-sm">
-              <span id="cursor-click-radius-description" className="input-group-addon">
-                {T__('mapPage.slidePanel.clickRadius.label')}
-              </span>
-              <input
-                name="clickRadius"
-                placeholder="0"
-                aria-describedby="cursor-click-radius-description"
-                className="form-control"
-                type="number"
-                value={clickRadius}
-                onChange={onChange}
-              />
-              <span className="input-group-addon">km</span>
-            </div>
-            <div className="input-group input-group-sm">
-              <span className="input-group-addon">
-                {T__('mapPage.slidePanel.mapClick.label')}
-              </span>
-              <span className="input-group-addon">
-                <input
-                  name="isMapClickEnabled"
-                  aria-label={T__('mapPage.slidePanel.mapClick.label')}
-                  type="checkbox"
-                  checked={isMapClickEnabled}
-                  onChange={onChange}
-                />
-              </span>
-            </div>
+            <SelectField
+              value={selectedLanguage.code}
+              floatingLabelText={T__('mapPage.slidePanel.languageSelector.label')}
+              style={sizeStyle}
+              floatingLabelStyle={floatingLabelStyle}
+              labelStyle={textStyle}
+              onChange={(event, index, value) =>
+                onChange('selectedLanguageCode', value)
+              }
+            >
+              {
+                languages.map(language => <MenuItem
+                  value={language.code}
+                  key={language.code}
+                  primaryText={language.name}
+                />)
+              }
+            </SelectField>
+          </li>
+          <li>
+            <Checkbox
+              label={T__('mapPage.slidePanel.mapClick.label')}
+              labelPosition="left"
+              className="tgv-slidePanel-control-width"
+              labelStyle={textStyle}
+              checked={isMapClickEnabled}
+              onCheck={(event, value) => onChange('isMapClickEnabled', value)}
+            />
+          </li>
+          <li>
+            <Checkbox
+              label={T__('mapPage.slidePanel.showFilter.label')}
+              labelPosition="left"
+              className="tgv-slidePanel-control-width"
+              labelStyle={textStyle}
+              checked={this.props.showFilter}
+              onCheck={(event, value) => onChange('showFilter', value)}
+            />
+          </li>
+          <li>
+            <Checkbox
+              label={T__('mapPage.slidePanel.showTimeStamps.label')}
+              labelPosition="left"
+              className="tgv-slidePanel-control-width"
+              labelStyle={textStyle}
+              checked={this.props.showTimeStamps}
+              onCheck={(event, value) => onChange('showTimeStamps', value)}
+            />
+          </li>
+          <li>
+            <TextField
+              hintText={1}
+              floatingLabelText={T__('mapPage.slidePanel.clickRadius.label')}
+              value={clickRadius}
+              className="tgv-slidePanel-control-width"
+              inputStyle={textStyle}
+              floatingLabelStyle={floatingLabelStyle}
+              onChange={event => {
+                let { value } = event.target;
+                value = value.replace(/\D/g, '');
+
+                value = value.length ? parseInt(value, 10) : 1;
+
+                if (value === clickRadius) {
+                  return;
+                }
+
+                onChange('clickRadius', value);
+              }}
+            />
           </li>
         </ul>
         <div>
           <p>{T__('mapPage.slidePanel.footer1')}</p>
           <p>{T__('mapPage.slidePanel.footer2')}</p>
           <p>
-            <span className="label label-primary">v{version}</span>
+            <span className="label label-primary">v{this.props.version}</span>
           </p>
         </div>
       </LeftNav>
     );
   }
 }
+
+SlidePanel.propTypes = {
+  visible: PropTypes.bool,
+  selectedLanguage: PropTypes.object.isRequired,
+  clickRadius: PropTypes.number,
+  isMapClickEnabled: PropTypes.bool,
+  contentSelector: PropTypes.string,
+  languages: PropTypes.array,
+  version: PropTypes.string,
+  header: PropTypes.string,
+  onChange: PropTypes.func
+};
 
 export default SlidePanel;

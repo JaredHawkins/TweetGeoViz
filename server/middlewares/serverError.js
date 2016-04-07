@@ -1,6 +1,6 @@
-'use strict';
+import { httpCodes } from '../config/config.js';
+const { HTTP_SERVER_ERROR } = httpCodes;
 
-/*global module*/
-module.exports = function(err, req, res, next) {
-  res.sendStatus(500);
-};
+export default function(err, req, res) {
+  res.sendStatus(HTTP_SERVER_ERROR);
+}

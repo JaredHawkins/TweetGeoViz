@@ -1,6 +1,6 @@
-'use strict';
+import { httpCodes } from '../config/config.js';
+const { HTTP_NOT_FOUND } = httpCodes;
 
-/*global module*/
-module.exports = function(req, res, next) {
-  res.sendStatus(404);
-};
+export default function(req, res) {
+  res.sendStatus(HTTP_NOT_FOUND);
+}

@@ -5,11 +5,19 @@ const initialState = {
     x: undefined,
     y: undefined
   },
-  visible: false
+  visible: false,
+  filterText: '',
+  showFilter: true,
+  showTimeStamps: true
 };
 
 export default function dataPopup(state = initialState, action) {
   switch (action.type) {
+    case types.POPUP_CHANGE_VALUE:
+      return {
+        ...state,
+        [action.name]: action.value
+      };
     case types.POPUP_SHOW:
       // if click is enabled and popup already shown - then do not do anything
       // wait until popup is closed
@@ -20,11 +28,13 @@ export default function dataPopup(state = initialState, action) {
       // otherwise show the popup
       return {
         ...state,
+        filterText: '',
         visible: true,
         point: action.point
       };
 
-    case types.SEARCHBAR_SEARCHQUERY_FOCUS:
+    case types.SLIDEPANEL_SHOW:
+    case types.NAVBAR_SEARCHQUERY_FOCUS:
     case types.POPUP_CLOSE:
       // if popup is already hidden - do not do anything
       if (!state.visible) {
@@ -34,6 +44,7 @@ export default function dataPopup(state = initialState, action) {
       // otherwise hide the popup
       return {
         ...state,
+        filterText: '',
         visible: false
       };
 

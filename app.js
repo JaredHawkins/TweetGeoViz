@@ -2,4 +2,4 @@
 
 /* global require */
 
-require('./server/server.js');
+require('./server-dist/server.js');

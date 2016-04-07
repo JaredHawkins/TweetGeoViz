@@ -1,6 +1,5 @@
 /* global Polyglot */
 
-import _ from 'lodash';
 import { UPDATE_LOCATION } from 'react-router-redux';
 import en from '../translations/en.js';
 import es from '../translations/es.js';
@@ -40,7 +39,7 @@ export function T__(key, data) {
 }
 
 function getLanguageByCode(code) {
-  return _.find(languages, { code });
+  return languages.find(language => language.code === code);
 }
 
 export function validLanguageCode(code) {
