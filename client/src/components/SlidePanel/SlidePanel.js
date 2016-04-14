@@ -148,7 +148,6 @@ class SlidePanel extends Component {
           </li>
           <li>
             <TextField
-              hintText={1}
               floatingLabelText={T__('mapPage.slidePanel.clickRadius.label')}
               value={clickRadius}
               className="tgv-slidePanel-control-width"

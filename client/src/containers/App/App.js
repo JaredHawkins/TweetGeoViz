@@ -42,12 +42,16 @@ class App extends Component {
       endDate
     } = query;
 
+    if (!searchQuery || !searchQuery.length) {
+      return;
+    }
+
     fetchTweets({
-      searchQuery: searchQuery,
+      searchQuery,
       startDate: startDate ? new Date(startDate) : undefined,
       endDate: endDate ? new Date(endDate) : undefined
     });
-  };
+  }
 
   render() {
     return (

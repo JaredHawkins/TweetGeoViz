@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { languages } from '../../reducers/language.js';
 import * as mapActions from '../../actions/mapActions.js';

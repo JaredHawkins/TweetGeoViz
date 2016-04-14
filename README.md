@@ -21,24 +21,23 @@ A product of collaboration between HealthMap.org (Boston Children's Hospital), M
 This project uses mongodb to manage its database, node.js for a server, and npm to manage dependencies. Install these on your machine to start:
 
  - [MongoDB v2.6.4 and higher](http://docs.mongodb.org/manual/installation/)
- - [Node v0.12.7](http://nodejs.org/download/) (comes with npm)
+ - [Node v0.12.7 and higher](http://nodejs.org/download/) (comes with npm)
  - [Control Tweets](https://db.tt/29prxPri) (courtesy of HealthMap)
 
 ##Technology Used for This Project
  - [MongoDB](https://www.mongodb.org/)
  - [Node](https://nodejs.org/en/)
  - [Webpack](https://webpack.github.io/)
- - [Gulp](http://gulpjs.com/)
  - [React](http://facebook.github.io/react/)
  - [Redux](http://redux.js.org/)
  - [Bootstrap] (http://getbootstrap.com/)
+ - [Material UI] (http://www.material-ui.com/#/)
  - [ES6 by Babel](https://babeljs.io/)
  - [LESS](http://lesscss.org/)
  - [Express](http://expressjs.com/)
  - [Google Maps APIs](https://www.google.ca/work/mapsearth/products/mapsapi.html)
  - [Polyglot] (http://airbnb.io/polyglot.js/)
  - [Mocha testing](http://mochajs.org/)
- - [SnapJS](https://github.com/jakiestfu/Snap.js)
  - [Postman](http://www.getpostman.com/)
  - [ES2015](https://babeljs.io/docs/learn-es2015/)
 
@@ -148,10 +147,11 @@ Supported languages:
 
  - English
  - Spanish
+ - Russian
  
 ####Adding Another Language
 
-In order to add a new language bundle just add another `<language>.js` file into `/client/src/translations/`. Then modify `/client/src/reducers/language.js` according to comments inside it.
+In order to add a new language bundle just extend `/client/src/constants/translations.js`. Then modify `/client/src/reducers/language.js` according to comments inside it.
 
 ##Testing
 
@@ -171,12 +171,6 @@ To start Server API
 
 ```
 npm run server-start
-```
-
-To start Server API for development using [nodemon](https://github.com/remy/nodemon)
-
-```
-npm run server-start-dev
 ```
 
 To start client for development
@@ -199,6 +193,10 @@ npm run client-build-production
 ##Manual API Testing + Postman Files
 
 To test API manually you can find Postman Collection and Environment files inside `postman/` folder.
+
+## Changelog
+
+see [CHANGELOG](./CHANGELOG.md)
 
 ##LICENSE
 

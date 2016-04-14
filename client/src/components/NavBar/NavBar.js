@@ -29,10 +29,6 @@ class NavBar extends Component {
       }
     };
 
-    const datePickerStyle = {
-      width: '200px'
-    };
-
     return (
       <div className="row">
         <div className="hidden-xs col-sm-1 col-md-1 col-lg-1"></div>
@@ -41,7 +37,7 @@ class NavBar extends Component {
             <div className="row">
               <div className="col-xs-1 col-md-1 col-lg-1 text-left no-padding-left-right">
                 <IconButton
-                  tooltip="Show Left Menu Settings"
+                  tooltip={T__('mapPage.navBar.leftMenuButton.tooltip')}
                   touch={true}
                   onClick={this.props.onClickMenu}
                   tooltipPosition="bottom-right"
@@ -52,7 +48,7 @@ class NavBar extends Component {
               <div className="hidden-xs hidden-sm col-md-2 col-lg-2 text-right no-padding-left-right">
                 <FlatButton
                   labelPosition="before"
-                  label={T__('mapPage.searchBar.searchButton.label')}
+                  label={T__('mapPage.navBar.searchButton.label')}
                   icon={<ActionSearch />}
                   style={styles.button}
                   disabled={searchQuery.length < MIN_QUERY_LENGTH}
@@ -69,7 +65,7 @@ class NavBar extends Component {
               </div>
               <div className="col-xs-7 col-sm-6 col-md-6 col-lg-6 no-padding-left-right">
                 <TextField
-                  hintText={T__('mapPage.searchBar.searchInput.placeholder')}
+                  hintText={T__('mapPage.navBar.searchInput.placeholder')}
                   fullWidth={false}
                   value={searchQuery}
                   onEnterKeyDown={this.props.onEnterKeyDown}
@@ -84,8 +80,8 @@ class NavBar extends Component {
                 <IconButton
                   tooltip={
                     this.props.showAdvanced
-                    ? 'Hide Advanced Menu'
-                    : 'Show Advanced Menu'
+                    ? T__('mapPage.navBar.advancedMenuButton.hideToolTip')
+                    : T__('mapPage.navBar.advancedMenuButton.showToolTip')
                   }
                   touch={true}
                   tooltipPosition="bottom-left"
@@ -112,7 +108,7 @@ class NavBar extends Component {
                 </div>
                 <div className="col-xs-7 col-sm-7 col-md-8 col-lg-8">
                   <DatePicker
-                    hintText="Start Date"
+                    hintText={T__('mapPage.navBar.startDate.hintText')}
                     maxDate={this.props.endDate || new Date()}
                     value={this.props.startDate}
                     className="tgv-datePicker"
@@ -121,7 +117,7 @@ class NavBar extends Component {
                 </div>
                 <div className="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-right no-padding-left-right">
                   <IconButton
-                    tooltip="Clear Start Date"
+                    tooltip={T__('mapPage.navBar.startDate.tooltip')}
                     touch={true}
                     onClick={() => onChange('startDate', undefined)}
                   >
@@ -139,7 +135,7 @@ class NavBar extends Component {
                 </div>
                 <div className="col-xs-7 col-sm-7 col-md-8 col-lg-8">
                   <DatePicker
-                    hintText="End Date"
+                    hintText={T__('mapPage.navBar.endDate.hintText')}
                     minDate={this.props.startDate}
                     value={this.props.endDate}
                     className="tgv-datePicker"
@@ -149,7 +145,7 @@ class NavBar extends Component {
                 </div>
                 <div className="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-right no-padding-left-right">
                   <IconButton
-                    tooltip="Clear End Date"
+                    tooltip={T__('mapPage.navBar.endDate.tooltip')}
                     touch={true}
                     onClick={() => onChange('endDate', undefined)}
                   >
@@ -167,11 +163,13 @@ class NavBar extends Component {
 }
 
 NavBar.propTypes = {
-  onChange: PropTypes.func,
-  onEnterKeyDown: PropTypes.func,
-  onClickSearch: PropTypes.func,
-  onFocus: PropTypes.func,
-  searchQuery: PropTypes.string
+  onClickMenu: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onEnterKeyDown: PropTypes.func.isRequired,
+  onClickSearch: PropTypes.func.isRequired,
+  onFocus: PropTypes.func.isRequired,
+  searchQuery: PropTypes.string,
+  showAdvanced: PropTypes.bool
 };
 
 export default NavBar;
