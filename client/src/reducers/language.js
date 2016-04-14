@@ -15,6 +15,11 @@ export const languages = [
     code: 'es',
     id: 2
   },
+  {
+    name: 'Русский',
+    code: 'ru',
+    id: 3
+  }
   // <--- add new language bundles HERE
 ];
 

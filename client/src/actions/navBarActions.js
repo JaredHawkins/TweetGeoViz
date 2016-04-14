@@ -7,5 +7,5 @@ export const changeValue = (name, value) => ({
 });
 
 export const focus = () => ({
-  type: types.NAVBAR_SEARCHQUERY_FOCUS
+  type: types.NAVBAR_SEARCHSTRING_FOCUS
 });

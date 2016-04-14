@@ -37,17 +37,17 @@ class App extends Component {
     }
 
     const {
-      searchQuery,
+      searchString,
       startDate,
       endDate
     } = query;
 
-    if (!searchQuery || !searchQuery.length) {
+    if (!searchString || !searchString.length) {
       return;
     }
 
     fetchTweets({
-      searchQuery,
+      searchString,
       startDate: startDate ? new Date(startDate) : undefined,
       endDate: endDate ? new Date(endDate) : undefined
     });

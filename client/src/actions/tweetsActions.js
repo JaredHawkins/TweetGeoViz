@@ -8,36 +8,36 @@ export const requestTweets = () => ({
   type: types.TWEETS_SEARCH_FETCHING
 });
 
-export const receiveTweets = (searchQuery, tweets, uuid) => ({
+export const receiveTweets = (searchString, tweets, uuid) => ({
   type: types.TWEETS_SEARCH_FINISHED,
   receivedAt: Date.now(),
-  searchQuery,
+  searchString,
   tweets,
   uuid
 });
 
-const shouldFetchTweets = (state, searchQuery) => {
-  const previousSearchQuery = state.tweets.searchQuery;
+const shouldFetchTweets = (state, searchString) => {
+  const previousSearchString = state.tweets.searchString;
 
-  return previousSearchQuery !== searchQuery;
+  return previousSearchString !== searchString;
 };
 
 export const fetchTweets = (options = {}) => {
   const {
-    searchQuery = '',
+    searchString = '',
     startDate,
     endDate
   } = options;
 
   return (dispatch, getState) => {
-    if (searchQuery.length < MIN_QUERY_LENGTH) {
+    if (searchString.length < MIN_QUERY_LENGTH) {
       return dispatch(
         showToast(T__('mapPage.toaster.smallSearchString', MIN_QUERY_LENGTH))
       );
     }
 
     // check if we just did the same search before
-    if (!shouldFetchTweets(getState(), searchQuery)) {
+    if (!shouldFetchTweets(getState(), searchString)) {
       return Promise.resolve();
     }
 
@@ -45,9 +45,9 @@ export const fetchTweets = (options = {}) => {
     dispatch(showToast('Searching...'));
 
     tweetsApi
-      .getTweets(searchQuery)
+      .getTweets(searchString)
       .then(json => {
-        dispatch(receiveTweets(searchQuery, json.features, json.uuid));
+        dispatch(receiveTweets(searchString, json.features, json.uuid));
         dispatch(
           showToast(T__('mapPage.toaster.foundTweets', json.features.length))
         );

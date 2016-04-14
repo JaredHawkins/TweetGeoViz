@@ -8,7 +8,7 @@ const initialState = {
   tweets: [],
   selectedTweets: [],
   heatmapData: [],
-  searchQuery: ''
+  searchString: ''
 };
 
 function generateHeatMap(tweets = []) {
@@ -25,8 +25,8 @@ function generateHeatMap(tweets = []) {
 
 function getTweetsInBounds(state, bounds) {
   let result = [];
-  const { tweets = [], searchQuery } = state;
-  const keywords = searchQuery.split(','); // split searchQuery
+  const { tweets = [], searchString } = state;
+  const keywords = searchString.split(','); // split searchString
 
   if (!bounds) {
     return;
@@ -66,7 +66,7 @@ export default function tweets(state = initialState, action) {
     case types.TWEETS_SEARCH_FINISHED:
       return {
         tweets: action.tweets,
-        searchQuery: action.searchQuery,
+        searchString: action.searchString,
         uuid: action.uuid,
         heatMapData: generateHeatMap(action.tweets),
         selectedTweets: [],

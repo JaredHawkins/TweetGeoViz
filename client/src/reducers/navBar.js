@@ -2,7 +2,7 @@ import * as types from '../constants/actionTypes.js';
 import { UPDATE_LOCATION } from 'react-router-redux';
 
 const initialState = {
-  searchQuery: '',
+  searchString: '',
   showAdvanced: false,
   startDate: undefined,
   endDate: undefined
@@ -13,7 +13,7 @@ export default function searchBar(state = initialState, action) {
     case UPDATE_LOCATION:
       const { query = {} } = action.payload;
       const {
-        searchQuery,
+        searchString,
         startDate,
         endDate
       } = query;
@@ -22,7 +22,7 @@ export default function searchBar(state = initialState, action) {
 
       return {
         ...state,
-        searchQuery,
+        searchString,
         showAdvanced,
         startDate: startDate ? new Date(startDate) : undefined,
         endDate: endDate ? new Date(endDate) : undefined

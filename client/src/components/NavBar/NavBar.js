@@ -19,7 +19,7 @@ import { MIN_QUERY_LENGTH } from '../../constants/config.js';
 class NavBar extends Component {
   render() {
     const {
-      searchQuery = '',
+      searchString = '',
       onChange
     } = this.props;
 
@@ -51,13 +51,13 @@ class NavBar extends Component {
                   label={T__('mapPage.navBar.searchButton.label')}
                   icon={<ActionSearch />}
                   style={styles.button}
-                  disabled={searchQuery.length < MIN_QUERY_LENGTH}
+                  disabled={searchString.length < MIN_QUERY_LENGTH}
                   onClick={this.props.onClickSearch}
                 />
               </div>
               <div className="col-xs-1 col-sm-1 hidden-lg hidden-md hidden-lg col-xs-offset-1 text-right no-padding-left-right">
                 <IconButton
-                  disabled={searchQuery.length < MIN_QUERY_LENGTH}
+                  disabled={searchString.length < MIN_QUERY_LENGTH}
                   onClick={this.props.onClickSearch}
                 >
                   <ActionSearch />
@@ -67,12 +67,12 @@ class NavBar extends Component {
                 <TextField
                   hintText={T__('mapPage.navBar.searchInput.placeholder')}
                   fullWidth={false}
-                  value={searchQuery}
+                  value={searchString}
                   onEnterKeyDown={this.props.onEnterKeyDown}
                   onFocus={this.props.onFocus}
                   onChange={event => {
                     const { value } = event.target;
-                    onChange('searchQuery', value);
+                    onChange('searchString', value);
                   }}
                 />
               </div>
@@ -168,7 +168,7 @@ NavBar.propTypes = {
   onEnterKeyDown: PropTypes.func.isRequired,
   onClickSearch: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
-  searchQuery: PropTypes.string,
+  searchString: PropTypes.string,
   showAdvanced: PropTypes.bool
 };
 

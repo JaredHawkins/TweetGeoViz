@@ -9,22 +9,24 @@ Visualization tool to view tweets by location and content.
 ------
 A product of collaboration between HealthMap.org (Boston Children's Hospital), Mozilla Science Lab and our community.
 
-![Screeshot 1](https://github.com/JaredHawkins/TweetGeoViz/blob/master/screenshots/mar_26_2015/1.png)
+![Screenshot 1](https://github.com/JaredHawkins/TweetGeoViz/blob/master/screenshots/1.png)
 
-![Screeshot 2](https://github.com/JaredHawkins/TweetGeoViz/blob/master/screenshots/mar_26_2015/2.png)
+![Screenshot 2](https://github.com/JaredHawkins/TweetGeoViz/blob/master/screenshots/2.png)
 
-![Screeshot 3](https://github.com/JaredHawkins/TweetGeoViz/blob/master/screenshots/mar_26_2015/3.png)
+![Screenshot 3](https://github.com/JaredHawkins/TweetGeoViz/blob/master/screenshots/3.png)
 
-#Getting Started
+![Screenshot 4](https://github.com/JaredHawkins/TweetGeoViz/blob/master/screenshots/4.png)
 
-##Dependencies
+# Getting Started
+
+## Dependencies
 This project uses mongodb to manage its database, node.js for a server, and npm to manage dependencies. Install these on your machine to start:
 
  - [MongoDB v2.6.4 and higher](http://docs.mongodb.org/manual/installation/)
  - [Node v0.12.7 and higher](http://nodejs.org/download/) (comes with npm)
  - [Control Tweets](https://db.tt/29prxPri) (courtesy of HealthMap)
 
-##Technology Used for This Project
+## Technology Used for This Project
  - [MongoDB](https://www.mongodb.org/)
  - [Node](https://nodejs.org/en/)
  - [Webpack](https://webpack.github.io/)
@@ -41,7 +43,7 @@ This project uses mongodb to manage its database, node.js for a server, and npm 
  - [Postman](http://www.getpostman.com/)
  - [ES2015](https://babeljs.io/docs/learn-es2015/)
 
-##Setup
+## Setup
 In the top directory of the project, run
 
 ```
@@ -83,20 +85,20 @@ App consists of 2 main components: Server and Client.
 To start the Server, run in a separate window (by default it will run on `http://localhost:2063/`)
 
 ```
-npm run server-start
+npm run server:start
 ```
 
 To run the Client, run in a separate window (by default it will run on `http://localhost:8080/` or `http://localhost:8080/webpack-dev-server/` if you want live-reloading while developing)
 
 ```
-npm run client-start
+npm run client:dev
 ```
 
 And in a browser, navigate to `http://localhost:8080/`.
 
-#Database Schema
+# Database Schema
 
-##MongoDB
+## MongoDB
 
 Each element in the database contains the following key / value pairs:
 
@@ -116,7 +118,7 @@ Each element in the database contains the following key / value pairs:
  "tln" : tweet longitude
 ```
 
-##geoJSON
+## geoJSON
 
 The `/search` route in `routes.js` chews up tweets from the database into [geoJSON format](http://geojson.org/) (not strictly necessary at present, but we'll use this format for serving raw data from the database, and for potentially interfacing with other mapping tools in future). The specific format to be used contains only the minimal information necessary for plotting on a map:
 
@@ -139,9 +141,9 @@ where `features` is an array of objects of the format:
 }
 ```
 
-where `tln` and `tlt` are the tweet longitude and lattitude pulled from the database.
+where `tln` and `tlt` are the tweet longitude and latitude pulled from the database.
 
-##Multi-Language Support
+## Multi-Language Support
 
 Supported languages:
 
@@ -149,17 +151,17 @@ Supported languages:
  - Spanish
  - Russian
  
-####Adding Another Language
+#### Adding Another Language
 
 In order to add a new language bundle just extend `/client/src/constants/translations.js`. Then modify `/client/src/reducers/language.js` according to comments inside it.
 
-##Testing
+## Available NPM Commands
+
+To lint client source code
 
 ```
-npm test
+npm run lint
 ```
-
-##Available NPM Commands
 
 To run tests
 
@@ -167,30 +169,36 @@ To run tests
 npm test
 ```
 
-To start Server API
+To transpile and start Server API locally
 
 ```
-npm run server-start
+npm run server:start
+```
+
+To transpile server code
+
+```
+npm run server:build
 ```
 
 To start client for development
 
 ```
-npm run client-start
+npm run client:dev
 ```
 
 To build development version of the client
 
 ```
-npm run client-build-dev
+npm run client:build:dev
 ```
 
 To build production version of the client (striped of PropType checks and uglified)
 
 ```
-npm run client-build-production
+npm run client:build:prod
 ```
-##Manual API Testing + Postman Files
+## Manual API Testing + Postman Files
 
 To test API manually you can find Postman Collection and Environment files inside `postman/` folder.
 
@@ -198,6 +206,6 @@ To test API manually you can find Postman Collection and Environment files insid
 
 see [CHANGELOG](./CHANGELOG.md)
 
-##LICENSE
+## LICENSE
 
 see [LICENSE](./LICENSE)

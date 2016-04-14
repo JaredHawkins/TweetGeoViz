@@ -40,7 +40,7 @@ export default function map(state = initialState, action) {
         lpoint: action.lpoint
       };
 
-    case types.NAVBAR_SEARCHQUERY_FOCUS:
+    case types.NAVBAR_SEARCHSTRING_FOCUS:
     case types.SLIDEPANEL_SHOW:
     case types.POPUP_CLOSE:
       // if circle is already hidden - do not do anything

@@ -10,7 +10,7 @@ import { NavBar } from '../../components';
 class NavBarContainer extends Component {
   _onClickSearch = () => {
     const {
-      searchQuery,
+      searchString,
       startDate,
       endDate,
       showAdvanced,
@@ -20,13 +20,13 @@ class NavBarContainer extends Component {
     } = this.props;
 
     // check first if there is anything to search for at all
-    if (!searchQuery.trim().length) {
+    if (!searchString.trim().length) {
       return;
     }
 
     const { code } = language;
     const args = {
-      searchQuery,
+      searchString,
       startDate: showAdvanced ? startDate : undefined,
       endDate: showAdvanced ? endDate : undefined
     };

@@ -34,7 +34,7 @@ export default function dataPopup(state = initialState, action) {
       };
 
     case types.SLIDEPANEL_SHOW:
-    case types.NAVBAR_SEARCHQUERY_FOCUS:
+    case types.NAVBAR_SEARCHSTRING_FOCUS:
     case types.POPUP_CLOSE:
       // if popup is already hidden - do not do anything
       if (!state.visible) {
