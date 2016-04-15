@@ -4,5 +4,6 @@ export DropDown from './DropDown/DropDown.js';
 export Map from './Map/Map.js';
 export NoDataRow from './NoDataRow/NoDataRow.js';
 export NotFoundPage from './NotFoundPage/NotFoundPage.js';
-export SearchBar from './SearchBar/SearchBar.js';
+export NavBar from './NavBar/NavBar.js';
 export SlidePanel from './SlidePanel/SlidePanel.js';
+export Toaster from './Toaster/Toaster.js';

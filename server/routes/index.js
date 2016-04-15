@@ -1,22 +1,13 @@
-'use strict';
+import express from 'express';
 
-/* global module, require */
+import * as tweets from './tweets.js';
 
-var express = require('express'),
-    router = express.Router(),
-    config = require('../config/config.json'),
-    tweets = require('./tweets.js');
+const router = express.Router();
 
-var ping = function(req, res) {
-  res.json({
-    message: 'pong'
-  });
-};
+router.get('/ping', (req, res) => res.json({ message: 'pong' }));
 
-router.get(config.pingUrl, ping);
-
-//Tweets///////////////////////////////////
-router.get('/tweets', tweets.get);
+// Tweets /////////////////////////////////
+router.get('/tweets', tweets.getTweets);
 ///////////////////////////////////////////
 
-module.exports = router;
+export default router;

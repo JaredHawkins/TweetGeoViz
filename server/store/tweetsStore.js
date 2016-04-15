@@ -1,22 +1,43 @@
-var tweetsCollection = require('./models/tweets'),
-    Promise = require('promise');
+import tweetsCollection from './models/tweet.js';
+import Promise from 'promise';
 
-var tweets = {
-  get: function(value) {
-    if (tweetsCollection.db._readyState === 0 || tweetsCollection.db._readyState > 1) {
-      return new Promise(function(resolve, reject) {
-        reject(new Error('Database is not responding'));
-      });
-    }
+export function getTweets(options = {}) {
+  const {
+    searchQuery,
+    startDate,
+    endDate
+  } = options;
 
-    var query = {
-      $text: {
-        $search: '"'+value+'"' // double quotes helps to search phrases with a space
-      }
-    };
-
-    return tweetsCollection.find(query).sort({ tln: 1, tlt: 1 }).exec();
+  if (tweetsCollection.db._readyState === 0 || tweetsCollection.db._readyState > 1) {
+    return new Promise((resolve, reject) => {
+      reject(new Error('Database is not responding'));
+    });
   }
-};
 
-module.exports = tweets;
+  let query = {
+    $text: {
+      $search: `"${searchQuery}"` // double quotes helps to search phrases with a space
+    }
+  };
+
+  if (startDate) {
+    query.cr = {
+      ...query.cr,
+      $gte: new Date(startDate)
+    };
+  }
+
+  if (endDate) {
+    query.cr = {
+      ...query.cr,
+      $lte: new Date(endDate)
+    };
+  }
+
+  const sortQuery = { cr: -1 }; // sort by timestamp
+
+  return tweetsCollection
+    .find(query)
+    .sort(sortQuery)
+    .exec();
+}

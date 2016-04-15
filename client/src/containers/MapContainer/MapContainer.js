@@ -46,34 +46,28 @@ class MapContainer extends Component {
   };
 
   render() {
-    return <Map {...this.props} onClick={this._onClick} />;
+    const {
+      ...props,
+      click,
+      show
+    } = this.props;
+
+    return <Map {...props}
+      onClick={this._onClick}
+    />;
   }
 }
-
-MapContainer.propTypes = {
-  isCircleVisible: PropTypes.bool,
-  isMapClickEnabled: PropTypes.bool,
-  lpoint: PropTypes.object,
-  clickRadius: PropTypes.number,
-  heatMapData: PropTypes.array,
-  searchUUID: PropTypes.string,
-  click: PropTypes.func.isRequired,
-  show: PropTypes.func.isRequired
-};
 
 function mapStateToProps(state) {
   const KM = 1000;
   let { clickRadius } = state.map;
-  const { isCircleVisible, lpoint, isMapClickEnabled } = state.map;
   const { uuid: searchUUID, heatMapData } = state.tweets;
 
   clickRadius *= KM;
 
   return {
+    ...state.map,
     selector: '#map-canvas',
-    isCircleVisible,
-    isMapClickEnabled,
-    lpoint,
     clickRadius,
     searchUUID,
     heatMapData

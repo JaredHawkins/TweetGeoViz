@@ -1,8 +1,10 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    config = require('../config/config.json').mongo;
+import mongoose from 'mongoose';
+import { mongoConfig } from '../../config/config.js';
 
-var tweets = new Schema({
+const { collection } = mongoConfig;
+const Schema = mongoose.Schema;
+
+const tweets = new Schema({
   lang  : String,
   loc   : String,
   plt   : Number,
@@ -20,4 +22,4 @@ var tweets = new Schema({
 });
 
 // note: the third parameter force the name of the collection
-module.exports = mongoose.model(config.collection, tweets, config.collection);
+export default mongoose.model(collection, tweets, collection);

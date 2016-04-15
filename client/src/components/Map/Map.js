@@ -6,34 +6,7 @@ require('./map.less');
 import React, { Component, PropTypes } from 'react';
 
 class Map extends Component {
-  static propTypes = {
-    isCircleVisible: PropTypes.bool,
-    lpoint: PropTypes.object,
-    selector: PropTypes.string,
-    clickRadius: PropTypes.number,
-    heatMapData: PropTypes.array,
-    searchUUID: PropTypes.string,
-    mapOptions: PropTypes.object,
-    onClick: PropTypes.func
-  };
-
-  static defaultProps = {
-    isCircleVisible: false,
-    lpoint: {
-      lat: 0,
-      lng: 0
-    },
-    clickRadius: 250000,
-    heatMapData: [],
-    mapOptions: {
-      center: new google.maps.LatLng(21.2125, 31.1973),
-      zoom: 3,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      streetViewControl: false
-    }
-  };
-
-  componentDidMount = () => {
+  componentDidMount() {
     const {
       selector,
       mapOptions,
@@ -50,9 +23,9 @@ class Map extends Component {
 
     this._renderHeatMap(heatMapData);
     this._toggleCircle(isCircleVisible);
-  };
+  }
 
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate(prevProps) {
     const {
       isCircleVisible,
       searchUUID,
@@ -68,7 +41,7 @@ class Map extends Component {
     if (prevProps.searchUUID !== searchUUID) {
       this._renderHeatMap(heatMapData);
     }
-  };
+  }
 
   _showCircle = () => {
     const { lpoint: { lat, lng }, clickRadius } = this.props;
@@ -137,5 +110,16 @@ class Map extends Component {
     return <div id="map-canvas"></div>;
   }
 }
+
+Map.propTypes = {
+  isCircleVisible: PropTypes.bool,
+  lpoint: PropTypes.object,
+  selector: PropTypes.string,
+  clickRadius: PropTypes.number,
+  heatMapData: PropTypes.array,
+  searchUUID: PropTypes.string,
+  mapOptions: PropTypes.object,
+  onClick: PropTypes.func
+};
 
 export default Map;

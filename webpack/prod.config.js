@@ -27,9 +27,9 @@ config.plugins = [
   }),
   new HtmlWebpackPlugin({
     filename: 'index.html',
-    template: './static/templates/index.html',
+    template: './client/static/templates/index.html',
     inject: true,
-    favicon: './static/images/favicon.ico'
+    favicon: './client/static/images/favicon.ico'
   })
 ];
 

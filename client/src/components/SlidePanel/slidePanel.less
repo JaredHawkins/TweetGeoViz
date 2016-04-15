@@ -1,49 +1,48 @@
 @backgroundColor: #323949;
 @textColor: #eee;
-@borderTopColor: rgba(255, 255, 255, 0.1);
-@borderBottomColor: rgba(0, 0, 0, 0.1);
+@borderColor: rgba(255, 255, 255, 0.1);
 @padding: 15px;
 
+.tgv-slidePanel {
+  background-color: @backgroundColor !important;
+  color: @textColor;
+  z-index: 10;
 
-.snap-drawers {
-  background: @backgroundColor;
+  .tgv-slidePanel-control-width {
+    max-width: 226px
+  }
 
-  .snap-drawer {
-    background: @backgroundColor;
-    color: @textColor;
+  .slidePanel-social {
+    padding: 0 @padding;
+  }
 
-    .slidePanel-social {
-      padding: 0 @padding;
-    }
+  h3 {
+    margin: @padding;
+    font-size: 36px;
+    font-weight: normal;
+  }
 
-    h3 {
-      margin: @padding;
-      font-size: 36px;
-      font-weight: normal;
-    }
+  h4 {
+    padding: @padding;
+    border-top: 1px solid @borderColor;
+    margin-bottom: 0;
+  }
 
-    h4 {
+  p {
+    padding: @padding;
+    opacity: 0.5;
+    font-size: 12px;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    border-bottom: 1px solid @borderColor;
+    border-top: 1px solid @borderColor;
+
+    li {
       padding: @padding;
-      border-top: 1px solid @borderTopColor;
-      margin-bottom: 0;
-    }
-
-    p {
-      padding: @padding;
-      opacity: 0.5;
-      font-size: 12px;
-    }
-
-    ul {
-      padding: 0;
-      margin: 0;
-      list-style-type: none;
-
-      li > .input-group {
-        padding: @padding;
-        border-bottom: 1px solid @borderBottomColor;
-        border-top: 1px solid @borderTopColor;
-      }
     }
   }
 }

@@ -5,6 +5,13 @@ class DataPopupRow extends Component {
     return (
       <li>
         <div className={this.props.rowClass}>
+          {
+            this.props.showTimeStamps ?
+            <p className="text-primary">
+              {new Date(this.props.timeStamp).toUTCString()}
+            </p>
+            : null
+          }
           <span dangerouslySetInnerHTML={{__html: this.props.text }}></span>
         </div>
       </li>

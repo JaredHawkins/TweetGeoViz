@@ -1,3 +1,5 @@
+/* global google */
+
 import * as types from '../constants/actionTypes.js';
 
 const initialState = {
@@ -7,7 +9,13 @@ const initialState = {
   },
   isCircleVisible: false,
   isMapClickEnabled: true,
-  clickRadius: 250
+  clickRadius: 250,
+  mapOptions: {
+    center: new google.maps.LatLng(21.2125, 31.1973),
+    zoom: 3,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    streetViewControl: false
+  }
 };
 
 export default function map(state = initialState, action) {
@@ -32,7 +40,8 @@ export default function map(state = initialState, action) {
         lpoint: action.lpoint
       };
 
-    case types.SEARCHBAR_SEARCHQUERY_FOCUS:
+    case types.NAVBAR_SEARCHSTRING_FOCUS:
+    case types.SLIDEPANEL_SHOW:
     case types.POPUP_CLOSE:
       // if circle is already hidden - do not do anything
       if (!state.isCircleVisible) {
@@ -42,7 +51,11 @@ export default function map(state = initialState, action) {
       // otherwise hide the circle
       return {
         ...state,
-        isCircleVisible: false
+        isCircleVisible: false,
+        lpoint: {
+          lat: 0,
+          lng: 0
+        }
       };
 
     default:

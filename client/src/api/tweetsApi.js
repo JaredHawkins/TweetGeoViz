@@ -1,5 +1,5 @@
 import request from 'superagent';
-import { api as apiConfig } from '../config/config.json';
+import { apiConfig } from '../constants/config.js';
 import Promise from 'promise';
 
 const {
@@ -24,7 +24,10 @@ function createRequest(options = {}) {
       .send(body)
       .end((error, response = {}) => {
         if (error) {
-          reject(error);
+          if (error.response) {
+            return reject(error.response.error.message);
+          }
+          reject(error.message || error);
         }
 
         resolve(response.body);
@@ -32,9 +35,9 @@ function createRequest(options = {}) {
   });
 }
 
-export function getTweets(searchQuery) {
+export function getTweets(searchString) {
   return createRequest({
     url: urls.tweets,
-    query: { search: searchQuery }
+    query: { searchString }
   });
 }
