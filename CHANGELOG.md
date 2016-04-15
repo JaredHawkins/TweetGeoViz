@@ -3,6 +3,7 @@
 
 ##### General
 - [Docs] Add CHANGELOG to the project for major releases
+- [UI] Make UI mobile friendly and more responsive
 - [Cleanup] Change language bundles. Simplifying language files for changes or missing labels
 - [Translations] Add Russian language to the bundle
 - [Docs] Add new Postman calls due to new API
