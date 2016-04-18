@@ -1,5 +1,5 @@
 // webpack specific - including required JS and CSS files
-require('./navBar.less');
+import './navBar.less';
 
 import React, { Component, PropTypes } from 'react';
 import Paper from 'material-ui/lib/paper';

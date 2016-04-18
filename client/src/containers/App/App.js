@@ -1,6 +1,6 @@
 // webpack specific - including required JS and CSS files
-require('../../../../node_modules/bootstrap/dist/css/bootstrap.min.css');
-require('../../../../node_modules/bootstrap/dist/js/bootstrap.min.js');
+import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../../../../node_modules/bootstrap/dist/js/bootstrap.min.js';
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';

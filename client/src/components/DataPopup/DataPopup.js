@@ -1,5 +1,5 @@
 // webpack specific - including required JS and CSS files
-require('./dataPopup.less');
+import './dataPopup.less';
 
 import React, { Component, PropTypes } from 'react';
 import { DataPopupRow, NoDataRow } from '../';

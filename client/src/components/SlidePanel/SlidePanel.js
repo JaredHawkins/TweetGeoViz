@@ -1,5 +1,5 @@
 // webpack specific - including required JS and CSS files
-require('./slidePanel.less');
+import './slidePanel.less';
 
 import React, { Component, PropTypes } from 'react';
 import LeftNav from 'material-ui/lib/left-nav';
