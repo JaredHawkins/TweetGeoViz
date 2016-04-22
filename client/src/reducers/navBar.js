@@ -32,7 +32,6 @@ export default function searchBar(state = initialState, action) {
         ...state,
         [action.name]: action.value
       };
-
     default:
       // nothing to do
       return state;

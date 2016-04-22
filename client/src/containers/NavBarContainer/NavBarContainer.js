@@ -37,11 +37,12 @@ class NavBarContainer extends Component {
 
   render() {
     const {
-      ...props,
       showSlidePanel,
       fetchTweets,
       changeValue,
-      focus
+      focus,
+      urlPush,
+      ...props
     } = this.props;
 
     const { showAdvanced } = props;

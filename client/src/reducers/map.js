@@ -2,6 +2,9 @@
 
 import * as types from '../constants/actionTypes.js';
 
+const HEATMAP_LAYER_NAME = 'HeatMap';
+const CLUSTER_LAYER_NAME = 'Clusters';
+
 const initialState = {
   lpoint: {
     lat: 0,
@@ -10,12 +13,17 @@ const initialState = {
   isCircleVisible: false,
   isMapClickEnabled: true,
   clickRadius: 250,
-  mapOptions: {
-    center: new google.maps.LatLng(21.2125, 31.1973),
-    zoom: 3,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    streetViewControl: false
-  }
+  layers: [
+    {
+      label: HEATMAP_LAYER_NAME,
+      value: HEATMAP_LAYER_NAME
+    },
+    {
+      label: CLUSTER_LAYER_NAME,
+      value: CLUSTER_LAYER_NAME
+    }
+  ],
+  selectedLayer: HEATMAP_LAYER_NAME
 };
 
 export default function map(state = initialState, action) {
@@ -25,7 +33,6 @@ export default function map(state = initialState, action) {
         ...state,
         [action.name]: action.value
       };
-
     case types.MAP_CLICK:
       // if click is enabled and circle already shown - then do not do anything
       // wait until popup is closed
@@ -39,7 +46,6 @@ export default function map(state = initialState, action) {
         isCircleVisible: true,
         lpoint: action.lpoint
       };
-
     case types.NAVBAR_SEARCHSTRING_FOCUS:
     case types.SLIDEPANEL_SHOW:
     case types.POPUP_CLOSE:
@@ -57,7 +63,6 @@ export default function map(state = initialState, action) {
           lng: 0
         }
       };
-
     default:
       // nothing to do
       return state;

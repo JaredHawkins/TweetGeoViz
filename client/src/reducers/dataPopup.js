@@ -32,7 +32,6 @@ export default function dataPopup(state = initialState, action) {
         visible: true,
         point: action.point
       };
-
     case types.SLIDEPANEL_SHOW:
     case types.NAVBAR_SEARCHSTRING_FOCUS:
     case types.POPUP_CLOSE:
@@ -47,7 +46,6 @@ export default function dataPopup(state = initialState, action) {
         filterText: '',
         visible: false
       };
-
     default:
       // nothing to do
       return state;

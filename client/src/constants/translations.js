@@ -67,6 +67,11 @@ export default {
         es: 'Ajustes',
         ru: 'Настройки'
       },
+      layerSelector: {
+        label: {
+          en: 'geoJSON Layer'
+        }
+      },
       languageSelector: {
         label: {
           en: 'Language',

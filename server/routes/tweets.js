@@ -29,9 +29,11 @@ function getResults(values = []) {
   });
 
   return {
-    type: 'FeatureCollection',    // empty geojson blob
-    features: features,
-    uuid: uuid.v1()
+    uuid: uuid.v1(),
+    geoJSON: {
+      type: 'FeatureCollection',    // empty geojson blob
+      features: features
+    }
   };
 }
 
@@ -44,9 +46,11 @@ export function getTweets(req, res, next) {
 
   if (!searchString) {
     return res.json({
-      type: 'FeatureCollection',
-      features: [],
-      uuid: uuid.v1()
+      uuid: uuid.v1(),
+      geoJSON: {
+        type: 'FeatureCollection',
+        features: []
+      }
     });
   }
 

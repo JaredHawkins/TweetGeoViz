@@ -47,9 +47,9 @@ class MapContainer extends Component {
 
   render() {
     const {
-      ...props,
       click,
-      show
+      show,
+      ...props
     } = this.props;
 
     return <Map {...props}
@@ -61,7 +61,7 @@ class MapContainer extends Component {
 function mapStateToProps(state) {
   const KM = 1000;
   let { clickRadius } = state.map;
-  const { uuid: searchUUID, heatMapData } = state.tweets;
+  const { uuid: searchUUID, tweets } = state.tweets;
 
   clickRadius *= KM;
 
@@ -70,7 +70,7 @@ function mapStateToProps(state) {
     selector: '#map-canvas',
     clickRadius,
     searchUUID,
-    heatMapData
+    tweets
   };
 }
 

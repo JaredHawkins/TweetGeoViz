@@ -11,10 +11,10 @@ import { SlidePanel } from '../../components';
 class SlidePanelContainer extends Component {
   render() {
     const {
-      ...props,
       changeValue,
       changeDataPopupValue,
-      urlReplace
+      urlReplace,
+      ...props
     } = this.props;
 
     return <SlidePanel {...props}
@@ -36,7 +36,12 @@ class SlidePanelContainer extends Component {
 function mapStateToProps(state) {
   const { visible } = state.slidePanel;
   const selectedLanguage = state.language;
-  const { clickRadius, isMapClickEnabled } = state.map;
+  const {
+    clickRadius,
+    isMapClickEnabled,
+    layers,
+    selectedLayer
+  } = state.map;
   const { showFilter, showTimeStamps } = state.dataPopup;
 
   return {
@@ -49,7 +54,9 @@ function mapStateToProps(state) {
     clickRadius,
     isMapClickEnabled,
     showFilter,
-    showTimeStamps
+    showTimeStamps,
+    layers,
+    selectedLayer
   };
 }
 

@@ -7,9 +7,9 @@ import * as dataPopupActions from '../../actions/dataPopupActions.js';
 class DataPopupContainer extends Component {
   render() {
     const {
-      ...props,
       close,
-      changeValue
+      changeValue,
+      ...props
     } = this.props;
 
     if (!props.visible) {
