@@ -16,14 +16,14 @@ const initialState = {
   layers: [
     {
       label: HEATMAP_LAYER_NAME,
-      value: HEATMAP_LAYER_NAME
+      value: 1
     },
     {
       label: CLUSTER_LAYER_NAME,
-      value: CLUSTER_LAYER_NAME
+      value: 2
     }
   ],
-  selectedLayer: HEATMAP_LAYER_NAME
+  selectedLayer: 1
 };
 
 export default function map(state = initialState, action) {

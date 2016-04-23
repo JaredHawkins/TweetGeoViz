@@ -6,35 +6,77 @@ import '../../../../node_modules/openlayers/dist/ol-debug.css';
 import ol from '../../../../node_modules/openlayers/dist/ol-debug.js';
 import React, { Component, PropTypes } from 'react';
 
-import { getHeatMapLayer, getClusterLayer } from '../../reducers/tweets.js';
-
 class Map extends Component {
   componentDidMount() {
     const {
-      selector,
-      mapOptions,
-      isCircleVisible,
-      onClick
+      selectedLayer
     } = this.props;
 
-    const raster = new ol.layer.Tile({ source: new ol.source.OSM() });
+    // Layers
+    this._rasterLayer = this._createTileLayer();
+    this._heatMapLayer = this._createHeatMapLayer();
+    this._clusterLayer = this._createClusterLayer();
 
-    this._map = new ol.Map({
-      layers: [raster],
+    // render Map
+    const map = new ol.Map({
       renderer: 'canvas',
       target: 'map-canvas',
       view: new ol.View({
         center: [0, 0],
         zoom: 2
-      })
+      }),
+      loadTilesWhileAnimating: true,
+      loadTilesWhileInteracting: true
     });
+
+    // set Layer Group
+    const layerCollection = new ol.Collection([
+      this._rasterLayer,
+      this._heatMapLayer,
+      this._clusterLayer
+    ]);
+    const layerGroup = new ol.layer.Group();
+    layerGroup.setLayers(layerCollection);
+
+    // add Layer Group to Map
+    map.setLayerGroup(layerGroup);
+
+    var overlay = new ol.Overlay({
+              element: document.getElementById('tweetsPopup'),
+              positioning: 'bottom-center'
+            });
+    debugger;
+    // register an event handler for the click event
+    map.on('click', event => {
+      // extract the spatial coordinate of the click event in map projection units
+      var coord = event.coordinate;
+      // transform it to decimal degrees
+      var degrees = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
+      // format a human readable version
+      var hdms = ol.coordinate.toStringHDMS(degrees);
+      // update the overlay element's content
+      var element = overlay.getElement();
+      element.innerHTML = hdms;
+      // position the element (using the coordinate in the map's projection)
+      overlay.setPosition(coord);
+      // and add it to the map
+      debugger;
+      map.addOverlay(overlay);
+    });
+
+    this._map = map;
+
+    // show only a specific layer we need
+    this._hideLayers();
+    this._showLayer(selectedLayer);
   }
 
   componentDidUpdate(prevProps) {
     const {
       isCircleVisible,
       searchUUID,
-      tweets
+      tweets,
+      selectedLayer
     } = this.props;
 
     // work with map circle only if its property has changed
@@ -44,10 +86,87 @@ class Map extends Component {
 
     // re-render heatmap only if search was changed
     if (prevProps.searchUUID !== searchUUID) {
-      this._map.addLayer(getHeatMapLayer(tweets));
-      this._map.addLayer(getClusterLayer(tweets));
+      const vectorSource = this._getVectorSource(tweets);
+      this._heatMapLayer.setSource(vectorSource);
+      this._clusterLayer.setSource(new ol.source.Cluster({
+        source: vectorSource,
+        distance: 40
+      }));
+    }
+
+    // show-hide layers
+    if (prevProps.selectedLayer !== selectedLayer) {
+      this._hideLayers();
+      this._showLayer(selectedLayer);
     }
   }
+
+  _createTileLayer = () => {
+    return new ol.layer.Tile({ source: new ol.source.OSM() });
+  };
+
+  _createHeatMapLayer = (options = {}) => {
+    return new ol.layer.Heatmap({
+      title: 'HeatMap',
+      blur: 15,
+      radius: 8,
+      opacity: 0.2,
+      weight: () => 1.0
+    });
+  };
+
+  _createClusterLayer = () => {
+    let styleCache = {};
+    return new ol.layer.Vector({
+      title: 'Clusters',
+      style: feature => {
+        const size = feature.get('features').length;
+        let style = styleCache[size];
+        if (!style) {
+          style = new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 10,
+              stroke: new ol.style.Stroke({
+                color: '#fff'
+              }),
+              fill: new ol.style.Fill({
+                color: '#3399CC'
+              })
+            }),
+            text: new ol.style.Text({
+              text: size.toString(),
+              fill: new ol.style.Fill({
+                color: '#fff'
+              })
+            })
+          });
+          styleCache[size] = style;
+        }
+        return style;
+      }
+    });
+  };
+
+  _getVectorSource = (geoJSON = []) => {
+    return new ol.source.Vector({
+      features: (new ol.format.GeoJSON()).readFeatures(geoJSON, {
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+      })
+    });
+  };
+
+  _hideLayers = () => {
+    const [, ...layers] = this._map.getLayerGroup().getLayers().getArray();
+    layers.forEach(layer => layer.setVisible(false));
+  };
+
+  _showLayer = (selectedLayer) => {
+    this._map.getLayerGroup()
+      .getLayers()
+      .item(selectedLayer)
+      .setVisible(true);
+  };
 
   _showCircle = () => {
     const { lpoint: { lat, lng }, clickRadius } = this.props;

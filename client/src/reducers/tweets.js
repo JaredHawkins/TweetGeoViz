@@ -43,64 +43,6 @@ function getTweetsInBounds(state, bounds) {
   return result;
 }
 
-function getVectorSource(geoJSON = []) {
-  return new ol.source.Vector({
-    features: (new ol.format.GeoJSON()).readFeatures(geoJSON, {
-      dataProjection: 'EPSG:4326',
-      featureProjection: 'EPSG:3857'
-    })
-  });
-}
-
-export function getHeatMapLayer(geoJSON = []) {
-  return new ol.layer.Heatmap({
-    title: 'HeatMap',
-    source: getVectorSource(geoJSON),
-    blur: 15,
-    radius: 8,
-    opacity: 0.2,
-    weight: () => 1.0
-  });
-}
-
-export function getClusterLayer(geoJSON = []) {
-  const clusterSource = new ol.source.Cluster({
-    source: getVectorSource(geoJSON),
-    distance: 40
-  });
-
-  let styleCache = {};
-  return new ol.layer.Vector({
-    title: 'Clusters',
-    source: clusterSource,
-    style: feature => {
-      const size = feature.get('features').length;
-      let style = styleCache[size];
-      if (!style) {
-        style = new ol.style.Style({
-          image: new ol.style.Circle({
-            radius: 10,
-            stroke: new ol.style.Stroke({
-              color: '#fff'
-            }),
-            fill: new ol.style.Fill({
-              color: '#3399CC'
-            })
-          }),
-          text: new ol.style.Text({
-            text: size.toString(),
-            fill: new ol.style.Fill({
-              color: '#fff'
-            })
-          })
-        });
-        styleCache[size] = style;
-      }
-      return style;
-    }
-  });
-}
-
 export default function tweets(state = initialState, action) {
   switch (action.type) {
     case types.TWEETS_SEARCH_FETCHING:
