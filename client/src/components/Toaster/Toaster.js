@@ -3,8 +3,6 @@ import Snackbar from 'material-ui/lib/snackbar';
 
 class Toaster extends Component {
   render() {
-    debugger;
-
     return <Snackbar
       open={this.props.visible}
       message={this.props.message}

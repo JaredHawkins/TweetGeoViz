@@ -56,10 +56,10 @@ class App extends Component {
   render() {
     return (
       <div>
-        <DataPopupContainer />
         <NavBarContainer />
         <SlidePanelContainer />
         <MapContainer />
+        <DataPopupContainer />
         <ToasterContainer />
       </div>
     );

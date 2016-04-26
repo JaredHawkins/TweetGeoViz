@@ -28,14 +28,13 @@ class DataPopup extends Component {
       onChange
     } = this.props;
 
+    debugger;
     const popupStyle = {
-      display: visible ? 'block' : 'none',
-      left: `${point.x}px`,
-      top: `${point.y}px`
+      display: visible ? 'block' : 'none'
     };
 
     return (
-      <div id="tweetsPopup" className="col-xs-12 col-sm-6 col-md-4 col-lg-4" style={popupStyle}>
+      <div id="tweetsPopup" style={popupStyle}>
         <Paper className="panel panel-default" zDepth={4}>
           <div className="panel-heading">
             <strong>{popupHeader}</strong>
@@ -43,13 +42,16 @@ class DataPopup extends Component {
               tooltip={T__('mapPage.dataPopup.closeButton.tooltip')}
               touch={true}
               className="close tgv-closePopup"
-              onClick={onClose}
+              onTouchTap={event => {
+                debugger;
+                onClose();
+              }}
             >
               <CloseIcon />
             </IconButton>
           </div>
           {
-            showFilter && (filterText.length || data.length) ?
+            /*showFilter && (filterText.length || data.length) ?*/
             <Paper className="panel-body filter-panel">
               <TextField
                 hintText={T__('mapPage.dataPopup.filter.hintText')}
@@ -61,7 +63,7 @@ class DataPopup extends Component {
                 }}
               />
             </Paper>
-            : null
+            /*: null*/
           }
           <div className="panel-body tweet-panel">
             <ul>

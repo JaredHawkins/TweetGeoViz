@@ -17,10 +17,27 @@ class Map extends Component {
     this._heatMapLayer = this._createHeatMapLayer();
     this._clusterLayer = this._createClusterLayer();
 
+    // overlay popup
+    this._popupOverlay = new ol.Overlay({
+      element: document.getElementById('tweetsPopup'),
+      positioning: 'top-center',
+      stopEvent: false,
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250
+      }
+    });
+
     // render Map
-    const map = new ol.Map({
+    this._map = new ol.Map({
       renderer: 'canvas',
       target: 'map-canvas',
+      overlays: [this._popupOverlay],
+      layers: [
+        this._rasterLayer,
+        this._heatMapLayer,
+        this._clusterLayer
+      ],
       view: new ol.View({
         center: [0, 0],
         zoom: 2
@@ -29,42 +46,7 @@ class Map extends Component {
       loadTilesWhileInteracting: true
     });
 
-    // set Layer Group
-    const layerCollection = new ol.Collection([
-      this._rasterLayer,
-      this._heatMapLayer,
-      this._clusterLayer
-    ]);
-    const layerGroup = new ol.layer.Group();
-    layerGroup.setLayers(layerCollection);
-
-    // add Layer Group to Map
-    map.setLayerGroup(layerGroup);
-
-    var overlay = new ol.Overlay({
-              element: document.getElementById('tweetsPopup'),
-              positioning: 'bottom-center'
-            });
-    debugger;
-    // register an event handler for the click event
-    map.on('click', event => {
-      // extract the spatial coordinate of the click event in map projection units
-      var coord = event.coordinate;
-      // transform it to decimal degrees
-      var degrees = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
-      // format a human readable version
-      var hdms = ol.coordinate.toStringHDMS(degrees);
-      // update the overlay element's content
-      var element = overlay.getElement();
-      element.innerHTML = hdms;
-      // position the element (using the coordinate in the map's projection)
-      overlay.setPosition(coord);
-      // and add it to the map
-      debugger;
-      map.addOverlay(overlay);
-    });
-
-    this._map = map;
+    this._map.on('click', this._mapOnClick);
 
     // show only a specific layer we need
     this._hideLayers();
@@ -100,6 +82,19 @@ class Map extends Component {
       this._showLayer(selectedLayer);
     }
   }
+
+  shouldComponentUpdate() {
+    // do not rerender this component since render method does not really change
+    return false;
+  }
+
+  _mapOnClick = (event) => {
+    const { onClick } = this.props;
+
+    const { coordinate } = event;
+    this._popupOverlay.setPosition(coordinate);
+    onClick(event);
+  };
 
   _createTileLayer = () => {
     return new ol.layer.Tile({ source: new ol.source.OSM() });
@@ -157,13 +152,12 @@ class Map extends Component {
   };
 
   _hideLayers = () => {
-    const [, ...layers] = this._map.getLayerGroup().getLayers().getArray();
+    const [, ...layers] = this._map.getLayers().getArray();
     layers.forEach(layer => layer.setVisible(false));
   };
 
   _showLayer = (selectedLayer) => {
-    this._map.getLayerGroup()
-      .getLayers()
+    this._map.getLayers()
       .item(selectedLayer)
       .setVisible(true);
   };

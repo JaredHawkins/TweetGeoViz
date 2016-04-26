@@ -23,26 +23,13 @@ class MapContainer extends Component {
       return;
     }
 
-    // get bounds for the click
-    const bounds = new google.maps.Circle({
-      center: new google.maps.LatLng(latLng.lat(), latLng.lng()),
-      radius: clickRadius
-    }).getBounds();
-
-    click(bounds, {
-      lat: latLng.lat(),
-      lng: latLng.lng()
-    });
-
     // do not show a popup if map click is disabled
     if (!isMapClickEnabled) {
       return;
     }
 
-    show({
-      x: pixel.x,
-      y: pixel.y
-    });
+    //debugger;
+    show();
   };
 
   render() {
@@ -52,7 +39,8 @@ class MapContainer extends Component {
       ...props
     } = this.props;
 
-    return <Map {...props}
+    return <Map
+      {...props}
       onClick={this._onClick}
     />;
   }

@@ -12,11 +12,8 @@ class DataPopupContainer extends Component {
       ...props
     } = this.props;
 
-    if (!props.visible) {
-      return <div />;
-    }
-
-    return <DataPopup {...props}
+    return <DataPopup
+      {...props}
       popupHeader={T__('mapPage.dataPopup.header', props.data.length)}
       noDataText={T__('mapPage.dataPopup.noDataText')}
       onClose={close}

@@ -10,7 +10,8 @@ class ToasterContainer extends Component {
       ...props
     } = this.props;
 
-    return <Toaster {...props}
+    return <Toaster
+      {...props}
       onClose={() => changeValue('visible', false)}
     />;
   }

@@ -17,7 +17,8 @@ class SlidePanelContainer extends Component {
       ...props
     } = this.props;
 
-    return <SlidePanel {...props}
+    return <SlidePanel
+      {...props}
       onChange={(name, value) => {
         if (name === 'selectedLanguageCode') {
           return urlReplace(`/${value}`);

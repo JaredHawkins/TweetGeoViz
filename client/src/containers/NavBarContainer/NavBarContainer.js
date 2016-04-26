@@ -47,7 +47,8 @@ class NavBarContainer extends Component {
 
     const { showAdvanced } = props;
 
-    return <NavBar {...props}
+    return <NavBar
+      {...props}
       onEnterKeyDown={this._onClickSearch}
       onClickSearch={this._onClickSearch}
       onFocus={focus}
