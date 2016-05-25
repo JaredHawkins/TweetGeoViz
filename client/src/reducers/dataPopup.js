@@ -1,10 +1,7 @@
 import * as types from '../constants/actionTypes.js';
 
 const initialState = {
-  point: {
-    x: undefined,
-    y: undefined
-  },
+  pixel: [0, 0],
   visible: false,
   filterText: '',
   showFilter: true,
@@ -30,12 +27,11 @@ export default function dataPopup(state = initialState, action) {
         ...state,
         filterText: '',
         visible: true,
-        point: action.point
+        pixel: action.pixel
       };
     case types.SLIDEPANEL_SHOW:
     case types.NAVBAR_SEARCHSTRING_FOCUS:
     case types.POPUP_CLOSE:
-      debugger;
       // if popup is already hidden - do not do anything
       if (!state.visible) {
         return state;

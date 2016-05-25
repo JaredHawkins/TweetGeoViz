@@ -6,8 +6,8 @@ export const changeValue = (name, value) => ({
   value
 });
 
-export const click = (bounds, lpoint) => ({
+export const click = (lonLat, coordinate) => ({
   type: types.MAP_CLICK,
-  bounds,
-  lpoint
+  lonLat,
+  coordinate
 });

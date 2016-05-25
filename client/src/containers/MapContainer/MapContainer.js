@@ -7,7 +7,7 @@ import * as dataPopupActions from '../../actions/dataPopupActions.js';
 import { Map } from '../../components';
 
 class MapContainer extends Component {
-  _onClick = (event) => {
+  _onClick = (pixel, lonLat, coordinate) => {
     const {
       click,
       show,
@@ -15,8 +15,6 @@ class MapContainer extends Component {
       clickRadius,
       isMapClickEnabled
     } = this.props;
-
-    const { latLng, pixel } = event;
 
     // if we show a circle on the map already then just stop
     if (isCircleVisible) {
@@ -28,8 +26,8 @@ class MapContainer extends Component {
       return;
     }
 
-    //debugger;
-    show();
+    show(pixel);
+    click(lonLat, coordinate);
   };
 
   render() {

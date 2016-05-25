@@ -28,7 +28,6 @@ class DataPopup extends Component {
       onChange
     } = this.props;
 
-    debugger;
     const popupStyle = {
       display: visible ? 'block' : 'none'
     };
@@ -42,16 +41,14 @@ class DataPopup extends Component {
               tooltip={T__('mapPage.dataPopup.closeButton.tooltip')}
               touch={true}
               className="close tgv-closePopup"
-              onTouchTap={event => {
-                debugger;
-                onClose();
-              }}
+              onTouchEnd={event => onClose()}
+              onMouseUp={event => onClose()}
             >
               <CloseIcon />
             </IconButton>
           </div>
           {
-            /*showFilter && (filterText.length || data.length) ?*/
+            showFilter && (filterText.length || data.length) ?
             <Paper className="panel-body filter-panel">
               <TextField
                 hintText={T__('mapPage.dataPopup.filter.hintText')}
@@ -63,7 +60,7 @@ class DataPopup extends Component {
                 }}
               />
             </Paper>
-            /*: null*/
+            : null
           }
           <div className="panel-body tweet-panel">
             <ul>

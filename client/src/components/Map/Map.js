@@ -5,6 +5,13 @@ import './map.less';
 import '../../../../node_modules/openlayers/dist/ol-debug.css';
 import ol from '../../../../node_modules/openlayers/dist/ol-debug.js';
 import React, { Component, PropTypes } from 'react';
+import {
+  HEATMAP_LAYER_NAME,
+  CLUSTER_LAYER_NAME
+} from '../../reducers/map.js';
+
+const epsg4326 = 'EPSG:4326';
+const epsg3857 = 'EPSG:3857';
 
 class Map extends Component {
   componentDidMount() {
@@ -16,12 +23,12 @@ class Map extends Component {
     this._rasterLayer = this._createTileLayer();
     this._heatMapLayer = this._createHeatMapLayer();
     this._clusterLayer = this._createClusterLayer();
+    this._selectCircleLayer = this._createSelectCircleLayer();
 
     // overlay popup
     this._popupOverlay = new ol.Overlay({
       element: document.getElementById('tweetsPopup'),
-      positioning: 'top-center',
-      stopEvent: false,
+      positioning: 'top-left',
       autoPan: true,
       autoPanAnimation: {
         duration: 250
@@ -36,7 +43,8 @@ class Map extends Component {
       layers: [
         this._rasterLayer,
         this._heatMapLayer,
-        this._clusterLayer
+        this._clusterLayer,
+        this._selectCircleLayer
       ],
       view: new ol.View({
         center: [0, 0],
@@ -49,7 +57,6 @@ class Map extends Component {
     this._map.on('click', this._mapOnClick);
 
     // show only a specific layer we need
-    this._hideLayers();
     this._showLayer(selectedLayer);
   }
 
@@ -78,22 +85,18 @@ class Map extends Component {
 
     // show-hide layers
     if (prevProps.selectedLayer !== selectedLayer) {
-      this._hideLayers();
       this._showLayer(selectedLayer);
     }
-  }
-
-  shouldComponentUpdate() {
-    // do not rerender this component since render method does not really change
-    return false;
   }
 
   _mapOnClick = (event) => {
     const { onClick } = this.props;
 
-    const { coordinate } = event;
+    const { coordinate, pixel } = event;
     this._popupOverlay.setPosition(coordinate);
-    onClick(event);
+    const lonLat = ol.proj.transform(coordinate, epsg3857, epsg4326);
+
+    onClick(pixel, lonLat, coordinate);
   };
 
   _createTileLayer = () => {
@@ -102,7 +105,7 @@ class Map extends Component {
 
   _createHeatMapLayer = (options = {}) => {
     return new ol.layer.Heatmap({
-      title: 'HeatMap',
+      title: HEATMAP_LAYER_NAME,
       blur: 15,
       radius: 8,
       opacity: 0.2,
@@ -113,19 +116,21 @@ class Map extends Component {
   _createClusterLayer = () => {
     let styleCache = {};
     return new ol.layer.Vector({
-      title: 'Clusters',
+      title: CLUSTER_LAYER_NAME,
       style: feature => {
+        // TBD: change radius and color based on how many tweets are there
         const size = feature.get('features').length;
         let style = styleCache[size];
         if (!style) {
           style = new ol.style.Style({
             image: new ol.style.Circle({
-              radius: 10,
+              radius: 12,
               stroke: new ol.style.Stroke({
-                color: '#fff'
+                color: 'rgba(51, 153, 204, 0.5)',
+                width: 10
               }),
               fill: new ol.style.Fill({
-                color: '#3399CC'
+                color: 'rgb(51, 153, 204)'
               })
             }),
             text: new ol.style.Text({
@@ -142,65 +147,69 @@ class Map extends Component {
     });
   };
 
+  _createSelectCircleLayer = () => {
+    return new ol.layer.Vector({
+      style: [
+        new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'rgb(0, 204, 255)',
+            width: 1
+          }),
+          fill: new ol.style.Fill({
+            color: 'rgba(0, 204, 255, 0.2)'
+          })
+        })
+      ]
+    });
+  };
+
   _getVectorSource = (geoJSON = []) => {
     return new ol.source.Vector({
       features: (new ol.format.GeoJSON()).readFeatures(geoJSON, {
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857'
+        featureProjection: epsg3857,
+        dataProjection: epsg4326,
       })
     });
   };
 
-  _hideLayers = () => {
-    const [, ...layers] = this._map.getLayers().getArray();
-    layers.forEach(layer => layer.setVisible(false));
-  };
-
   _showLayer = (selectedLayer) => {
+    this._clusterLayer.setVisible(false);
+    this._heatMapLayer.setVisible(false);
+
     this._map.getLayers()
       .item(selectedLayer)
       .setVisible(true);
   };
 
   _showCircle = () => {
-    const { lpoint: { lat, lng }, clickRadius } = this.props;
+    const {
+      lonLat,
+      coordinate,
+      clickRadius
+    } = this.props;
 
-    this._hideCircle();
+    const [ lon, lat ] = lonLat;
 
-    this._mapCircle = new google.maps.Circle({
-      map: this._googleMap,
-      center: new google.maps.LatLng(lat, lng),
-      clickable: false,
-      radius: clickRadius,
-      fillColor: '#fff',
-      fillOpacity: 0.6,
-      strokeColor: '#313131',
-      strokeOpacity: 0.4,
-      strokeWeight: 0.8
-    });
+    const precisionCircle = ol.geom.Polygon.circular(
+      /* WGS84 Sphere */
+      new ol.Sphere(6378137),
+      /* Center */
+      lonLat,
+      /* Radius */
+      clickRadius,
+      /* Number of verticies */
+      64
+    ).transform(epsg4326, epsg3857);
 
-    this._googleMap.setOptions({
-      draggable: false,
-      zoomControl: false,
-      scrollwheel: false,
-      panControl: false,
-      disableDoubleClickZoom: true
-    });
+    const precisionCircleFeature = new ol.Feature(precisionCircle)
+    const vectorSource = new ol.source.Vector();
+    vectorSource.addFeature(precisionCircleFeature);
+
+    this._selectCircleLayer.setSource(vectorSource);
   };
 
   _hideCircle = () => {
-    if (!this._mapCircle) {
-      return;
-    }
-
-    this._mapCircle.setMap(null);
-    this._googleMap.setOptions({
-      draggable: true,
-      zoomControl: true,
-      scrollwheel: true,
-      panControl: true,
-      disableDoubleClickZoom: false
-    });
+    this._selectCircleLayer.setSource();
   };
 
   _toggleCircle = isCircleVisible => {
