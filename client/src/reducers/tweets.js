@@ -59,14 +59,15 @@ export default function tweets(state = initialState, action) {
         isSearching: false
       };
     case types.MAP_CLICK:
+      debugger;
       // if there are no tweets at all, then do not even bother
-      if (!state.tweets.length) {
-        return state;
-      }
+      //if (!state.tweets.length) {
+      //  return state;
+      //}
 
       return {
         ...state,
-        selectedTweets: getTweetsInBounds(state, action.bounds)
+        selectedTweets: action.selectedFeatures
       };
     default:
       // nothing to do

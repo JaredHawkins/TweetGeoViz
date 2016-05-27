@@ -75,7 +75,7 @@ class Map extends Component {
 
     // re-render heatmap only if search was changed
     if (prevProps.searchUUID !== searchUUID) {
-      const vectorSource = this._getVectorSource(tweets);
+      const vectorSource = this._getMapVectorSource(tweets);
       this._heatMapLayer.setSource(vectorSource);
       this._clusterLayer.setSource(new ol.source.Cluster({
         source: vectorSource,
@@ -90,13 +90,19 @@ class Map extends Component {
   }
 
   _mapOnClick = (event) => {
-    const { onClick } = this.props;
+    const { onClick, clickRadius } = this.props;
 
     const { coordinate, pixel } = event;
     this._popupOverlay.setPosition(coordinate);
     const lonLat = ol.proj.transform(coordinate, epsg3857, epsg4326);
 
-    onClick(pixel, lonLat, coordinate);
+    // TBD: we need to move this logic somewhere else
+    // get tweets which are in the selection circle
+    const mainSource = this._heatMapLayer.getSource();
+    const circleSource = this._getCircleVectorSource(lonLat, coordinate, clickRadius);
+    const selectedFeatures = mainSource.getFeaturesInExtent(circleSource.getExtent());
+
+    onClick(pixel, lonLat, coordinate, selectedFeatures);
   };
 
   _createTileLayer = () => {
@@ -163,13 +169,35 @@ class Map extends Component {
     });
   };
 
-  _getVectorSource = (geoJSON = []) => {
+  _getMapVectorSource = (geoJSON = []) => {
+    debugger;
     return new ol.source.Vector({
       features: (new ol.format.GeoJSON()).readFeatures(geoJSON, {
         featureProjection: epsg3857,
         dataProjection: epsg4326,
       })
     });
+  };
+
+  _getCircleVectorSource = (lonLat, coordinate, clickRadius) => {
+    const [ lon, lat ] = lonLat;
+
+    const precisionCircle = ol.geom.Polygon.circular(
+      /* WGS84 Sphere */
+      new ol.Sphere(6378137),
+      /* Center */
+      lonLat,
+      /* Radius */
+      clickRadius,
+      /* Number of verticies */
+      64
+    ).transform(epsg4326, epsg3857);
+
+    const precisionCircleFeature = new ol.Feature(precisionCircle)
+    const vectorSource = new ol.source.Vector();
+    vectorSource.addFeature(precisionCircleFeature);
+
+    return vectorSource;
   };
 
   _showLayer = (selectedLayer) => {
@@ -188,22 +216,8 @@ class Map extends Component {
       clickRadius
     } = this.props;
 
-    const [ lon, lat ] = lonLat;
-
-    const precisionCircle = ol.geom.Polygon.circular(
-      /* WGS84 Sphere */
-      new ol.Sphere(6378137),
-      /* Center */
-      lonLat,
-      /* Radius */
-      clickRadius,
-      /* Number of verticies */
-      64
-    ).transform(epsg4326, epsg3857);
-
-    const precisionCircleFeature = new ol.Feature(precisionCircle)
-    const vectorSource = new ol.source.Vector();
-    vectorSource.addFeature(precisionCircleFeature);
+    const vectorSource =
+      this._getCircleVectorSource(lonLat, coordinate, clickRadius);
 
     this._selectCircleLayer.setSource(vectorSource);
   };
