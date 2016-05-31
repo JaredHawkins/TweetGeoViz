@@ -37,16 +37,18 @@ class NavBarContainer extends Component {
 
   render() {
     const {
-      ...props,
       showSlidePanel,
       fetchTweets,
       changeValue,
-      focus
+      focus,
+      urlPush,
+      ...props
     } = this.props;
 
     const { showAdvanced } = props;
 
-    return <NavBar {...props}
+    return <NavBar
+      {...props}
       onEnterKeyDown={this._onClickSearch}
       onClickSearch={this._onClickSearch}
       onFocus={focus}

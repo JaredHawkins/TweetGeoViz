@@ -4,11 +4,7 @@
 @padding: 15px;
 
 #tweetsPopup {
-  display: none;
-  top: 100px;
-  left: 100px;
-  position: absolute;
-  z-index: 10;
+  width: 300px;
 
   @media (max-width: 750px) {
     top: 80px !important;
@@ -47,9 +43,6 @@
   }
 
   .tweet-panel {
-    /*overflow-y: auto;*/
-    /*padding: 0px;*/
-
     overflow-x: hidden;
     max-height: @tweetPopupMaxHeight;
 
@@ -61,7 +54,6 @@
       li .tweetText {
         padding: @padding;
         border-bottom: 1px solid @borderBottomColor;
-        /*border-top: 1px solid @borderTopColor;*/
       }
     }
   }

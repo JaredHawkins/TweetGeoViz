@@ -46,7 +46,7 @@ export default function language(state = initialState, action) {
   switch (action.type) {
     case UPDATE_LOCATION:
       const { pathname } = action.payload;
-      const [_, code] = pathname.split('/');
+      const [, code] = pathname.split('/');
 
       // if it is unknown language code
       if (!validLanguageCode(code)) {

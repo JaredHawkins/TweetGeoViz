@@ -7,16 +7,13 @@ import * as dataPopupActions from '../../actions/dataPopupActions.js';
 class DataPopupContainer extends Component {
   render() {
     const {
-      ...props,
       close,
-      changeValue
+      changeValue,
+      ...props
     } = this.props;
 
-    if (!props.visible) {
-      return <div />;
-    }
-
-    return <DataPopup {...props}
+    return <DataPopup
+      {...props}
       popupHeader={T__('mapPage.dataPopup.header', props.data.length)}
       noDataText={T__('mapPage.dataPopup.noDataText')}
       onClose={close}

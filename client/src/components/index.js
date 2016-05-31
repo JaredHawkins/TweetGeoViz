@@ -7,3 +7,4 @@ export NotFoundPage from './NotFoundPage/NotFoundPage.js';
 export NavBar from './NavBar/NavBar.js';
 export SlidePanel from './SlidePanel/SlidePanel.js';
 export Toaster from './Toaster/Toaster.js';
+export SlidePanelSocial from './SlidePanelSocial/SlidePanelSocial.js'

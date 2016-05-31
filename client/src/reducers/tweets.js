@@ -7,53 +7,27 @@ const initialState = {
   isSearching: false,
   tweets: [],
   selectedTweets: [],
-  heatmapData: [],
   searchString: ''
 };
 
-function generateHeatMap(tweets = []) {
-  let heatmapData = [];
-
-  tweets.forEach(tweet => {
-    const coords = tweet.geometry.coordinates;
-    const latLng = new google.maps.LatLng(coords[1], coords[0]);
-    heatmapData.push(latLng);
-  });
-
-  return heatmapData;
-}
-
-function getTweetsInBounds(state, bounds) {
+function getTweetsHTML(tweets, searchString) {
   let result = [];
-  const { tweets = [], searchString } = state;
   const keywords = searchString.split(','); // split searchString
 
-  if (!bounds) {
-    return;
-  }
-
-  tweets.forEach(tweet => {
-    const coords = tweet.geometry.coordinates;
-    const latLng = new google.maps.LatLng(coords[1], coords[0]);
-
-    if (!bounds.contains(latLng)) {
-      return;
-    }
-
-    let text = tweet.text;
+  return tweets.map(tweet => {
+    const { text } = tweet;
+    let textHTML;
     // highlighting matched keywords
     for (let i = 0; i < keywords.length; i++) {
       const regex = new RegExp(keywords[i].trim(), 'ig');
-      text = text.replace(regex, '<mark>$&</mark>');
+      textHTML = text.replace(regex, '<mark>$&</mark>');
     }
 
-    result.push({
+    return {
       ...tweet,
-      text
-    });
+      textHTML
+    };
   });
-
-  return result;
 }
 
 export default function tweets(state = initialState, action) {
@@ -68,22 +42,14 @@ export default function tweets(state = initialState, action) {
         tweets: action.tweets,
         searchString: action.searchString,
         uuid: action.uuid,
-        heatMapData: generateHeatMap(action.tweets),
         selectedTweets: [],
         isSearching: false
       };
-
     case types.MAP_CLICK:
-      // if there are no tweets at all, then do not even bother
-      if (!state.tweets.length) {
-        return state;
-      }
-
       return {
         ...state,
-        selectedTweets: getTweetsInBounds(state, action.bounds)
+        selectedTweets: getTweetsHTML(action.selectedTweets, state.searchString)
       };
-
     default:
       // nothing to do
       return state;

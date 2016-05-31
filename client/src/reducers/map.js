@@ -2,20 +2,26 @@
 
 import * as types from '../constants/actionTypes.js';
 
+export const HEATMAP_LAYER_NAME = 'HeatMap';
+export const CLUSTER_LAYER_NAME = 'Clusters';
+
 const initialState = {
-  lpoint: {
-    lat: 0,
-    lng: 0
-  },
+  lonLat: [0, 0],
+  coordinate: [0, 0],
   isCircleVisible: false,
   isMapClickEnabled: true,
   clickRadius: 250,
-  mapOptions: {
-    center: new google.maps.LatLng(21.2125, 31.1973),
-    zoom: 3,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    streetViewControl: false
-  }
+  layers: [
+    {
+      label: HEATMAP_LAYER_NAME,
+      value: 1
+    },
+    {
+      label: CLUSTER_LAYER_NAME,
+      value: 2
+    }
+  ],
+  selectedLayer: 1
 };
 
 export default function map(state = initialState, action) {
@@ -25,7 +31,6 @@ export default function map(state = initialState, action) {
         ...state,
         [action.name]: action.value
       };
-
     case types.MAP_CLICK:
       // if click is enabled and circle already shown - then do not do anything
       // wait until popup is closed
@@ -37,9 +42,9 @@ export default function map(state = initialState, action) {
       return {
         ...state,
         isCircleVisible: true,
-        lpoint: action.lpoint
+        lonLat: action.lonLat,
+        coordinate: action.coordinate
       };
-
     case types.NAVBAR_SEARCHSTRING_FOCUS:
     case types.SLIDEPANEL_SHOW:
     case types.POPUP_CLOSE:
@@ -51,13 +56,8 @@ export default function map(state = initialState, action) {
       // otherwise hide the circle
       return {
         ...state,
-        isCircleVisible: false,
-        lpoint: {
-          lat: 0,
-          lng: 0
-        }
+        isCircleVisible: false
       };
-
     default:
       // nothing to do
       return state;

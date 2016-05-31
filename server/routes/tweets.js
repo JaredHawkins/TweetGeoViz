@@ -17,21 +17,25 @@ function getResults(values = []) {
 
       features.push({
         type: 'Feature',
+        id: item._id,
         geometry: {
           type: 'Point',
           coordinates: [item.tln, item.tlt]
         },
-        timeStamp: item.cr,
-        text: item.t,
-        _id: item._id
+        properties: {
+          timeStamp: item.cr,
+          text: item.t
+        }
       });
     });
   });
 
   return {
-    type: 'FeatureCollection',    // empty geojson blob
-    features: features,
-    uuid: uuid.v1()
+    uuid: uuid.v1(),
+    geoJSON: {
+      type: 'FeatureCollection',    // empty geojson blob
+      features: features
+    }
   };
 }
 
@@ -44,9 +48,11 @@ export function getTweets(req, res, next) {
 
   if (!searchString) {
     return res.json({
-      type: 'FeatureCollection',
-      features: [],
-      uuid: uuid.v1()
+      uuid: uuid.v1(),
+      geoJSON: {
+        type: 'FeatureCollection',
+        features: []
+      }
     });
   }
 

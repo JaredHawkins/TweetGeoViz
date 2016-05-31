@@ -6,11 +6,12 @@ import * as toasterActions from '../../actions/toasterActions.js';
 class ToasterContainer extends Component {
   render() {
     const {
-      ...props,
-      changeValue
+      changeValue,
+      ...props
     } = this.props;
 
-    return <Toaster {...props}
+    return <Toaster
+      {...props}
       onClose={() => changeValue('visible', false)}
     />;
   }

@@ -1,5 +1,5 @@
 // webpack specific - including required JS and CSS files
-require('./dataPopup.less');
+import './dataPopup.less';
 
 import React, { Component, PropTypes } from 'react';
 import { DataPopupRow, NoDataRow } from '../';
@@ -29,13 +29,11 @@ class DataPopup extends Component {
     } = this.props;
 
     const popupStyle = {
-      display: visible ? 'block' : 'none',
-      left: `${point.x}px`,
-      top: `${point.y}px`
+      display: visible ? 'block' : 'none'
     };
 
     return (
-      <div id="tweetsPopup" className="col-xs-12 col-sm-6 col-md-4 col-lg-4" style={popupStyle}>
+      <div id="tweetsPopup" style={popupStyle}>
         <Paper className="panel panel-default" zDepth={4}>
           <div className="panel-heading">
             <strong>{popupHeader}</strong>
@@ -43,7 +41,8 @@ class DataPopup extends Component {
               tooltip={T__('mapPage.dataPopup.closeButton.tooltip')}
               touch={true}
               className="close tgv-closePopup"
-              onClick={onClose}
+              onTouchEnd={event => onClose()}
+              onMouseUp={event => onClose()}
             >
               <CloseIcon />
             </IconButton>
@@ -67,15 +66,13 @@ class DataPopup extends Component {
             <ul>
               {
                 data.length ?
-                data.map(row =>
-                  <DataPopupRow
-                    showTimeStamps={showTimeStamps}
-                    timeStamp={row.timeStamp}
-                    text={row.text}
-                    rowClass={rowClass}
-                    key={row._id || row.timeStamp}
-                  />
-                )
+                data.map(feature => <DataPopupRow
+                  showTimeStamps={showTimeStamps}
+                  timeStamp={feature.timeStamp}
+                  text={feature.textHTML}
+                  rowClass={rowClass}
+                  key={feature.id}
+                />)
                 : <NoDataRow noDataText={noDataText} rowClass={rowClass} />
               }
             </ul>

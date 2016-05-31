@@ -1,10 +1,7 @@
 import * as types from '../constants/actionTypes.js';
 
 const initialState = {
-  point: {
-    x: undefined,
-    y: undefined
-  },
+  coordinate: [0, 0],
   visible: false,
   filterText: '',
   showFilter: true,
@@ -30,9 +27,8 @@ export default function dataPopup(state = initialState, action) {
         ...state,
         filterText: '',
         visible: true,
-        point: action.point
+        coordinate: action.coordinate
       };
-
     case types.SLIDEPANEL_SHOW:
     case types.NAVBAR_SEARCHSTRING_FOCUS:
     case types.POPUP_CLOSE:
@@ -47,7 +43,6 @@ export default function dataPopup(state = initialState, action) {
         filterText: '',
         visible: false
       };
-
     default:
       // nothing to do
       return state;

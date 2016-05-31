@@ -7,7 +7,7 @@ import * as dataPopupActions from '../../actions/dataPopupActions.js';
 import { Map } from '../../components';
 
 class MapContainer extends Component {
-  _onClick = (event) => {
+  _onClick = (lonLat, coordinate, selectedTweets) => {
     const {
       click,
       show,
@@ -16,43 +16,29 @@ class MapContainer extends Component {
       isMapClickEnabled
     } = this.props;
 
-    const { latLng, pixel } = event;
-
     // if we show a circle on the map already then just stop
     if (isCircleVisible) {
       return;
     }
-
-    // get bounds for the click
-    const bounds = new google.maps.Circle({
-      center: new google.maps.LatLng(latLng.lat(), latLng.lng()),
-      radius: clickRadius
-    }).getBounds();
-
-    click(bounds, {
-      lat: latLng.lat(),
-      lng: latLng.lng()
-    });
 
     // do not show a popup if map click is disabled
     if (!isMapClickEnabled) {
       return;
     }
 
-    show({
-      x: pixel.x,
-      y: pixel.y
-    });
+    show(coordinate);
+    click(lonLat, coordinate, selectedTweets);
   };
 
   render() {
     const {
-      ...props,
       click,
-      show
+      show,
+      ...props
     } = this.props;
 
-    return <Map {...props}
+    return <Map
+      {...props}
       onClick={this._onClick}
     />;
   }
@@ -61,7 +47,7 @@ class MapContainer extends Component {
 function mapStateToProps(state) {
   const KM = 1000;
   let { clickRadius } = state.map;
-  const { uuid: searchUUID, heatMapData } = state.tweets;
+  const { uuid: searchUUID, tweets } = state.tweets;
 
   clickRadius *= KM;
 
@@ -70,7 +56,7 @@ function mapStateToProps(state) {
     selector: '#map-canvas',
     clickRadius,
     searchUUID,
-    heatMapData
+    tweets
   };
 }
 

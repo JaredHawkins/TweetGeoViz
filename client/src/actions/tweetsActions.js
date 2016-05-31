@@ -46,10 +46,11 @@ export const fetchTweets = (options = {}) => {
 
     tweetsApi
       .getTweets(searchString)
-      .then(json => {
-        dispatch(receiveTweets(searchString, json.features, json.uuid));
+      .then((result = {}) => {
+        const { geoJSON, uuid } = result;
+        dispatch(receiveTweets(searchString, geoJSON, uuid));
         dispatch(
-          showToast(T__('mapPage.toaster.foundTweets', json.features.length))
+          showToast(T__('mapPage.toaster.foundTweets', geoJSON.features.length))
         );
       })
       .catch(error => dispatch(showToast(error)));
