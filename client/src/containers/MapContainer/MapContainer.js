@@ -7,7 +7,7 @@ import * as dataPopupActions from '../../actions/dataPopupActions.js';
 import { Map } from '../../components';
 
 class MapContainer extends Component {
-  _onClick = (pixel, lonLat, coordinate, selectedTweets) => {
+  _onClick = (lonLat, coordinate, selectedTweets) => {
     const {
       click,
       show,
@@ -26,7 +26,7 @@ class MapContainer extends Component {
       return;
     }
 
-    show(pixel);
+    show(coordinate);
     click(lonLat, coordinate, selectedTweets);
   };
 

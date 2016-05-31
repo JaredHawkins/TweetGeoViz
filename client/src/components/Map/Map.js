@@ -65,7 +65,8 @@ class Map extends Component {
       isCircleVisible,
       searchUUID,
       tweets,
-      selectedLayer
+      selectedLayer,
+      coordinate
     } = this.props;
 
     // work with map circle only if its property has changed
@@ -87,18 +88,22 @@ class Map extends Component {
     if (prevProps.selectedLayer !== selectedLayer) {
       this._showLayer(selectedLayer);
     }
+
+    // change popup position
+    if (prevProps.coordinate !== coordinate) {
+      this._popupOverlay.setPosition(coordinate);
+    }
   }
 
   _mapOnClick = (event) => {
     const { onClick, clickRadius } = this.props;
 
-    const { coordinate, pixel } = event;
-    this._popupOverlay.setPosition(coordinate);
+    const { coordinate } = event;
     const lonLat = ol.proj.transform(coordinate, epsg3857, epsg4326);
 
     // TBD: we need to move this logic somewhere else
     // get tweets which are in the selection circle
-    const mainSource = this._heatMapLayer.getSource();
+    const mainSource = this._heatMapLayer.getSource() || new ol.source.Vector();
     const circleSource = this._getCircleVectorSource(lonLat, coordinate, clickRadius);
     const selectedFeatures = mainSource.getFeaturesInExtent(circleSource.getExtent());
     const selectedTweets = selectedFeatures.map(feature => {
@@ -109,7 +114,7 @@ class Map extends Component {
       };
     });
 
-    onClick(pixel, lonLat, coordinate, selectedTweets);
+    onClick(lonLat, coordinate, selectedTweets);
   };
 
   _createTileLayer = () => {

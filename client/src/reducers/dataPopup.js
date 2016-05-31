@@ -1,7 +1,7 @@
 import * as types from '../constants/actionTypes.js';
 
 const initialState = {
-  pixel: [0, 0],
+  coordinate: [0, 0],
   visible: false,
   filterText: '',
   showFilter: true,
@@ -27,7 +27,7 @@ export default function dataPopup(state = initialState, action) {
         ...state,
         filterText: '',
         visible: true,
-        pixel: action.pixel
+        coordinate: action.coordinate
       };
     case types.SLIDEPANEL_SHOW:
     case types.NAVBAR_SEARCHSTRING_FOCUS:

@@ -4,9 +4,9 @@ export const close = () => ({
   type: types.POPUP_CLOSE
 });
 
-export const show = (pixel) => ({
+export const show = (coordinate) => ({
   type: types.POPUP_SHOW,
-  pixel
+  coordinate
 });
 
 export const changeValue = (name, value) => ({

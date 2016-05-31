@@ -7,7 +7,7 @@ export const CLUSTER_LAYER_NAME = 'Clusters';
 
 const initialState = {
   lonLat: [0, 0],
-  coordinate: undefined,
+  coordinate: [0, 0],
   isCircleVisible: false,
   isMapClickEnabled: true,
   clickRadius: 250,
