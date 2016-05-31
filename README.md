@@ -37,7 +37,7 @@ This project uses mongodb to manage its database, node.js for a server, and npm 
  - [ES6 by Babel](https://babeljs.io/)
  - [LESS](http://lesscss.org/)
  - [Express](http://expressjs.com/)
- - [Google Maps APIs](https://www.google.ca/work/mapsearth/products/mapsapi.html)
+ - [OpenLayers](http://openlayers.org/)
  - [Polyglot] (http://airbnb.io/polyglot.js/)
  - [Mocha testing](http://mochajs.org/)
  - [Postman](http://www.getpostman.com/)
@@ -134,9 +134,14 @@ where `features` is an array of objects of the format:
 ```
 {
   type: 'Feature',
+  id: item._id,
   geometry: {
     type: 'Point',
     coordinates: [tln, tlt]
+  },
+  properties: {
+    timeStamp: item.cr,
+    text: item.t
   }
 }
 ```

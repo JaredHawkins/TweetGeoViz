@@ -101,8 +101,15 @@ class Map extends Component {
     const mainSource = this._heatMapLayer.getSource();
     const circleSource = this._getCircleVectorSource(lonLat, coordinate, clickRadius);
     const selectedFeatures = mainSource.getFeaturesInExtent(circleSource.getExtent());
+    const selectedTweets = selectedFeatures.map(feature => {
+      return {
+        id: feature.getId(),
+        timeStamp: feature.getProperties().timeStamp,
+        text: feature.getProperties().text
+      };
+    });
 
-    onClick(pixel, lonLat, coordinate, selectedFeatures);
+    onClick(pixel, lonLat, coordinate, selectedTweets);
   };
 
   _createTileLayer = () => {
@@ -170,7 +177,6 @@ class Map extends Component {
   };
 
   _getMapVectorSource = (geoJSON = []) => {
-    debugger;
     return new ol.source.Vector({
       features: (new ol.format.GeoJSON()).readFeatures(geoJSON, {
         featureProjection: epsg3857,

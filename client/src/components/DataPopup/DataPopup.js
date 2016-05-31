@@ -31,7 +31,7 @@ class DataPopup extends Component {
     const popupStyle = {
       display: visible ? 'block' : 'none'
     };
-    debugger;
+
     return (
       <div id="tweetsPopup" style={popupStyle}>
         <Paper className="panel panel-default" zDepth={4}>
@@ -66,16 +66,13 @@ class DataPopup extends Component {
             <ul>
               {
                 data.length ?
-                data.map(feature => {
-                  const featureProps = feature.getProperties();
-                  return <DataPopupRow
-                    showTimeStamps={showTimeStamps}
-                    timeStamp={featureProps.timeStamp}
-                    text={featureProps.text}
-                    rowClass={rowClass}
-                    key={feature.getId() || featureProps.timeStamp}
-                  />
-                })
+                data.map(feature => <DataPopupRow
+                  showTimeStamps={showTimeStamps}
+                  timeStamp={feature.timeStamp}
+                  text={feature.textHTML}
+                  rowClass={rowClass}
+                  key={feature.id}
+                />)
                 : <NoDataRow noDataText={noDataText} rowClass={rowClass} />
               }
             </ul>

@@ -5,6 +5,7 @@ const { collection } = mongoConfig;
 const Schema = mongoose.Schema;
 
 const tweets = new Schema({
+  _id   : String,
   lang  : String,
   loc   : String,
   plt   : Number,

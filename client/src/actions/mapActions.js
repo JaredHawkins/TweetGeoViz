@@ -6,9 +6,9 @@ export const changeValue = (name, value) => ({
   value
 });
 
-export const click = (lonLat, coordinate, selectedFeatures) => ({
+export const click = (lonLat, coordinate, selectedTweets) => ({
   type: types.MAP_CLICK,
   lonLat,
   coordinate,
-  selectedFeatures
+  selectedTweets
 });

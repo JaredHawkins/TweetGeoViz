@@ -69,7 +69,9 @@ export default {
       },
       layerSelector: {
         label: {
-          en: 'geoJSON Layer'
+          en: 'geoJSON Layer',
+          es: 'capa GeoJSON',
+          ru: 'geoJSON слой'
         }
       },
       languageSelector: {

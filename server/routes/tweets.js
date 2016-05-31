@@ -17,19 +17,15 @@ function getResults(values = []) {
 
       features.push({
         type: 'Feature',
+        id: item._id,
         geometry: {
           type: 'Point',
           coordinates: [item.tln, item.tlt]
         },
         properties: {
           timeStamp: item.cr,
-          text: item.t,
-          id: item._id,
-          _id: item._id
-        },
-        timeStamp: item.cr,
-        text: item.t,
-        _id: item._id
+          text: item.t
+        }
       });
     });
   });

@@ -1,3 +1,27 @@
+## 0.5.0
+###### _May 30, 2016_
+
+##### General
+- [Core] Integrate and use OpenLayers for Map rendering as well as its Features
+- [Core] Re-wire all map clicks, popup, features, controls and more to work with OpenLayers
+
+##### Client
+- [Map] Show Cluster and HeatMap layers
+- [SlidePanel] Add ability to switch between different layers (#89)
+- [DataPopup] It does not store its pixel positioning any more. Positioning controlled by Overlay in Map
+- [DataPopup] Unfortunately styling is controled from JS now due to Overlay properties. Need to change that
+- [SlidePanel] Decouple social part of the SlidePanel into SlidePanelSocial
+
+##### Server
+- [Core] Return _id, text and timeStamp for every GeoJSON feature
+
+##### Fixes / Enhancements
+- [Docs] Add missing spec for new GeoJSON returned from server
+- [UI] Replace all requires with import to be more ES6
+
+##### Depreceated
+- [Core] Remove GoogleMap API with OpenLayers v3 (#57)
+
 ## 0.4.0
 ###### _Apr 14, 2016_
 
